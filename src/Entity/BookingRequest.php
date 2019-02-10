@@ -6,9 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Gedmo\Mapping\Annotation as Gedmo;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BookingRequestRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deleted")
  * @UniqueEntity("email")
  * @ApiResource(
  *     itemOperations={"get"},
@@ -19,6 +22,7 @@ class BookingRequest
 {
     public function __construct()
     {
+        $this->confirmed = 0;
         $this->groupConditions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -30,17 +34,17 @@ class BookingRequest
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, name="contact_name")
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=16)
+     * @ORM\Column(type="string", length=16, name="contact_phone")
      */
     private $phone;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, name="contact_email")
      */
     private $email;
 
@@ -83,6 +87,35 @@ class BookingRequest
      *      )
      */
     private $groupConditions;
+
+    /**
+     * @ORM\Column(type="integer", name="confirmed")
+     */
+    private $confirmed;
+
+    /**
+     * @var \Datetime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime", name="created_at")
+     */
+    private $created;
+
+    /**
+     * @var \Datetime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime", name="updated_at"))
+     */
+    private $updated;
+
+    /**
+     * @var \DateTime $deleted
+     *
+     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     */
+    private $deleted;
+
 
     public function getId(): ?int
     {
@@ -237,5 +270,89 @@ class BookingRequest
         return $this->groupConditions;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getConfirmed(): ?int
+    {
+        return $this->confirmed;
+    }
 
+    /**
+     * @param mixed $confirmed
+     */
+    public function setConfirmed($confirmed): self
+    {
+        $this->confirmed = $confirmed;
+        return $this;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     * @return BookingRequest
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \DateTime $updated
+     * @return BookingRequest
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * Set deleted
+     *
+     * @param \DateTime $deleted
+     * @return BookingRequest
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return \DateTime
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
 }

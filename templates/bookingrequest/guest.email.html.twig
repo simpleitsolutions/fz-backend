@@ -1,0 +1,86 @@
+<!--link type="text/css" rel="stylesheet" href="http://www.flyzermatt.com/wp-content/themese/Zoo/style.css"> -->
+<link href="{{ app.request.scheme ~ '://' ~ app.request.host}}{{app.request.port == 80?'': ':'~app.request.port}}/css/bootstrap.css" rel="stylesheet" media="all">
+
+<style>
+	.container {
+		font-size: 12px;
+	}
+
+	li {
+	  margin: 10px 0;
+	}
+</style>
+
+<div class="container">
+		<div class="text-center">
+		  	<img src="{{ app.request.scheme ~ '://' ~ app.request.host}}{{app.request.port == 80?'': ':'~app.request.port}}/img/fly-zermatt-come-fly-with-us-logo.jpg">
+		</div>
+
+<p>Thank you for your interest in coming to fly with us in Zermatt!</p>
+
+<p>Please note that at the moment you do NOT have a fixed booking. Follow the below steps to make a fixed booking...</p>
+<h3><i>How to finalize your Booking</i></h3>
+
+	<ol>
+	<li>Contact us 3-4 days before your desired flight date, to let us know you're still interested in flying.
+    Tel: +41 79 643 6808 :: <a href="mailto:info@flyzermatt.com">info@flyzermatt.com</a></li>
+
+    <li>We prefer that you drop by our fly shop in Zermatt a day or two before your flight to check the weather and pay -- once you have done this, you have a *fixed* booking.
+    If you can NOT come by our shop before your flight (for example you are arriving on the morning of your flight), then it is also possible to pay in advance via PayPal. Please let us know and we'll send you a Money Request for your desired flight(s) amount.  (NOTE: there is a CHF 10.- non-refundable charge per booked flight when paying in advance via PayPal)</li>
+    </ol>
+
+<p>This is the only way that we can offer you a fixed booking.</p>
+
+<p>To find our shop in Zermatt, please see the video below.</p>
+
+<p><i>With kind regards,<br/>
+The FlyZermatt Team</i></p>
+
+<p style="color:#939393;border-top:1px solid #D3D3D3;border-bottom:1px solid #D3D3D3;padding-top:10px;padding-bottom:10px;"><i>This is the information that you entered into the Web Form at FlyZermatt.com:<br/>
+(please note that we never share your information with *anyone*!)</i></p>
+
+<p><b>From ::</b><br/>
+{{ bookingRequest.name }} :: {{ '<'~bookingRequest.email~'>' }}</p>
+
+<p><b>Flight ::</b><br/>
+{{ bookingRequest.flight.description }}</p>
+
+<p><b>Phone ::</b><br/>
+{{ bookingRequest.phone }}</p>
+
+<p><b>Nr of People ::</b><br/>
+{{ bookingRequest.noPassengers }}</p>
+
+<p><b>Dates ::</b><br/>
+Arrive: {{ bookingRequest.arrivalDate|date("d.m.Y") }}<br/>
+<span style="color:#8B0000;"><b>Flight: {{ bookingRequest.flightDate|date("d.m.Y") }}</b></span><br/>
+Leave: {{ bookingRequest.departureDate|date("d.m.Y") }}<br/></p>
+
+<p><b>Group Requirements ::</b><br/>
+	{% for groupCondition in bookingRequest.groupconditions %}
+		{{ groupCondition.name }}<br/>
+	{% endfor %}
+</p>
+
+<p><b>Message ::</b><br/>
+{{ bookingRequest.comments }}</p>
+
+---------------------------------------------------------------------------------------
+<p>FlyZermatt Tandem Paragliding Flights. Zermatt, Switzerland</br>
+<a href="mailto:info@flyzermatt.com">info@flyzermatt.com</a><br/>
+<a href="https://www.flyzermatt.com" target="_blank">www.flyzermatt.com</a><br/>
+Tel: +41 79 643 6808<br/>
+Mobile: +41 79 643 6808<br/></p>
+
+<p style="text-align:center;">How to find the FLYZermatt shop<br/><br/>
+<a href="https://vimeo.com/217390381" target="_blank">
+	<img width="450" alt="How to find the FLY Zermatt shop" title="How to find the FLY Zermatt shop" src="{{ app.request.scheme ~ '://' ~ app.request.host}}{{app.request.port == 80?'': ':'~app.request.port}}/img/how-to-get-to-FlyZermatt-office-intro.png">
+</a>
+</p>
+<p style="text-align:center;">Like us on Facebook!<br/>
+<a href="https://www.facebook.com/flyzermatt/" target="_blank">https://www.facebook.com/flyzermatt/</a></p>
+
+<p style="text-align:center;">FLYZermatt on Vimeo.com<br/>
+<a href="https://vimeo.com/flyzermatt" target="_blank">https://vimeo.com/flyzermatt</a></p>
+
+---------------------------------------------------------------------------------------
