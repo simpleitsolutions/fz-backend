@@ -44,8 +44,11 @@ class BookingRequestEmailSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::VIEW => ['emailGuest', EventPriorities::PRE_WRITE],
-            KernelEvents::VIEW => ['emailOffice', EventPriorities::PRE_WRITE]
+            KernelEvents::VIEW => [
+                                    ['emailOffice', EventPriorities::PRE_WRITE],
+                                    ['emailGuest', EventPriorities::PRE_WRITE]
+                                    ]
+//            KernelEvents::VIEW => [, EventPriorities::PRE_WRITE]
         ];
     }
 
@@ -59,8 +62,8 @@ class BookingRequestEmailSubscriber implements EventSubscriberInterface
             return;
         }
         $message = (new \Swift_Message('Booking Request - '.$bookingRequest->getName()))
-            ->setFrom('tom.schneider@simpleitsolutions.ch')
-            ->setTo('tom.schneider@simpleitsolutions.ch')
+            ->setFrom('info@flyzermatt.com')
+            ->setTo($bookingRequest->getEmail())
             ->setBody(
                 $this->twig->render(
                     'bookingrequest/guest.email.html.twig',
@@ -93,8 +96,8 @@ class BookingRequestEmailSubscriber implements EventSubscriberInterface
         }
 
         $message = (new \Swift_Message('Booking Request - '.$bookingRequest->getName()))
-            ->setFrom('tom.schneider@simpleitsolutions.ch')
-            ->setTo('support@simpleitsolutions.ch')
+            ->setFrom($bookingRequest->getEmail())
+            ->setTo('info@flyzermatt.com')
             ->setBody(
                 $this->twig->render(
                     'bookingrequest/office.email.html.twig',

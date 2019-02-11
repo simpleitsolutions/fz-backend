@@ -12,7 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BookingRequestRepository")
  * @Gedmo\SoftDeleteable(fieldName="deleted")
- * @UniqueEntity("email")
+ * @//UniqueEntity("email")
  * @ApiResource(
  *     itemOperations={"get"},
  *     collectionOperations={"post"}
