@@ -21,7 +21,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class BookingRequestEmailSubscriber implements EventSubscriberInterface
 {
-
     /**
      * @var \Swift_Mailer
      */
@@ -48,7 +47,6 @@ class BookingRequestEmailSubscriber implements EventSubscriberInterface
                                     ['emailOffice', EventPriorities::PRE_WRITE],
                                     ['emailGuest', EventPriorities::PRE_WRITE]
                                     ]
-//            KernelEvents::VIEW => [, EventPriorities::PRE_WRITE]
         ];
     }
 
@@ -118,12 +116,4 @@ class BookingRequestEmailSubscriber implements EventSubscriberInterface
         ;
         $this->mailer->send($message);
     }
-
-    /**
-     * Sets a logger instance on the object.
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return void
-     */
 }
