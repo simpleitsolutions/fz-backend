@@ -5,8 +5,10 @@ namespace App\DataFixtures;
 use App\Entity\BookingRequest;
 use App\Entity\BookingRequestGroupCondition;
 use App\Entity\Product;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
@@ -60,6 +62,13 @@ class AppFixtures extends Fixture
         ],
     ];
 
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
     public function load(ObjectManager $manager)
     {
         // $product = new Product();
@@ -68,6 +77,7 @@ class AppFixtures extends Fixture
         $this->loadFlights($manager);
         $this->loadGroupConditions($manager);
         $this->loadBookingRequests($manager);
+        $this->loadUsers($manager);
 
         $manager->flush();
     }
@@ -126,6 +136,23 @@ class AppFixtures extends Fixture
 
             $manager->persist($bookingRequest);
         }
+    }
+
+    private function loadUsers(ObjectManager $manager)
+    {
+        $user = new User();
+        $user->setUsername('john_doe');
+//        $user->setFullName('John Doe');
+        $user->setEmail('john_doe@doe.com');
+        $user->setPassword(
+            $this->passwordEncoder->encodePassword(
+                $user,
+                'john123'
+            )
+        );
+
+        $manager->persist($user);
+        $manager->flush();
     }
 
     protected function getRandomFlight(): Product

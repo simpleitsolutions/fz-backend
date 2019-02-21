@@ -92,6 +92,29 @@
       <path value="$PROJECT_DIR$/vendor/swiftmailer/swiftmailer" />
       <path value="$PROJECT_DIR$/vendor/egulias/email-validator" />
       <path value="$PROJECT_DIR$/vendor/symfony/swiftmailer-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/var-dumper" />
+      <path value="$PROJECT_DIR$/vendor/symfony/profiler-pack" />
+      <path value="$PROJECT_DIR$/vendor/symfony/web-profiler-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php72" />
+      <path value="$PROJECT_DIR$/vendor/symfony/options-resolver" />
+      <path value="$PROJECT_DIR$/vendor/symfony/form" />
+      <path value="$PROJECT_DIR$/vendor/symfony/templating" />
+      <path value="$PROJECT_DIR$/vendor/symfony/intl" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-icu" />
+      <path value="$PROJECT_DIR$/vendor/symfony/security-acl" />
+      <path value="$PROJECT_DIR$/vendor/symfony/translation" />
+      <path value="$PROJECT_DIR$/vendor/sonata-project/doctrine-extensions" />
+      <path value="$PROJECT_DIR$/vendor/sonata-project/datagrid-bundle" />
+      <path value="$PROJECT_DIR$/vendor/sonata-project/block-bundle" />
+      <path value="$PROJECT_DIR$/vendor/sonata-project/admin-bundle" />
+      <path value="$PROJECT_DIR$/vendor/sonata-project/cache" />
+      <path value="$PROJECT_DIR$/vendor/sonata-project/exporter" />
+      <path value="$PROJECT_DIR$/vendor/knplabs/knp-menu" />
+      <path value="$PROJECT_DIR$/vendor/sonata-project/core-bundle" />
+      <path value="$PROJECT_DIR$/vendor/cocur/slugify" />
+      <path value="$PROJECT_DIR$/vendor/knplabs/knp-menu-bundle" />
+      <path value="$PROJECT_DIR$/vendor/twig/extensions" />
+      <path value="$PROJECT_DIR$/vendor/sonata-project/doctrine-orm-admin-bundle" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
