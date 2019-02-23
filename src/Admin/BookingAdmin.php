@@ -9,6 +9,7 @@ use App\Form\PassengerType;
 use App\Repository\BookingOwnerRepository;
 use App\Repository\MeetingLocationRepository;
 use App\Repository\ProductRepository;
+use DateTime;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -20,6 +21,8 @@ use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\CoreBundle\Form\Type\StatusType;
+use Sonata\Form\Type\BaseStatusType;
 use Sonata\Form\Type\DatePickerType;
 use Sonata\Form\Type\DateRangePickerType;
 use Sonata\Form\Type\DateTimePickerType;
@@ -39,7 +42,17 @@ class BookingAdmin extends AbstractAdmin
     {
         $instance = parent::getNewInstance();
 
-//        $entityManager = $this->getModelManager()->getEntityManager('App\Entity\MeetingLocation');
+        if ($this->hasRequest()) { //Pre-load new Booking from Booking Schedule view.
+            $targetDate = $this->getRequest()->get('date', null);
+            $instance->setFlightDate(DateTime::createFromFormat('Y-m-d', $targetDate));
+
+            $flightScheduleTimeId = $this->getRequest()->get('flightScheduleTimeId', null);
+            $entityManager = $this->getModelManager()->getEntityManager('App\Entity\FlightScheduleTime');
+            $flightScheduleTime = $entityManager->getRepository('App\Entity\FlightScheduleTime')->find($flightScheduleTimeId);
+            $instance->setFlightScheduleTime($flightScheduleTime);
+            $instance->setMeetingTime($flightScheduleTime->getScheduleStartTime());
+        }
+
 //        $meetingLocation = $entityManager->getRepository('App\Entity\MeetingLocation')->find(3);
 //        $flight = $entityManager->getRepository('App\Entity\Product')->find(1);
 //
@@ -141,18 +154,18 @@ class BookingAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('id')
-            ->add('created')
             ->add('status')
-            ->add('contactinfo')
-            ->add('flightdate')
+            ->add('contactinfo', null, ['label' => 'Contact Info'])
+            ->add('flightdate', null, ['label' => 'Flight Date', 'format' => 'd.M.Y'])
             ->add('flight')
             ->add('passengers')
-            ->add('meetingTime')
+            ->add('meetingTime', null, ['format' => 'H:i'])
             ->add('meetingLocation')
+            ->add('created', null, ['format' => 'd.M.Y H:i'])
             ->add('_action', null, array(
                 'actions' => array(
-                    'edit' => [],
-                    'delete' => [],
+                    'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
+                    'delete' => ['template' => '/sonataadmin/CRUD/list__action_delete.html.twig'],
                 )
             ))
         ;

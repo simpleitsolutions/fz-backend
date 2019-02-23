@@ -1,8 +1,21 @@
 sonata_admin:
     title: 'SITS Bookings'
     title_logo: /img/fly-zermatt-logo.png
+    show_mosaic_button: false
+    security:
+        handler: sonata.admin.security.handler.role
+
+        role_admin: ROLE_ADMIN
+        role_super_admin: ROLE_SUPER_ADMIN
+
+    templates:
+#        show:   '@App/Admin/display_client.html.twig'
+        layout: '/sonataadmin/standard_layout.html.twig'
+        user_block: '/sonataadmin/Core/user_block.html.twig'
     options:
-#        form_type: 'horizontal'
+        dropdown_number_groups_per_colums:  2
+        lock_protection: true
+    #        form_type: 'horizontal'
     dashboard:
         blocks:
             - { type: sonata.admin.block.admin_list, position: left }
@@ -14,6 +27,13 @@ sonata_admin:
                 items:
                     - route:        booking_schedule_view_list
                       label:        BookingSchedule
+            New Voucher:
+                on_top:               true
+                roles: [ROLE_USER]
+                icon:                 '<i class="fa fa-certificate"></i>'
+                items:
+                    - route:        voucher_create
+                      label:        Voucher
             Booking Request:
                 on_top:               true
                 roles: [ROLE_USER]
@@ -28,13 +48,6 @@ sonata_admin:
                 items:
                     - route:        waitinglist_list
                       label:        Waiting List
-            Voucher:
-                on_top:               true
-                roles: [ROLE_USER]
-                icon:                 '<i class="fa fa-certificate"></i>'
-                items:
-                    - route:        voucher_list
-                      label:        Voucher
             Admin:
                 icon:                 '<i class="fa fa-cog"></i>'
                 roles: [ROLE_ADMIN]

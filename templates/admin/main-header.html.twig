@@ -4,11 +4,11 @@
     	    <div class="hidden-print hidden-xs pull-left">{{ indexdate|date("l j")}}<sup>{{indexdate|date("S")}}</sup>{{indexdate|date(" F Y") }}</div>
     	    <span class="hidden-print visible-xs pull-left">{{ indexdate|date("D M j")}}<sup>{{indexdate|date("S")}}</sup>{{indexdate|date(" Y") }}</span>
     	    <div class="pull-right hidden-print hidden-xs">
-    			<a href="{#{ path('waiting_list_new', {'date':indexdate|date("Y-m-d")})  }#}" class="btn btn-default btn-sm">NEW WAIT LIST</a>
+    			<a href="{{ path('waitinglist_create', {'date':indexdate|date("Y-m-d")})  }}" class="btn btn-default btn-sm">NEW WAIT LIST</a>
     	    </div>
     	    <div class="pull-right hidden-print hidden-xs">&nbsp;</div>
     	    <div class="pull-right hidden-print hidden-xs">
-    			<a target="eodreport" href="{#{ path('report_daily_pilot_payment', {'date':indexdate|date("Y-m-d")}) }#}" class="btn btn-default btn-sm">EOD</a>
+    			<a href="{{ path('daily_pilot_payment', {'date':indexdate|date("Y-m-d")}) }}" class="btn btn-default btn-sm">EOD</a>
     	    </div>
     	    <div class="pull-right hidden-print hidden-xs">&nbsp;</div>
         	<div class="pull-right hidden-print">
@@ -24,7 +24,7 @@
 	    	{% endif %}
     	    <div class="pull-right hidden-print">&nbsp;</div>
     	    <div class="pull-right hidden-print">
-    			<a href="{#{ path('booking_new', {'date':indexdate|date("Y-m-d")}) }#}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></a>
+    			<a href="{{ path('booking_create', {'date':indexdate|date("Y-m-d")}) }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></a>
     	    </div>
     	</h4>
     </div>

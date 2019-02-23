@@ -1,14 +1,14 @@
 <div class="visible-xs visible-sm">
 	<div class="col-xs-12 col-sm-6">
         <ul class="pagination">
-          	<li><a href="{#{path('booking_index_schedule', {'date':"now"|date("Y-m-d")} ) }#}">Today</a></li>
+          	<li><a href="{{path('booking_schedule_view_list', {'date':"now"|date("Y-m-d")} ) }}">Today</a></li>
         </ul>
         <ul class="pagination">
         {% for i in -1..3 %}
           {% if i == 0 %}
         	<li class="disabled"><a href="#">{{indexdate|date("d")}}</a></li>
           {% else %}
-          	<li><a href="{#{path('booking_index_schedule', {'date':indexdate|date_modify('+' ~ i ~ 'days')|date("Y-m-d")} ) }#}">{{indexdate|date_modify('+' ~ i ~ 'days')|date("d")}}</a></li>
+          	<li><a href="{{path('booking_schedule_view_list', {'date':indexdate|date_modify('+' ~ i ~ 'days')|date("Y-m-d")} ) }}">{{indexdate|date_modify('+' ~ i ~ 'days')|date("d")}}</a></li>
           {% endif %}
         {% endfor %}
         </ul>
@@ -17,25 +17,25 @@
 
 <div class="visible-md visible-lg col-md-10">
     <ul class="pagination">
-      	<li><a href="{#{path('booking_index_schedule', {'date':"now"|date("Y-m-d")} ) }#}">Today</a></li>
+      	<li><a href="{{path('booking_schedule_view_list', {'date':"now"|date("Y-m-d")} ) }}">Today</a></li>
     </ul>
     <ul class="pagination">
     {% for i in -1..3 %}
       {% if i == 0 %}
     	<li class="disabled"><a href="#">{{indexdate|date("D d")}}</a></li>
       {% else %}
-      	<li><a href="{#{path('booking_index_schedule', {'date':indexdate|date_modify('+' ~ i ~ 'days')|date("Y-m-d")} ) }#}">{{indexdate|date_modify('+' ~ i ~ 'days')|date("D d")}}</a></li>
+      	<li><a href="{{path('booking_schedule_view_list', {'date':indexdate|date_modify('+' ~ i ~ 'days')|date("Y-m-d")} ) }}">{{indexdate|date_modify('+' ~ i ~ 'days')|date("D d")}}</a></li>
       {% endif %}
     {% endfor %}
     {% for i in 4..5 %}
-      	<li><a href="{#{path('booking_index_schedule', {'date':indexdate|date_modify('+' ~ i ~ 'days')|date("Y-m-d")} ) }#}">{{indexdate|date_modify('+' ~ i ~ 'days')|date("D d")}}</a></li>
+      	<li><a href="{{ path('booking_schedule_view_list', {'date':indexdate|date_modify('+' ~ i ~ 'days')|date("Y-m-d")} ) }}">{{indexdate|date_modify('+' ~ i ~ 'days')|date("D d")}}</a></li>
     {% endfor %}
     </ul>
     <ul class="pagination">
-      	<li><a href="{#{path('booking_index_schedule', {'date':indexdate|date_modify('+1 weeks')|date("Y-m-d")} ) }#}">Next Week</a></li>
+      	<li><a href="{{path('booking_schedule_view_list', {'date':indexdate|date_modify('+1 weeks')|date("Y-m-d")} ) }}">Next Week</a></li>
     </ul>
     <ul class="pagination">
-      	<li><a href="{#{path('booking_index_schedule', {'date':indexdate|date_modify('+1 months')|date("Y-m-01")} ) }#}">{{ indexdate|date_modify('+1 months')|date("F") }}</a></li>
+      	<li><a href="{{path('booking_schedule_view_list', {'date':indexdate|date_modify('+1 months')|date("Y-m-01")} ) }}">{{ indexdate|date_modify('+1 months')|date("F") }}</a></li>
     </ul>
 </div>
 <div class="">

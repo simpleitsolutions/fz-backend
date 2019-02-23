@@ -89,7 +89,7 @@ services:
             - App\Entity\Booking
             -
         tags:
-            - { name: sonata.admin, manager_type: orm, group: Admin, label: Booking }
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Booking, pager_type: 'simple' }
         public: true
 
     admin.pilot:

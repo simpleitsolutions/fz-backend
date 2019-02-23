@@ -16,7 +16,9 @@ class Booking
 	const STATUS_CONFIRMED = 2;
 	const STATUS_PAYMENT_PART = 3;
 	const STATUS_PAYMENT_FULL = 4;
-	
+
+    const STATUS_LABELS = ['NEW', 'CONFIRMED', 'PAYMENT_PART', 'PAYMENT_FULL'];
+
     public function __construct()
     {
         $this->passengers = new \Doctrine\Common\Collections\ArrayCollection();

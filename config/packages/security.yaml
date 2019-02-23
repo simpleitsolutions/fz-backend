@@ -31,6 +31,45 @@ security:
                 target: sonata_admin_dashboard
             # https://symfony.com/doc/current/security/form_login_setup.html
 
+    role_hierarchy:
+        BOOKING_READONLY:
+            - ROLE_ADMIN_BOOKING_LIST
+            - ROLE_ADMIN_BOOKING_VIEW
+        BOOKINGREQUEST_READONLY:
+            - ROLE_ADMIN_BOOKINGREQUEST_LIST
+            - ROLE_ADMIN_BOOKINGREQUEST_VIEW
+        WAITINGLIST_READONLY:
+            - ROLE_ADMIN_WAITINGLIST_LIST
+            - ROLE_ADMIN_WAITINGLIST_VIEW
+        VOUCHER_READONLY:
+            - ROLE_ADMIN_VOUCHER_LIST
+            - ROLE_ADMIN_VOUCHER_VIEW
+        PILOT_READONLY:
+            - ROLE_ADMIN_PILOT_LIST
+            - ROLE_ADMIN_PILOT_VIEW
+        USER_READONLY:
+            - ROLE_ADMIN_USER_LIST
+            - ROLE_ADMIN_USER_VIEW
+
+        BOOKING_ADMIN:
+            - ROLE_ADMIN_BOOKING_ALL
+        BOOKINGREQUEST_ADMIN:
+            - ROLE_ADMIN_BOOKINGREQUEST_ALL
+        WAITINGLIST_ADMIN:
+            - ROLE_ADMIN_WAITINGLIST_ALL
+        VOUCHER_ADMIN:
+            - ROLE_ADMIN_VOUCHER_ALL
+        USER_ADMIN:
+            - ROLE_ADMIN_USER_ALL
+        PILOT_ADMIN:
+            - ROLE_ADMIN_PILOT_ALL
+
+        ROLE_USER:      [BOOKING_READONLY, BOOKINGREQUEST_READONLY, VOUCHER_READONLY, WAITINGLIST_READONLY, PILOT_READONLY]
+        ROLE_ADMIN:     [BOOKING_ADMIN, BOOKINGREQUEST_ADMIN, VOUCHER_ADMIN, WAITINGLIST_ADMIN, USER_ADMIN, PILOT_ADMIN]
+
+        access_decision_manager:
+            strategy: unanimous
+
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
