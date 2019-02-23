@@ -70,6 +70,11 @@ class Product extends BaseEntity
     private $advertised;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $preferred;
+
+    /**
      * @ORM\ManyToOne(targetEntity="ProductCategory")
      * @ORM\JoinColumn(name="product_category_id", referencedColumnName="id")
      **/
@@ -186,6 +191,29 @@ class Product extends BaseEntity
     }
 
     /**
+     * Set preferred
+     *
+     * @param boolean $preferred
+     * @return Product
+     */
+    public function setPreferred($preferred)
+    {
+        $this->preferred = $preferred;
+
+        return $this;
+    }
+
+    /**
+     * Get preferred
+     *
+     * @return boolean
+     */
+    public function getPreferred()
+    {
+        return $this->preferred;
+    }
+
+    /**
      * Set productCategory
      *
      * @param ProductCategory $productCategory
@@ -208,4 +236,8 @@ class Product extends BaseEntity
         return $this->productCategory;
     }
 
+    public function __toString()
+    {
+        return $this->getDescription();
+    }
 }

@@ -7,6 +7,7 @@ namespace App\Entity;
  * @ORM\Table(name="users")
 */
 
+use PhpParser\Node\Expr\Array_;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -40,7 +41,16 @@ class User implements UserInterface, \Serializable
      */
     private $password;
 
-//    private $fullname;
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $roles;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Pilot")
+     * @ORM\JoinColumn(name="pilot_id", referencedColumnName="id", unique=true)
+     */
+    protected $pilot;
 
     /**
      * @return mixed
@@ -48,6 +58,19 @@ class User implements UserInterface, \Serializable
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param mixed $username
+     */
+    public function setUsername($username): void
+    {
+        $this->username = $username;
     }
 
     /**
@@ -66,13 +89,6 @@ class User implements UserInterface, \Serializable
         $this->email = $email;
     }
 
-    public function getRoles()
-    {
-        return [
-            'ROLE_ADMIN'
-        ];
-    }
-
     public function getPassword()
     {
         return $this->password;
@@ -86,22 +102,41 @@ class User implements UserInterface, \Serializable
         $this->password = $password;
     }
 
+    /**
+     * Set pilot
+     *
+     * @param \App\Entity\Pilot $pilot
+     * @return User
+     */
+    public function setPilot(Pilot $pilot)
+    {
+        $this->pilot = $pilot;
+
+        return $this;
+    }
+
+    /**
+     * Get pilot
+     *
+     * @return \App\Entity\Pilot
+     */
+    public function getPilot()
+    {
+        return $this->pilot;
+    }
+
     public function getSalt()
     {
         return null;
     }
 
-    public function getUsername(): ?string
+    public function getRoles()
     {
-        return $this->username;
-    }
-
-    /**
-     * @param mixed $username
-     */
-    public function setUsername($username): void
-    {
-        $this->username = $username;
+//        return $serializer->deserialize($this->roles, , 'json');
+        return unserialize($this->roles);
+//        return [
+//            'ROLE_ADMIN'
+//        ];
     }
 
     public function eraseCredentials()
@@ -115,7 +150,8 @@ class User implements UserInterface, \Serializable
         return serialize([
             $this->id,
             $this->username,
-            $this->password
+            $this->password,
+            $this->roles
         ]);
     }
 
@@ -123,6 +159,12 @@ class User implements UserInterface, \Serializable
     {
         list($this->id,
             $this->username,
-            $this->password) = unserialize($serialized);
+            $this->password,
+            $this->roles) = unserialize($serialized);
+    }
+
+    public function __toString()
+    {
+        return $this->getPilot()?$this->getPilot()->getName():$this->getUsername();
     }
 }

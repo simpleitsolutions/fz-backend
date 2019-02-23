@@ -1,0 +1,66 @@
+<div class="panel-heading">
+
+{% if(title is defined and title == 'UNSCHEDULED BOOKINGS') %}
+    	<h4 class="text-center">{{ title }}</h4>
+{% else %}
+
+{% set class = 'info' %}
+{% if(timeSchedule.noOfPilotsAvailable <= 0) %}
+{% set class = 'danger' %}
+{% elseif(timeSchedule.noOfPilotsAvailable == 1) %}
+{% set class = 'warning' %}
+{% endif %}
+
+<div class="row">
+    <div class="text-center col-xs-12 col-sm-12 col-md-12">
+    	<h4>
+            <a href="{#{ path('booking_new', {'date':indexdate|date("Y-m-d"), 'flightScheduleTimeId':timeSchedule.flightScheduleTime.id}) }#}" class="btn btn-default btn-sm pull-left">
+    			<span class="glyphicon glyphicon-plus"></span>
+            </a>
+    		FLIGHT {{ timeSchedule.flightScheduleTime.orderIndex }}
+    		<span class="label label-{{ class }}">{{ timeSchedule.noOfPilotsAvailable }}</span>
+    	    {{ timeSchedule.flightScheduleTime.scheduleStartTime|date("H:i") }}
+            <a data-toggle="collapse" href="#pilots-availability-collapse-{{ timeSchedule.flightScheduleTime.orderIndex }}">
+                <button class="hidden-xs btn btn-default btn-sm pull-right" type="button">
+                  PILOT AVAILABILITY
+                </button>
+                <button class="visible-xs btn btn-default btn-sm pull-right" type="button">
+                 PILOTS
+                </button>
+            </a>
+    	</h4>
+    </div>
+    <div id="pilots-availability-collapse-{{ timeSchedule.flightScheduleTime.orderIndex }}" class="text-center col-xs-12 col-sm-12 col-md-12 panel-collapse collapse">
+    <h5>IN: [
+    {% for availablePilot in timeSchedule.availablePilots %}
+    	{{ availablePilot.name }}{% if not loop.last %},{% endif %}
+    {% endfor %}
+    ]
+    &nbsp;
+    OUT: [
+    {% for unavailablePilot in timeSchedule.unavailablePilots %}
+    	{{ unavailablePilot.name }}{% if not loop.last %},{% endif %}
+    {% endfor %}
+    ]</h5>
+    </div>
+</div>    
+{% endif %}                
+</div>                
+<div class="panel-body" style="background-color:#fff;padding-top:0px;padding-bottom:0px;">
+<div class="row">
+    <table style="border:0px solid #f2f2f2;margin-bottom:0px;" class="table table-hover table-condensed">
+    	{% if bookingCollection|length > 0 %}
+    	{{ include('admin/bookings-header.html.twig') }}
+    	{% endif %}
+    	<tbody>
+    
+        {% for booking in bookingCollection %}
+            
+            {{ include('admin/bookings-row.html.twig') }}
+        
+        {% endfor %}
+    	</tbody>
+    </table>
+</div>
+</div>
+

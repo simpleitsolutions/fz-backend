@@ -9,11 +9,11 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class UserAdmin extends AbstractAdmin
+class PilotAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'user';
+    protected $baseRoutePattern = 'pilot';
 
-    protected $baseRouteName = 'user';
+    protected $baseRouteName = 'pilot';
 
     public function getNewInstance()
     {
@@ -37,10 +37,11 @@ class UserAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->with('User', array('class' => 'col-md-3'))
+            ->with('User', array('class' => 'col-md-6'))
 //            ->add('id')
-            ->add('username')
-            ->add('email')
+            ->add('name')
+            ->add('flyZermattPilot')
+            ->add('sortOrder')
             ->end()
         ;
     }
@@ -48,19 +49,18 @@ class UserAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('username')
-            ->add('email')
+            ->add('name')
+            ->add('flyZermattPilot')
+            ->add('sortOrder')
         ;
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
-            ->addIdentifier('username')
-            ->add('email')
-            ->add('pilot')
-//            ->add('roles')
+            ->addIdentifier('name')
+            ->add('flyZermattPilot')
+            ->add('sortOrder')
             ->add('_action', null, array(
                 'actions' => array(
                     'edit' => [],
@@ -73,8 +73,9 @@ class UserAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('username')
-            ->add('email')
+            ->add('name')
+            ->add('flyZermattPilot')
+            ->add('sortOrder')
         ;
     }
 

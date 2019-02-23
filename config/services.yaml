@@ -32,6 +32,76 @@ services:
 #            $logger: '@monolog.logger.markdown'
 
 
+    admin.bookingscheduleview:
+        class: App\Admin\BookingScheduleViewAdmin
+        arguments:
+            -
+            -
+            - App\Controller\BookingScheduleViewCRUDController
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Booking Schedule}
+        public: true
+
+    admin.bookingrequest:
+        class: App\Admin\BookingRequestAdmin
+        arguments:
+            -
+            - App\Entity\BookingRequest
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Booking Request }
+        public: true
+
+    admin.waitinglist:
+        class: App\Admin\WaitingListAdmin
+        arguments:
+            -
+            - App\Entity\WaitingListItem
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Waiting List }
+        public: true
+
+    admin.voucher:
+        class: App\Admin\VoucherAdmin
+        arguments:
+            -
+            - App\Entity\Voucher
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Voucher }
+        public: true
+
+    admin.passenger:
+        class: App\Admin\PassengerAdmin
+        arguments:
+            -
+            - App\Entity\Passenger
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Passenger }
+        public: true
+
+    admin.booking:
+        class: App\Admin\BookingAdmin
+        arguments:
+            -
+            - App\Entity\Booking
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Booking }
+        public: true
+
+    admin.pilot:
+        class: App\Admin\PilotAdmin
+        arguments:
+            -
+            - App\Entity\Pilot
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Pilot }
+        public: true
+
     admin.user:
         class: App\Admin\UserAdmin
         arguments:
@@ -39,5 +109,6 @@ services:
             - App\Entity\User
             -
         tags:
-            - { name: sonata.admin, manager_type: orm, label: User }
+            - { name: sonata.admin, manager_type: orm, group: Admin,  label: User }
         public: true
+

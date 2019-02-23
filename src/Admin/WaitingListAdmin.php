@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Admin;
-
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -9,11 +7,11 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class UserAdmin extends AbstractAdmin
+class WaitingListAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'user';
+    protected $baseRoutePattern = 'waitinglist';
 
-    protected $baseRouteName = 'user';
+    protected $baseRouteName = 'waitinglist';
 
     public function getNewInstance()
     {
@@ -37,10 +35,13 @@ class UserAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->with('User', array('class' => 'col-md-3'))
+            ->with('Waiting List', array('class' => 'col-md-4'))
 //            ->add('id')
-            ->add('username')
-            ->add('email')
+            ->add('waitingListItemDate')
+            ->add('name')
+            ->add('contactinfo')
+            ->add('noofpassengers')
+            ->add('notes')
             ->end()
         ;
     }
@@ -48,19 +49,23 @@ class UserAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('username')
-            ->add('email')
+            ->add('waitingListItemDate')
+            ->add('name')
+            ->add('contactinfo')
+            ->add('noofpassengers')
+            ->add('notes')
         ;
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
-            ->addIdentifier('username')
-            ->add('email')
-            ->add('pilot')
-//            ->add('roles')
+            ->addIdentifier('id')
+            ->add('waitingListItemDate')
+            ->add('name')
+            ->add('contactinfo')
+            ->add('noofpassengers')
+            ->add('notes')
             ->add('_action', null, array(
                 'actions' => array(
                     'edit' => [],
@@ -73,8 +78,11 @@ class UserAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('username')
-            ->add('email')
+            ->add('waitingListItemDate')
+            ->add('name')
+            ->add('contactinfo')
+            ->add('noofpassengers')
+            ->add('notes')
         ;
     }
 

@@ -19,6 +19,22 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    public function getPreferredFlightProducts()
+    {
+        $preferredFlights = $this
+            ->createQueryBuilder('p')
+            ->join('p.productCategory', 'pc')
+            ->where('pc.name = :category')
+            ->andWhere('p.preferred = :preferred')
+            ->setParameter('category', 'FLIGHT')
+            ->setParameter('preferred', true)
+            ->orderBy('p.sortOrder', 'ASC')
+            ->getQuery()
+            ->execute();
+
+        return $preferredFlights;
+    }
+
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */

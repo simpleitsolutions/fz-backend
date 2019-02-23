@@ -1,0 +1,103 @@
+<div class="row">
+    <div class="col-md-12">
+    	<h4 >
+    	    <div class="hidden-print hidden-xs pull-left">{{ indexdate|date("l j")}}<sup>{{indexdate|date("S")}}</sup>{{indexdate|date(" F Y") }}</div>
+    	    <span class="hidden-print visible-xs pull-left">{{ indexdate|date("D M j")}}<sup>{{indexdate|date("S")}}</sup>{{indexdate|date(" Y") }}</span>
+    	    <div class="pull-right hidden-print hidden-xs">
+    			<a href="{#{ path('waiting_list_new', {'date':indexdate|date("Y-m-d")})  }#}" class="btn btn-default btn-sm">NEW WAIT LIST</a>
+    	    </div>
+    	    <div class="pull-right hidden-print hidden-xs">&nbsp;</div>
+    	    <div class="pull-right hidden-print hidden-xs">
+    			<a target="eodreport" href="{#{ path('report_daily_pilot_payment', {'date':indexdate|date("Y-m-d")}) }#}" class="btn btn-default btn-sm">EOD</a>
+    	    </div>
+    	    <div class="pull-right hidden-print hidden-xs">&nbsp;</div>
+        	<div class="pull-right hidden-print">
+                <a href="{#{ path('booking_index') }#}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-list-alt"></span></a>
+            </div>
+    	    <div class="pull-right hidden-print">&nbsp;</div>
+    		{% if is_granted('ROLE_ADMIN') %}
+    	   	{% endif %}
+          	{% if app.user.pilot is not null %}
+          	<div class="pull-right hidden-print">
+	            <a href="{#{ path('pilot_availability', {'pilotId':app.user.pilot.id}) }#}" class="btn btn-default btn-sm pull-right"><span class="glyphicon glyphicon-cog"></span></a>
+	        </div>
+	    	{% endif %}
+    	    <div class="pull-right hidden-print">&nbsp;</div>
+    	    <div class="pull-right hidden-print">
+    			<a href="{#{ path('booking_new', {'date':indexdate|date("Y-m-d")}) }#}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></a>
+    	    </div>
+    	</h4>
+    </div>
+</div>
+
+
+<div class="row hidden-xs" style="margin-top:10px;">
+	<div class="text-center">
+		{{ include('admin/flight-time-summary.html.twig') }}
+	</div>
+	<div class="text-center">
+        <div class="col-xs-12">
+            <a data-toggle="collapse" href="#collapse">
+            <button class="btn btn-xs btn-primary nav-justified" type="button" style="margin-top:10px;">
+              PILOT AVAILABILITY 
+            </button>
+            </a>
+        </div>
+	</div>
+</div>
+<div class="row visible-xs" style="margin-top:10px;">
+	<div class="text-center">
+		{{ include('admin/flight-time-summary-xs.html.twig') }}
+	</div>
+	<div class="text-center">
+        <div class="col-xs-12">
+            <a data-toggle="collapse" href="#xs-collapse">
+            <button class="btn btn-primary nav-justified" type="button" style="margin-top:10px;">
+              PILOT AVAILABILITY
+            </button>
+            </a>
+        </div>
+	</div>
+	<div id="xs-collapse" class="row text-center panel-collapse collapse">
+		<div class="col-xs-12">
+          {% for timeSchedule in timeSchedules %}
+          	    <button class="btn btn-sm btn-primary" style="width:11%;padding:0px;margin-top:5px;">{{ timeSchedule.flightScheduleTime.scheduleStartTime|date('H:i') }}</button>
+	      {% endfor %}
+		</div>
+      {% for pilot in pilots %}
+      	<div class="col-xs-12 text-center">
+          {% for timeSchedule in timeSchedules %}
+              {% set pilotClass = 'success' %}
+	          {% for unavailablePilot in timeSchedule.unavailablePilots %}
+	          	{% if unavailablePilot == pilot %}
+	          		{% set pilotClass = 'danger' %}
+                {% endif %}
+		      {% endfor %}
+        	<button class="btn btn-sm btn-{{ pilotClass }}" style="width:11%;padding:0px;margin:0px 0px;">{{ pilot.name }}</button>
+	      {% endfor %}
+      	</div>
+      {% endfor %}
+	</div>
+</div>
+<div class="row hidden-xs" style="margin-top:10px;">
+	<div id="collapse" class="row text-center panel-collapse collapse">
+		<div class="col-md-12">
+          {% for timeSchedule in timeSchedules %}
+          	    <button class="btn btn-md btn-primary" style="width:11%;margin-top:5px;">{{ timeSchedule.flightScheduleTime.scheduleStartTime|date('H:i') }}</button>
+	      {% endfor %}
+		</div>
+      {% for pilot in pilots %}
+      	<div class="col-md-12 text-center">
+          {% for timeSchedule in timeSchedules %}
+              {% set pilotClass = 'success' %}
+	          {% for unavailablePilot in timeSchedule.unavailablePilots %}
+	          	{% if unavailablePilot == pilot %}
+	          		{% set pilotClass = 'danger' %}
+                {% endif %}
+		      {% endfor %}
+        	<button class="btn btn-md btn-{{ pilotClass }}" style="width:11%;margin-top:5px;">{{ pilot.name }}</button>
+	      {% endfor %}
+      	</div>
+      {% endfor %}
+	</div>
+</div>

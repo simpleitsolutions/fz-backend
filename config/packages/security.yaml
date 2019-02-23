@@ -28,7 +28,7 @@ security:
 #                failure_path:
             logout:
                 path: security_logout
-                target: api_entrypoint
+                target: sonata_admin_dashboard
             # https://symfony.com/doc/current/security/form_login_setup.html
 
     # Easy way to control access for large sections of your site

@@ -1,0 +1,136 @@
+
+{% set deleteable = false %}
+{% if (booking.status == constant('App\\Entity\\Booking::STATUS_PAYMENT_PART') or (booking.calculateBalance > 0 and booking.hasPayments)) %}
+	{% set cssClass = 'warning' %}
+	{% set status = 'OPEN ' ~  booking.calculateBalance|number_format(2) %}
+	{% set status_sm = booking.calculateBalance|number_format(2) %}
+{% elseif (booking.status == constant('App\\Entity\\Booking::STATUS_PAYMENT_FULL') or booking.paidInFull) %}
+	{% set cssClass = 'success' %}
+	{% set status = 'PAID IN FULL' %}
+	{% set status_sm = 'PAID' %}
+{% elseif (booking.status == constant('App\\Entity\\Booking::STATUS_NEW')) %}
+	{% set cssClass = 'danger' %}
+	{% set status = 'NO DEPOSIT' %}
+	{% set status_sm = 'NO DEP' %}
+	{% set deleteable = true %}
+{% elseif (booking.status == constant('App\\Entity\\Booking::STATUS_CONFIRMED')) %}
+	{% set cssClass = 'info' %}
+	{% set status = 'CONFIRMED' %}
+	{% set status_sm = 'CONFIRM' %}
+{% else %}
+	{% set cssClass = 'danger' %}
+	{% set status = 'NO DEPOSIT' %}
+	{% set status_sm = 'NO DEP' %}
+	{% set deleteable = true %}
+{% endif %}
+
+<tr class="hidden-xs hidden-sm {{cssClass}} booking-{{ booking.id }}">
+	<td rowspan="3" class="text-center">
+	    {{booking.meetingTime|date("H:i:s") == '00:00:00'?booking.flightdate|date("H:i"):booking.meetingTime|date("H:i")}}<br/>
+	    {% if booking.owner and booking.owner.name != 'FlyZermatt' %}
+		    <span style="padding:9px 3px;background-color:#996600;" class="label label-status">{{booking.owner.name}}</span><br/>
+	    {% else %}
+		    <span style="padding:9px 3px;" class="label label-status label-{{cssClass}}">{{status}}</span><br/>
+	    {% endif %}
+		#{{booking.id}}</br>
+	    {% if (booking.status == constant('App\\Entity\\Booking::STATUS_NEW')) %}
+			<a href="{#{ path('booking_confirm', { 'id': booking.id }) }#}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+	    {% elseif (booking.status == constant('App\\Entity\\Booking::STATUS_CONFIRMED') ) %}
+			<a href="{#{ path('booking_unconfirm', { 'id': booking.id }) }#}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-thumbs-down"></span></a>
+		{% endif %}
+		
+	</td>
+	<td class="text-center">{{booking.meetinglocation.name}}</td>
+	<td class="text-center">{{booking.flight.description}}</td>
+	<td class="text-center">{{booking.passengers|length}}</td>
+	<td class="text-center" style="width:110px;">
+	{% for passenger in booking.passengers %}
+			{{passenger.name}}<br />
+	{% endfor %}
+	</td>
+	<td class="text-center">
+		{% for passenger in booking.passengers %}
+			{% if passenger.pilot is null %}
+				&nbsp;<br/>
+			{% else %}
+				{{ passenger.pilot.name}}<br />
+			{% endif %}
+		{% endfor %}
+	</td>
+<!-- 
+	<td style="width:300px;"><table style="width:100%;" class="text-center"><tr><td style="padding-bottom:7px;">{{booking.contactinfo}}</td></tr><tr><td>{{booking.notes}}</td></tr></table></td>
+ -->
+ 	<td class="hidden-md text-right">
+	    {{booking.createdBy==null?'':booking.createdBy.username}} {{booking.created|date('d.m.y H:i')}}<br/>
+	    {{booking.lastUpdatedBy==null?'':booking.lastUpdatedBy.username}} {{booking.updated|date('d.m.y H:i')}}
+	</td>
+	<td class="no-gutter text-center" style="width:115px;" rowspan="3">
+		<div class="btn-group" role="group" aria-label="actions" style="margin-bottom:5px;">
+			<a href="{#{ path('booking_show', { 'id': booking.id }) }#}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-search"></span></a>
+			<a href="{#{ path('booking_update', { 'id': booking.id }) }#}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-edit"></span></a>
+			<a href="#" data-href="{#{ path('booking_delete', { 'id': booking.id }) }#}" class="btn btn-default btn-sm hidden-xs" data-toggle="modal" data-target="#deleteWarning"><span class="glyphicon glyphicon-remove"></span></a>
+	    </div>
+	    {% for sumUpPayment in booking.sumupPayments %}
+    	    <div>
+    	   	 	<span class="btn btn-default btn-xs hidden-xs">{{ sumUpPayment.paymentType.shortName }} {{ sumUpPayment.amount }}</span>
+    	    </div>
+	    {% endfor %}
+	</td>
+</tr>
+<tr class="visible-lg {{cssClass}} booking-{{ booking.id }}"><td colspan="6" style="border:none;">{{booking.contactinfo}}</td></tr>
+<tr class="visible-lg {{cssClass}} booking-{{ booking.id }}"><td colspan="6" style="border:none;">{{booking.notes}}</td></tr>
+<tr class="visible-md {{cssClass}} booking-{{ booking.id }}"><td colspan="5" style="border:none;">{{booking.contactinfo}}</td></tr>
+<tr class="visible-md  {{cssClass}} booking-{{ booking.id }}"><td colspan="5" style="border:none;">{{booking.notes}}</td></tr>
+
+<tr class="visible-xs visible-sm {{cssClass}} booking-{{ booking.id }}">
+	<td class="text-center" rowspan="2">
+		{{booking.meetingTime|date("H:i:s") == '00:00:00'?booking.flightdate|date("H:i"):booking.meetingTime|date("H:i")}}<br/>
+	    {% if booking.owner and booking.owner.name != 'FlyZermatt' %}
+		    <span style="padding:3px 0px;background-color:#996600;" class="label label-status">{{booking.owner.name}}</span><br/>
+	    {% else %}
+		    <span style="padding:3px 0px;" class="label label-status label-{{cssClass}}">{{status_sm}}</span><br/>
+	    {% endif %}
+		#{{booking.id}}
+	    <span style="margin-top:10px;display:block;"> 
+	    {% if (booking.status == constant('App\\Entity\\Booking::STATUS_NEW')) %}
+			<a href="{#{ path('booking_confirm', { 'id': booking.id }) }#}" class="btn btn-default btn-md"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+	    {% elseif (booking.status == constant('App\\Entity\\Booking::STATUS_CONFIRMED') ) %}
+			<a href="{#{ path('booking_unconfirm', { 'id': booking.id }) }#}" class="btn btn-default btn-md"><span class="glyphicon glyphicon-thumbs-down"></span></a>
+		{% endif %}
+		</span>
+	</td>
+	<td class="text-center">{{booking.meetinglocation.shortName}}</td>
+	<td class="text-center">{{booking.flight.shortName}}</td>
+	<td class="text-center">{{booking.passengers|length}}</td>
+	<td class="text-center" style="width:40%;">
+	{% for passenger in booking.passengers %}
+			{{passenger.name}}<br />
+	{% endfor %}
+	</td>
+	<td class="text-center" style="width:15%;">
+	{% set newline = "<br />" %}
+	{% for passenger in booking.passengers %}
+			{{(passenger.pilot is null ? '' : passenger.pilot.name~"<br />")|raw}}
+	{% endfor %}
+	</td>
+  	<td class="text-right" style="width:5%;" rowspan="2">
+		<div class="dropdown">
+		  <button class="btn btn-default btn-md dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+		    <span class="glyphicon glyphicon-cog"></span>
+		  </button>
+		  <ul class="dropdown-menu dropdown-menu-left text-left" role="menu" aria-labelledby="">
+		    <li role="presentation"><a role="menuitem" tabindex="-1" href="{#{ path('booking_show', { 'id': booking.id }) }#}">View</a></li>
+		    <li role="presentation"><a role="menuitem" tabindex="-1" href="{#{ path('booking_update', { 'id': booking.id }) }#}">Edit</a></li>
+		    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-href="{#{ path('booking_delete', { 'id': booking.id }) }#}" data-toggle="modal" data-target="#deleteWarning">Delete</a></li>
+		  </ul>
+		</div>		
+	    {% for sumUpPayment in booking.sumupPayments %}
+    	    <div>
+    	   	 	<span class="btn btn-default btn-xs">{{ sumUpPayment.paymentType.shortName }} {{ sumUpPayment.amount }}</span>
+    	    </div>
+	    {% endfor %}
+  	</td>
+</tr>
+<tr class="visible-xs visible-sm {{cssClass}} booking-{{ booking.id }}">
+	<td colspan="5" style="border-top:0px;"><table style="width:100%;"><tr><td>{{booking.contactinfo}}</td></tr><tr><td class="text-left">{{booking.notes}}</td></tr></table></td>
+</tr>

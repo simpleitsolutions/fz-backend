@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Admin;
-
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -9,11 +7,11 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class UserAdmin extends AbstractAdmin
+class BookingRequestAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'user';
+    protected $baseRoutePattern = 'bookingrequest';
 
-    protected $baseRouteName = 'user';
+    protected $baseRouteName = 'bookingrequest';
 
     public function getNewInstance()
     {
@@ -37,10 +35,18 @@ class UserAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->with('User', array('class' => 'col-md-3'))
+            ->with('Booking Request', array('class' => 'col-md-6'))
 //            ->add('id')
-            ->add('username')
+            ->add('name')
+            ->add('phone')
             ->add('email')
+            ->add('noPassengers')
+            ->add('flight')
+            ->add('flightDate')
+            ->add('arrivalDate')
+            ->add('departureDate')
+            ->add('groupConditions')
+            ->add('comments')
             ->end()
         ;
     }
@@ -48,19 +54,26 @@ class UserAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('username')
+            ->add('name')
+            ->add('phone')
             ->add('email')
+            ->add('noPassengers')
         ;
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
-            ->addIdentifier('username')
+            ->addIdentifier('name')
+            ->add('phone')
             ->add('email')
-            ->add('pilot')
-//            ->add('roles')
+            ->add('noPassengers')
+            ->add('flight')
+            ->add('flightDate')
+            ->add('arrivalDate')
+            ->add('departureDate')
+            ->add('groupConditions')
+            ->add('comments')
             ->add('_action', null, array(
                 'actions' => array(
                     'edit' => [],
@@ -73,8 +86,16 @@ class UserAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('username')
+            ->add('name')
+            ->add('phone')
             ->add('email')
+            ->add('noPassengers')
+            ->add('flight')
+            ->add('flightDate')
+            ->add('arrivalDate')
+            ->add('departureDate')
+            ->add('groupConditions')
+            ->add('comments')
         ;
     }
 

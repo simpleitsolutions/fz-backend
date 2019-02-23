@@ -19,6 +19,18 @@ class BookingRequestRepository extends ServiceEntityRepository
         parent::__construct($registry, BookingRequest::class);
     }
 
+    public function getBookingRequestsForDate(\DateTime $givenDate)
+    {
+        return $this->createQueryBuilder('br')
+            ->where('br.confirmed = false')
+            ->andwhere('br.flightDate BETWEEN :startdate AND :enddate')
+            ->setParameter('startdate', $givenDate)
+            ->setParameter('enddate',  $givenDate)
+            ->orderBy('br.flightDate', 'ASC')
+            ->getQuery()
+            ->execute();
+    }
+
     // /**
     //  * @return BookingRequest[] Returns an array of BookingRequest objects
     //  */
