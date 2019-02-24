@@ -27,6 +27,7 @@ use Sonata\Form\Type\DatePickerType;
 use Sonata\Form\Type\DateRangePickerType;
 use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 
@@ -41,16 +42,23 @@ class BookingAdmin extends AbstractAdmin
     public function getNewInstance()
     {
         $instance = parent::getNewInstance();
+        $entityManager = $this->getModelManager()->getEntityManager('App\Entity\BookingOwner');
+        $bookingOwner = $entityManager->getRepository('App\Entity\BookingOwner')->findOneBy(array('name' => 'FlyZermatt'));
 
+        $instance->setOwner($bookingOwner);
         if ($this->hasRequest()) { //Pre-load new Booking from Booking Schedule view.
             $targetDate = $this->getRequest()->get('date', null);
-            $instance->setFlightDate(DateTime::createFromFormat('Y-m-d', $targetDate));
+            if($targetDate != null) {
+                $instance->setFlightDate(DateTime::createFromFormat('Y-m-d', $targetDate));
+            }
 
             $flightScheduleTimeId = $this->getRequest()->get('flightScheduleTimeId', null);
-            $entityManager = $this->getModelManager()->getEntityManager('App\Entity\FlightScheduleTime');
-            $flightScheduleTime = $entityManager->getRepository('App\Entity\FlightScheduleTime')->find($flightScheduleTimeId);
-            $instance->setFlightScheduleTime($flightScheduleTime);
-            $instance->setMeetingTime($flightScheduleTime->getScheduleStartTime());
+            if($flightScheduleTimeId != null) {
+                $entityManager = $this->getModelManager()->getEntityManager('App\Entity\FlightScheduleTime');
+                $flightScheduleTime = $entityManager->getRepository('App\Entity\FlightScheduleTime')->find($flightScheduleTimeId);
+                $instance->setFlightScheduleTime($flightScheduleTime);
+                $instance->setMeetingTime($flightScheduleTime->getScheduleStartTime());
+            }
         }
 
 //        $meetingLocation = $entityManager->getRepository('App\Entity\MeetingLocation')->find(3);
@@ -86,17 +94,14 @@ class BookingAdmin extends AbstractAdmin
 
         
         $formMapper
-        ->with('Details', ['class' => 'col-md-5'])
-//            ->add('id')
-//            ->add('flightScheduleTime')
-//              ->add('flightdate', DateTimePickerType::class, ['datepicker_use_button' => false] )
+        ->with('Details', ['class' => 'col-md-4'])
             ->add('flightdate', DateType::class, [ 'label' => 'Flight Date',
                             'widget' => 'single_text',
 //                            'html5' => false,
                             'attr' => ['class' => 'js-datepicker'],])
             ->add('meetingTime', TimeType::class)
             ->add('flight', null,
-                        ['placeholder' => 'Please Select',
+                        ['placeholder' => 'Please Select', 'attr'=>array('data-sonata-select2'=>'false'),
                          'query_builder' => function(ProductRepository $er) {
                                                 return $er->createQueryBuilder('p')
                                                     ->join('p.productCategory', 'pc')
@@ -111,20 +116,8 @@ class BookingAdmin extends AbstractAdmin
                                     return $er->createQueryBuilder('ml')
                                         ->orderBy('ml.sortOrder', 'ASC');}])
             ->add('contactinfo', null, ['label' => 'Contact'])
-            ->add('notes', null, ['label' => 'Comments'])
-            ->add('owner', null, ['label' => false,
-                    'multiple' => false,
-                    'expanded' => true,
-                    'query_builder' => function(BookingOwnerRepository $er) {
-                        return $er->createQueryBuilder('bo')
-                            ->orderBy('bo.sortOrder', 'ASC');}]
-            )
-            ->add('created', DateType::class, ['widget' => 'single_text', 'disabled' => true])
-            ->add('createdBy', TextType::class, ['disabled' => true])
-            ->add('updated', DateType::class, ['widget' => 'single_text', 'disabled' => true])
-            ->add('lastUpdatedBy', TextType::class, ['disabled' => true] )
         ->end()
-        ->with('Passengers', ['class' => 'col-md-7'])
+        ->with('Passengers', ['class' => 'col-md-8'])
             ->add('passengers',
                 CollectionType::class,
                     ['label' => false,
@@ -135,7 +128,23 @@ class BookingAdmin extends AbstractAdmin
                         'entry_type' => PassengerType::class,
                     ]
                 )
-            ->end()
+        ->end()
+        ->with('Notes', ['class' => 'col-md-9'])
+            ->add('notes', TextareaType::class, ['label' => 'Comments', 'required' => false, 'attr' => ['rows' => '6']])
+        ->end()
+        ->with('Office', ['class' => 'col-md-3'])
+            ->add('owner', null, ['placeholder' => false,
+                    'multiple' => false,
+                    'expanded' => true,
+                    'query_builder' => function(BookingOwnerRepository $er) {
+                        return $er->createQueryBuilder('bo')
+                            ->orderBy('bo.sortOrder', 'ASC');}]
+            )
+//            ->add('created', DateType::class, ['widget' => 'single_text', 'disabled' => true])
+//            ->add('createdBy', TextType::class, ['disabled' => true])
+//            ->add('updated', DateType::class, ['widget' => 'single_text', 'disabled' => true])
+//            ->add('lastUpdatedBy', TextType::class, ['disabled' => true] )
+        ->end()
         ;
     }
 
@@ -192,6 +201,10 @@ class BookingAdmin extends AbstractAdmin
         $object->setLastUpdatedBy($user);
         $object->setCreated($createdDate);
         $object->setUpdated($createdDate);
+
+        foreach ($object->getPassengers() as $passenger) {
+            $passenger->setFlight($object->getFlight());
+        }
     }
 
     public function __toString()

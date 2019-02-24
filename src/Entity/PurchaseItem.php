@@ -18,7 +18,7 @@ class PurchaseItem extends BaseEntity
     public function __construct(Product $product)
     {
 		$this->setProduct($product);
-		$this->setDescription($product->getName());
+		$this->setDescription($product->getDescription());
 		$this->setAmount($product->getPrice());
     }
 

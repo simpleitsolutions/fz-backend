@@ -417,7 +417,7 @@ function bookingPaymentSummaryUpdatePurchaseItem(selectEl)
 	
 	$.ajax({
 	    type        : 'GET',
-	    url         : '/product/cost/' + selectEl.value,
+	    url         : '/booking/product/cost/' + selectEl.value,
 	    data        : selectEl.value,
 	})
 	.done(function(response){
@@ -425,7 +425,7 @@ function bookingPaymentSummaryUpdatePurchaseItem(selectEl)
 		$('#'+productPriceId).html(response);
 	})
 	.fail(function(jqXHR, textStatus, errorThrown){
-    	alert('Error : ' + errorThrown);
+    	alert('Error HERE: ' + errorThrown);
 	});
 
 	$(document).ajaxStop(function() { calculateSum(); });

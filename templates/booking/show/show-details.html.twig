@@ -1,0 +1,11 @@
+<h5>DETAILS</h5>
+<table class="table table-condensed booking-details">
+	<tr><td>Date:</td><td>{{ entity.flightdate|date("l F jS Y") }}</td></tr>
+	<tr><td>Time:</td><td>{{entity.meetingTime|date("H:i:s") == '00:00:00'?entity.flightdate|date("H:i"):entity.meetingTime|date("H:i")}}</td></tr>
+	<tr><td>Meeting:</td><td>{{entity.meetinglocation.name}}</td></tr>
+	<tr class="hidden-print"><td>Flight:</td><td>{{entity.flight.description}}</td></tr>
+	<tr>
+		<td>Contact:</td>
+		<td>{{ entity.contactinfo }}</td>
+	</tr>
+</table>

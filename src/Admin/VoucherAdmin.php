@@ -6,6 +6,8 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class VoucherAdmin extends AbstractAdmin
 {
@@ -41,7 +43,8 @@ class VoucherAdmin extends AbstractAdmin
             ->add('name')
             ->add('flight')
             ->add('withPhotos')
-            ->add('language')
+            ->add('message', TextareaType::class, ['attr' => ['rows' => '4']])
+            ->add('language', ChoiceType::class, ['expanded' => true, 'choices' => ['English' => 'en', 'German' => 'de']])
             ->end()
         ;
     }

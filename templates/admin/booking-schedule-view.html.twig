@@ -3,6 +3,7 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
 
 {% block sonata_admin_content %}
+
         <style>
             @media only screen and (max-width: 767px) {
                 div.waiting-list, div.booking-requests
@@ -181,7 +182,7 @@
         {% set timeSchedules = bookingDailySchedule.timeSchedules %}
         {% set bookingsUnallocated = bookingDailySchedule.bookingsUnallocated %}
         {% set pilots = bookingDailySchedule.pilots %}
-
+<div class="row content">
         <div class="modal fade" id="deleteWarning" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content col-md-6 text-center">
@@ -436,5 +437,5 @@
             <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %#}
 
-
+</div>
 {% endblock %}

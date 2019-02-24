@@ -1,0 +1,36 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+
+{% block content %}
+
+	<div class="modal fade" id="cancelWarning" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-sm">
+	    <div class="modal-content col-md-6 text-center">
+	      <div class="modal-body">
+	        <h4 class="modal-title">Cancel without saving?</h4>
+	      </div>
+	      <div class="modal-footer">
+	        <a href="{{ path('booking_show', {'id':passenger.booking.id }) }}" class="btn btn-primary">Yes</a>
+	        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="modal fade" id="ajaxError" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content col-md-12 text-center">
+	      <div class="modal-body">
+	        <h4 class="modal-title">AJAX Error has occurred</h4>
+            <p>some content</p>
+          </div>
+	    </div>
+	  </div>
+	</div>
+
+  <div id="ajaxreplace" class="panel panel-default pdf-page-half">
+
+	{% include 'booking/payment/passenger.payment.summary.form.html.twig' %}
+
+  </div>
+
+{% endblock %}

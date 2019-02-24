@@ -1,0 +1,69 @@
+<table class="table table-condensed booking-details">
+	<tr>
+		<th style="border:none;"><h5>PASSENGER <span class="hidden-print">( Pilot )</span></h5></th>
+		<th class="text-center" style="border:none;"><h5>FLIGHT</h5></th>
+		<th class="hidden-xs hidden-sm hidden-print" style="border:none;">
+		{#% if not entity.hasPassengerPayment %#}
+			{% if entity.paidInFull %}
+	     		<a href="{{ path('booking_schedule_payment', { 'id': entity.id }) }}" class="btn btn-default btn-xs btn-success hidden-print label-status">
+	     			PAID IN FULL
+	     		</a>
+	     	{% else %}
+	     		<a href="{{ path('booking_schedule_payment', { 'id': entity.id }) }}" class="btn btn-default btn-xs btn-warning hidden-print label-status">
+	     			OPEN {% if entity.hasPayments %}{{ entity.calculateBalance|number_format(2) }}{% endif %}
+	     		</a>
+     		{% endif %}
+ 		{#% endif %#}
+		</th>
+		<th class="visible-xs visible-sm hidden-print" style="border:none;">
+		{#% if not entity.hasPassengerPayment %#}
+	     	{% if entity.paidInFull %}
+	     		<a href="{{ path('booking_schedule_payment', { 'id': entity.id }) }}" class="btn btn-default btn-xs btn-success hidden-print label-status">
+     				PAID
+				<a/>
+	     	{% else %}
+	     		<a href="{{ path('booking_schedule_payment', { 'id': entity.id }) }}" class="btn btn-default btn-xs btn-warning hidden-print label-status">
+     				OPEN {% if entity.hasPayments %}{{ entity.calculateBalance|number_format(2) }}{% endif %}
+     			</a>
+     		{% endif %}
+ 		{#% endif %#}
+		</th>
+	</tr>
+		{% for passenger in entity.passengers %}
+	<tr>
+		<td>{{passenger.name}} <span class="hidden-print">( {{ passenger.pilot == null?'TBA':passenger.pilot.name }} )</span></td>
+		<td class="text-left" >{{ passenger.flight == null?'TBA':passenger.flight.description }}</td>
+
+		<td class="hidden-xs hidden-sm hidden-print" style="min-width:30%px;">
+			{% if not passenger.paidInFull %}
+				<a href="{{ path('booking_schedule_passenger_payment', {'passenger_id': passenger.id}) }}" class="btn btn-default btn-xs btn-warning hidden-print label-status">
+					{% if passenger.hasMadePayment %}
+						OPEN {{ passenger.calculateOwing|number_format(2) }}
+					{% else %}
+						OPEN
+					{% endif %}
+				</a>
+			{% else %}
+				<a href="{{ path('booking_schedule_passenger_payment', {'passenger_id': passenger.id}) }}" class="btn btn-default btn-xs btn-success hidden-print label-status">
+					PAID IN FULL
+				</a>
+			{% endif %}
+		</td>
+		<td class="visible-xs visible-sm hidden-print">
+			{% if not passenger.paidInFull %}
+				<a href="{{ path('booking_schedule_passenger_payment', {'passenger_id': passenger.id}) }}" class="btn btn-default btn-xs btn-warning hidden-print label-status">
+					{% if passenger.hasMadePayment %}
+						OPEN {{ passenger.calculateOwing|number_format(2) }}
+					{% else %}
+						OPEN
+					{% endif %}
+				</a>
+			{% else %}
+				<a href="{{ path('booking_schedule_passenger_payment', {'passenger_id': passenger.id}) }}" class="btn btn-default btn-xs btn-success hidden-print label-status">
+					PAID
+				</a>
+			{% endif %}
+		</td>
+	</tr>
+		{% endfor %}
+</table>

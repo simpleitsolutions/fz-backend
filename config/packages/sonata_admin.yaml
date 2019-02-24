@@ -57,6 +57,10 @@ sonata_admin:
                     - admin.user
 
 
+#    assets:
+#        javascripts:
+#            extra_javascripts: 'js/aazp.js'
+
 sonata_block:
     blocks:
         sonata.admin.block.admin_list:

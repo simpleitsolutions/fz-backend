@@ -1,10 +1,29 @@
 <?php
 namespace App\Controller;
  
+use App\Entity\Booking;
+use App\Entity\Passenger;
+use App\Entity\Payment;
+use App\Entity\PaymentType;
+use App\Entity\Product;
+use App\Entity\ProductCategory;
+use App\Entity\PurchaseItem;
+use App\Form\BPPassengerType;
 use App\Form\DateSelectorType;
+use App\Form\PurchaseType;
+use App\Helper\BookingPaymentHelper;
+use App\Helper\PaymentViewHelper;
 use Doctrine\Common\Collections\ArrayCollection;
+//use Sonata\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -102,51 +121,54 @@ class BookingController extends AbstractController
 //        ));
 //    }
 //
-//    public function showAction($id)
-//    {
-//        $em = $this->getDoctrine()->getManager();
-//        $paymentsRepos = $em->getRepository('AazpBookingBundle:Payment');
-//
-//        $booking = $em->getRepository('AazpBookingBundle:Booking')->find($id);
-//
-//        if (!$booking) {
-//            throw $this->createNotFoundException('Unable to find Booking entity.');
-//        }
-//
-//        $deleteForm = $this->createFormBuilder($booking)
-//		            ->setAction($this->generateUrl('booking_delete', array ('id' => $id)))
-//		            ->add('Delete', 'submit')
-//					->getForm();
-//
-//		$booking->hasPassengerPayment();
-//
-//		$payments = $paymentsRepos->getPaymentsForBooking($booking);
-//		$paymentViewHelper = new PaymentViewHelper();
-//		$paymentViewList = $paymentViewHelper->processPayments($payments);
-//
-//// 		$payments = new ArrayCollection();
-//// 		foreach($booking->getPassengers() as $passenger)
-//// 		{
-//// 			if($passenger->getPurchase() != null)
-//// 			{
-//// 				foreach($passenger->getPurchase()->getPayments() as $payment)
-//// 				{
-//// 					if(!$payments->contains($payment))
-//// 					{
-//// 						$payments[] = $payment;
-//// 					}
-//// 				}
-//// 			}
-//// 		}
-//
-//        return $this->render('AazpBookingBundle:Booking:show.html.twig', array(
-//            'entity'      => $booking,
-//            'delete_form' => $deleteForm->createView(),
-//            'payments' => $payments,
-//            'paymentViewList' => $paymentViewList
-//        ));
-//    }
-//
+    /**
+     * @Route("/show/{id}", name="booking_schedule_show")
+     */
+    public function showAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $paymentsRepos = $em->getRepository('\App\Entity\Payment');
+
+        $booking = $em->getRepository('\App\Entity\Booking')->find($id);
+
+        if (!$booking) {
+            throw $this->createNotFoundException('Unable to find Booking entity.');
+        }
+
+        $deleteForm = $this->createFormBuilder($booking)
+		            ->setAction($this->generateUrl('booking_delete', array ('id' => $id)))
+		            ->add('Delete', SubmitType::class)
+					->getForm();
+
+		$booking->hasPassengerPayment();
+
+		$payments = $paymentsRepos->getPaymentsForBooking($booking);
+		$paymentViewHelper = new PaymentViewHelper();
+		$paymentViewList = $paymentViewHelper->processPayments($payments);
+
+// 		$payments = new ArrayCollection();
+// 		foreach($booking->getPassengers() as $passenger)
+// 		{
+// 			if($passenger->getPurchase() != null)
+// 			{
+// 				foreach($passenger->getPurchase()->getPayments() as $payment)
+// 				{
+// 					if(!$payments->contains($payment))
+// 					{
+// 						$payments[] = $payment;
+// 					}
+// 				}
+// 			}
+// 		}
+
+        return $this->render('booking/show.html.twig', array(
+            'entity'      => $booking,
+            'delete_form' => $deleteForm->createView(),
+            'payments' => $payments,
+            'paymentViewList' => $paymentViewList
+        ));
+    }
+
 //    public function newAction(Request $request)
 //    {
 //        $flightScheduleTimeRepos = $this->getDoctrine()->getRepository('AazpBookingBundle:FlightScheduleTime');
@@ -384,347 +406,362 @@ class BookingController extends AbstractController
 //
 //     }
 //
-//     public function confirmAction($id)
-//     {
-//         $em = $this->getDoctrine()->getManager();
-//         $booking = $em->getRepository('AazpBookingBundle:Booking')->find($id);
-//
-//         if (!$booking) {
-//             throw $this->createNotFoundException('Unable to find Booking entity.');
-//         }
-//
-//         $booking->setLastUpdatedBy($this->getUser());
-//         $booking->setStatus(Booking::STATUS_CONFIRMED);
-//
-//         $em->flush();
-//
-//         $this->get('session')->getFlashBag()->add('success', 'Booking has been successfully confirmed!');
-//
-//         return $this->redirect($this->generateUrl('booking_index_schedule'));
-//     }
-//
-//     public function unconfirmAction($id)
-//     {
-//         $em = $this->getDoctrine()->getManager();
-//         $booking = $em->getRepository('AazpBookingBundle:Booking')->find($id);
-//
-//         if (!$booking) {
-//             throw $this->createNotFoundException('Unable to find Booking entity.');
-//         }
-//
-//         $booking->setLastUpdatedBy($this->getUser());
-//         $booking->setStatus(Booking::STATUS_NEW);
-//
-//         $em->flush();
-//
-//         $this->get('session')->getFlashBag()->add('success', 'Booking has been successfully unconfirmed!');
-//
-//         return $this->redirect($this->generateUrl('booking_index_schedule'));
-//     }
-//
-//      public function deleteAction($id)
-//    {
-//        $em = $this->getDoctrine()->getManager();
-//        $entity = $em->getRepository('AazpBookingBundle:Booking')->find($id);
-//
-//	    if (!$entity) {
-//	        throw $this->createNotFoundException('Unable to find Booking entity.');
-//        }
-//
-//		$entity->setLastUpdatedBy($this->getUser());
-//
-//        $em->remove($entity);
-//        $em->flush();
-//
-// 		$this->get('session')->getFlashBag()->add('success', 'Booking has been successfully deleted!');
-//
-//        return $this->redirect($this->generateUrl('booking_index_schedule'));
-//    }
-//
-//    public function newBookingPaymentAction($id)
-//    {
-//        $request = Request::createFromGlobals();
-//        $em = $this->getDoctrine()->getManager();
-//        $paymentsRepos = $em->getRepository('AazpBookingBundle:Payment');
-//
-//        $booking = $em->getRepository('AazpBookingBundle:Booking')->find($id);
-//        if (!$booking)
-//        {
-//            throw $this->createNotFoundException('Unable to find Booking entity.');
-//        }
-//
-//        //PRELOAD FORM
-//        foreach ($booking->getPassengers() as $passenger)
-//        {
-//            if($passenger->getPurchase() === null)
-//            {
-//                $purchase = new Purchase();
-//
-//                $product_category_photo = $em->getRepository('AazpBookingBundle:ProductCategory')->findOneByName('FLIGHT-PHOTO');
-//                $product_photo_option = $em->getRepository('AazpBookingBundle:Product')->findOneByProductCategory($product_category_photo);
-//                if (!$product_photo_option) {
-//                    throw $this->createNotFoundException('Unable to find Flight Photo Product entity.');
-//                }
-//
-//                $purchase_item_flight = new PurchaseItem($passenger->getFlight());
-//                $purchase_item_photo_option = new PurchaseItem($product_photo_option);
-//
-//                $purchase->addPurchaseItem($purchase_item_flight);
-//                $purchase->addPurchaseItem($purchase_item_photo_option);
-//
-//                $passenger->setPurchase($purchase);
-//            }
-//        }
-//
-//        //LOAD PAYMENT LIST
-//        $payments = $paymentsRepos->getPaymentsForBooking($booking);
-//        $paymentViewHelper = new PaymentViewHelper();
-//        $paymentViewList = $paymentViewHelper->processPayments($payments);
-//
-//        $form = $this->createFormBuilder($booking)
-//        ->add('passengers', 'collection', array('type' => new BPPassengerType(), 'allow_add' => false, 'allow_delete' => false, 'by_reference' => false))
-//        ->add('paymentType', 'entity', array('label' => 'Payment Type', 'class' => 'AazpBookingBundle:PaymentType','property' => 'name', 'mapped' => false, 'expanded' => true))
-//        ->add('paymentAmount', 'number', array('precision' => 2, 'data' => $booking->calculateBalance(), 'mapped' => false))
-//        ->add('sumupRef', 'text', array('mapped' => false, 'required' => false))
-//        ->add('description', 'text', array('mapped' => false, 'required' => false))
-//        ->add('pay', 'submit')
-//        ->add('cancel', 'submit', array('attr' => array('formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )))
-//        ->getForm();
-//
-//        $form->handleRequest($request);
-//
-//        if($request->isXmlHttpRequest() )
-//        {
-//            $paymentType = $form->get('paymentType')->getData();
-//
-//            $product_category_card_fee = $em->getRepository('AazpBookingBundle:ProductCategory')->findOneByName('CARD-FEE');
-//
-//            $product_card_fee = $em->getRepository('AazpBookingBundle:Product')->findOneByProductCategory($product_category_card_fee);
-//            if (!$product_card_fee)
-//            {
-//                throw $this->createNotFoundException('Unable to find Card Fee Product entity.');
-//            }
-//
-//            //IF CASH OR INVOICE OR VOUCHER THEN REMOVE CARD FEE Purchase Item IF IT EXISTS
-//            if($paymentType->getName() === "CASH" ||
-//                $paymentType->getName() === "INVOICE" ||
-//                $paymentType->getName() === "VOUCHER")
-//            {
-//                foreach ($booking->getPassengers() as $passenger)
-//                {
-//                    //check if CARD FEE EXISTS
-//                    foreach ($passenger->getPurchase()->getPurchaseItems() as $purchaseItem)
-//                    {
-//                        //Remove if it does
-//                        if($purchaseItem->getProduct() == $product_card_fee)
-//                        {
-//                            //CAN ONLY REMOVE IF NO OTHER PAYMENT HAS BEEN MADE WITH A CARD FEE **********************************
-//                            if(!$passenger->getPurchase()->hasNoPriorCardPayment())
-//                            {
-//                                $passenger->getPurchase()->removePurchaseItem($purchaseItem);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            else if($paymentType->getName() === "VISA" ||
-//                $paymentType->getName() === "M/C" ||
-//                $paymentType->getName() === "JCB" ||
-//                $paymentType->getName() === "AMEX" ||
-//                $paymentType->getName() === "Maestro")
-//            {
-//                //check if CARD FEE EXISTS
-//                //Add if it doesn't
-//                // $noOfFlights = 0;
-//                $cardFeeExists = false;
-//                foreach ($booking->getPassengers() as $passenger)
-//                {
-//                    foreach ($passenger->getPurchase()->getPurchaseItems() as $purchaseItem)
-//                    {
-//                        if($purchaseItem->getProduct() == $product_card_fee)
-//                        {
-//                            // $purchase->removePurchaseItem($purchaseItem);
-//                            //IF CARD THEN ADD CARD FEE Purchase Item AND CALCULATE ITS AMOUNT (FLIGHTS x FEE)
-//                            // $purchaseItem->setAmount($paymentType->getFee());
-//                            $cardFeeExists = true;
-//                        }
-//                        //Count the number of Flight Products in order to calculate the Card Fee.
-//                        // if($purchaseItem->getProduct()->getProductCategory()->getDescription() == "FLIGHT")
-//                        // {
-//                        // $noOfFlights++;
-//                        // }
-//                    }
-//                    if(!$cardFeeExists)
-//                    {
-//                        //Add Purchase Items to the Purchase
-//                        $purchase_item_card_fee = new PurchaseItem($product_card_fee);
-//                        $passenger->getPurchase()->addPurchaseItem($purchase_item_card_fee);
-//                        $purchase_item_card_fee->setAmount($product_card_fee->getPrice());
-//                    }
-//                }
-//            }
-//
-//            $passenger->setPurchase($passenger->getPurchase());
-//
-//            $form = $this->createForm(new PurchaseType($em), $passenger->getPurchase());
-//
-//            $form = $this->createFormBuilder($booking)
-//            ->add('passengers', 'collection', array('type' => new BPPassengerType(), 'allow_add' => false, 'allow_delete' => false, 'by_reference' => false))
-//            ->add('paymentType', 'entity', array('label' => 'Payment Type', 'class' => 'AazpBookingBundle:PaymentType','property' => 'name', 'data' => $paymentType, 'mapped' => false, 'expanded' => true))
-//            ->add('paymentAmount', 'number', array('precision' => 2, 'data' => $booking->calculateBalance(), 'mapped' => false))
-//            ->add('description', 'text', array('mapped' => false, 'required' => false))
-//            ->add('pay', 'submit')
-//            ->add('cancel', 'submit', array('attr' => array('formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )))
-//            ->getForm();
-//
-//
-//            $template = $this->renderView('AazpBookingBundle:Purchase:booking.payment.summary.form.html.twig', array(
-//                'payments' => $payments,
-//                'paymentViewList' => $paymentViewList,
-//                'booking' => $booking,
-//                'form'	=> $form->createView(),
-//            ));
-//
-//            $json = json_encode($template);
-//            $response = new Response($json, 200);
-//            $response->headers->set('Content-Type', 'application/json');
-//            return $response;
-//        }
-//
-//        if ($form->isValid())
-//        {
-//            $paymentAmount = $form->get('paymentAmount')->getData();
-//            $paymentType = $form->get('paymentType')->getData();
-//            $paymentDescription = $form->get('description')->getData();
-//            $paymentSumupRef = $form->get('sumupRef')->getData();
-//            $transactionNo = date('YmdHis');
-//
-//            $passengers = $booking->getPassengers();
-//
-//            $bookingPaymentHelper = new BookingPaymentHelper($paymentAmount, $passengers);
-//            if($bookingPaymentHelper->getOwingTotal() == 0.0)
-//            {
-//                $paymentMessage = 'BOOKING ALREADY PAID IN FULL. Payment '.$paymentAmount.' CHF not accepted!';
-//                $messageType = 'danger';
-//            }
-//            else if($bookingPaymentHelper->hasEvenPaymentDistribution())
-//            {
-//                $passengerAmount = $bookingPaymentHelper->getPassengerPaymentAmount();
-//                foreach ($passengers as $passenger)
-//                {
-//                    $thisPassengerPaymentAmount = $bookingPaymentHelper->getPassengerPaymentStatus()[$passenger->getId()];
-//                    $passengerPayment = $thisPassengerPaymentAmount->getSubPaymentTotal();
-//                    $passengerOwingBalance = $thisPassengerPaymentAmount->getOwingBalance();
-//                    if($passengerOwingBalance <> 0.0)
-//                    {
-//                        $payment = new Payment();
-//                        $payment->setAmount($paymentAmount);
-//                        $payment->setSubAmount($passengerAmount);
-//                        $payment->setPaymentType($paymentType);
-//                        $payment->setDescription($paymentDescription);
-//                        $payment->setSumupRef($paymentSumupRef);
-//                        $payment->setTransactionNo($transactionNo);
-//
-//                        $purchase = $passenger->getPurchase();
-//                        if($purchase === null)
-//                        {
-//                            $purchase = new Purchase();
-//                        }
-//                        $payment->addPurchase($purchase);
-//                        $purchase->addPayment($payment);
-//                    }
-//                }
-//                $paymentMessage = 'Payment '.number_format($paymentAmount,2).' CHF successful!';
-//                $messageType = 'success';
-//            }
-//            else
-//            {
-//                if(number_format($paymentAmount,2) == number_format($bookingPaymentHelper->getOwingTotal(),2))
-//                {
-//                    foreach ($passengers as $passenger)
-//                    {
-//                        $payment = new Payment();
-//                        $payment->setAmount($paymentAmount);
-//                        $payment->setSubAmount($passenger->calculateOwing());
-//                        $payment->setPaymentType($paymentType);
-//                        $payment->setDescription($paymentDescription);
-//                        $payment->setSumupRef($paymentSumupRef);
-//                        $payment->setTransactionNo($transactionNo);
-//
-//                        $purchase = $passenger->getPurchase();
-//                        if($purchase === null)
-//                        {
-//                            $purchase = new Purchase();
-//                        }
-//                        $payment->addPurchase($purchase);
-//                        $purchase->addPayment($payment);
-//                    }
-//                }
-//                else
-//                {
-//                   $paymentAmountBalance = $paymentAmount;
-//                   while($paymentAmountBalance <> 0.0)
-//                   {
-//                       $calculatedPaymentAmount = $bookingPaymentHelper->process($paymentAmountBalance);
-//                       if($calculatedPaymentAmount == 0.0)
-//                       {
-//                           $paymentAmountBalance = 0.0;
-//                       }
-//                       $paymentAmountBalance = $paymentAmountBalance - $calculatedPaymentAmount;
-//                   }
-//                   foreach ($passengers as $passenger)
-//                   {
-//                       $thisPassengerPaymentAmount = $bookingPaymentHelper->getPassengerPaymentStatus()[$passenger->getId()];
-//                       $passengerPayment = $thisPassengerPaymentAmount->getSubPaymentTotal();
-//                       $passengerOwingBalance = $thisPassengerPaymentAmount->getOwingBalance();
-//                       if($passengerPayment > 0.0)
-//                       {
-//                           $payment = new Payment();
-//                           $payment->setAmount($paymentAmount);
-//                           $payment->setSubAmount($passengerPayment);
-//                           $payment->setPaymentType($paymentType);
-//                           $payment->setDescription($paymentDescription);
-//                           $payment->setSumupRef($paymentSumupRef);
-//                           $payment->setTransactionNo($transactionNo);
-//
-//                           $purchase = $passenger->getPurchase();
-//                           if($purchase === null)
-//                           {
-//                               $purchase = new Purchase();
-//                           }
-//                           $payment->addPurchase($purchase);
-//                           $purchase->addPayment($payment);
-//                       }
-//                   }
-//                }
-//                $paymentMessage = 'Payment '.number_format($paymentAmount,2).' CHF successful!';
-//                $messageType = 'success';
-//            }
-//
-//            if($booking->paidInFull())
-//            {
-//                $booking->setStatus(Booking::STATUS_PAYMENT_FULL);
-//            }
-//            else
-//            {
-//                $booking->setStatus(Booking::STATUS_PAYMENT_PART);
-//            }
-//
-//            $em->persist($booking);
-//            $em->flush();
-//            $this->get('session')->getFlashBag()->add($messageType, $paymentMessage);
-//            return $this->redirect($this->generateUrl('booking_show', array ('id'=> $booking->getId())));
-//        }
-//        return $this->render('AazpBookingBundle:Purchase:booking.payment.summary.html.twig', array(
-//            'paymentViewList' => $paymentViewList,
-//            'payments' => $payments,
-//            'booking' => $booking,
-//            'form'	=> $form->createView(),
-//        ));
-//
-//    }
-//
-//    public function bookingPaymentAction($id)
+    /**
+     * @Route("/confirm/{id}", name="booking_confirm")
+     */
+     public function confirmAction($id)
+     {
+         $em = $this->getDoctrine()->getManager();
+         $booking = $em->getRepository('App\Entity\Booking')->find($id);
+
+         if (!$booking) {
+             throw $this->createNotFoundException('Unable to find Booking entity.');
+         }
+
+         $booking->setLastUpdatedBy($this->getUser());
+         $booking->setStatus(Booking::STATUS_CONFIRMED);
+
+         $em->flush();
+
+         $this->get('session')->getFlashBag()->add('success', 'Booking has been successfully confirmed!');
+
+         return $this->redirect($this->generateUrl('booking_schedule_view_list'));
+     }
+
+    /**
+     * @Route("/unconfirm/{id}", name="booking_unconfirm")
+     */
+     public function unconfirmAction($id)
+     {
+         $em = $this->getDoctrine()->getManager();
+         $booking = $em->getRepository('App\Entity\Booking')->find($id);
+
+         if (!$booking) {
+             throw $this->createNotFoundException('Unable to find Booking entity.');
+         }
+
+         $booking->setLastUpdatedBy($this->getUser());
+         $booking->setStatus(Booking::STATUS_NEW);
+
+         $em->flush();
+
+         $this->get('session')->getFlashBag()->add('success', 'Booking has been successfully unconfirmed!');
+
+         return $this->redirect($this->generateUrl('booking_schedule_view_list'));
+     }
+
+    /**
+     * @Route("/delete/{id}", name="booking_schedule_delete")
+     */
+      public function deleteAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('App\Entity\Booking')->find($id);
+
+	    if (!$entity) {
+	        throw $this->createNotFoundException('Unable to find Booking entity.');
+        }
+
+		$entity->setLastUpdatedBy($this->getUser());
+
+        $em->remove($entity);
+        $em->flush();
+
+ 		$this->get('session')->getFlashBag()->add('success', 'Booking has been successfully deleted!');
+
+        return $this->redirect($this->generateUrl('booking_schedule_view_list'));
+    }
+
+    /**
+     * @Route("/payment/{id}", name="booking_schedule_payment")
+     */
+    public function bookingPaymentAction($id)
+    {
+        $request = Request::createFromGlobals();
+        $em = $this->getDoctrine()->getManager();
+        $paymentsRepos = $em->getRepository(Payment::class);
+
+        $booking = $em->getRepository(Booking::class)->find($id);
+        if (!$booking)
+        {
+            throw $this->createNotFoundException('Unable to find Booking entity.');
+        }
+
+        //PRELOAD FORM
+        foreach ($booking->getPassengers() as $passenger)
+        {
+            if($passenger->getPurchase() === null)
+            {
+                $purchase = new Purchase();
+
+                $product_category_photo = $em->getRepository(ProductCategory::class)->findOneByName('FLIGHT-PHOTO');
+                $product_photo_option = $em->getRepository(Product::class)->findOneByProductCategory($product_category_photo);
+                if (!$product_photo_option) {
+                    throw $this->createNotFoundException('Unable to find Flight Photo Product entity.');
+                }
+
+                $purchase_item_flight = new PurchaseItem($passenger->getFlight());
+                $purchase_item_photo_option = new PurchaseItem($product_photo_option);
+
+                $purchase->addPurchaseItem($purchase_item_flight);
+                $purchase->addPurchaseItem($purchase_item_photo_option);
+
+                $passenger->setPurchase($purchase);
+            }
+        }
+
+        //LOAD PAYMENT LIST
+        $payments = $paymentsRepos->getPaymentsForBooking($booking);
+        $paymentViewHelper = new PaymentViewHelper();
+        $paymentViewList = $paymentViewHelper->processPayments($payments);
+
+        $form = $this->createFormBuilder($booking)
+//            ->add('passengers', CollectionType::class, array('type' => new BPPassengerType(), 'allow_add' => false, 'allow_delete' => false, 'by_reference' => false))
+            ->add('passengers', CollectionType::class, array('entry_type' => BPPassengerType::class, 'allow_add' => false, 'allow_delete' => false, 'by_reference' => false))
+//            ->add('paymentType', EntityType::class, array('label' => 'Payment Type', 'class' => PaymentType::class,'property' => 'name', 'mapped' => false, 'expanded' => true))
+            ->add('paymentType', EntityType::class, array('label' => 'Payment Type', 'class' => PaymentType::class, 'choice_label' => 'name', 'mapped' => false, 'expanded' => true))
+//            ->add('paymentAmount', NumberType::class, array('precision' => 2, 'data' => $booking->calculateBalance(), 'mapped' => false))
+            ->add('paymentAmount', NumberType::class, array('scale' => 2, 'data' => $booking->calculateBalance(), 'mapped' => false))
+            ->add('sumupRef', TextType::class, array('mapped' => false, 'required' => false))
+            ->add('description', TextType::class, array('mapped' => false, 'required' => false))
+            ->add('pay', SubmitType::class)
+            ->add('cancel', SubmitType::class, array('attr' => array('formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if($request->isXmlHttpRequest() )
+        {
+            $paymentType = $form->get('paymentType')->getData();
+
+            $product_category_card_fee = $em->getRepository(ProductCategory::class)->findOneByName('CARD-FEE');
+
+            $product_card_fee = $em->getRepository(Product::class)->findOneByProductCategory($product_category_card_fee);
+            if (!$product_card_fee)
+            {
+                throw $this->createNotFoundException('Unable to find Card Fee Product entity.');
+            }
+
+            //IF CASH OR INVOICE OR VOUCHER THEN REMOVE CARD FEE Purchase Item IF IT EXISTS
+            if($paymentType->getName() === "CASH" ||
+                $paymentType->getName() === "INVOICE" ||
+                $paymentType->getName() === "VOUCHER")
+            {
+                foreach ($booking->getPassengers() as $passenger)
+                {
+                    //check if CARD FEE EXISTS
+                    foreach ($passenger->getPurchase()->getPurchaseItems() as $purchaseItem)
+                    {
+                        //Remove if it does
+                        if($purchaseItem->getProduct() == $product_card_fee)
+                        {
+                            //CAN ONLY REMOVE IF NO OTHER PAYMENT HAS BEEN MADE WITH A CARD FEE **********************************
+                            if(!$passenger->getPurchase()->hasNoPriorCardPayment())
+                            {
+                                $passenger->getPurchase()->removePurchaseItem($purchaseItem);
+                            }
+                        }
+                    }
+                }
+            }
+            else if($paymentType->getName() === "VISA" ||
+                $paymentType->getName() === "M/C" ||
+                $paymentType->getName() === "JCB" ||
+                $paymentType->getName() === "AMEX" ||
+                $paymentType->getName() === "Maestro")
+            {
+                //check if CARD FEE EXISTS
+                //Add if it doesn't
+                // $noOfFlights = 0;
+                $cardFeeExists = false;
+                foreach ($booking->getPassengers() as $passenger)
+                {
+                    foreach ($passenger->getPurchase()->getPurchaseItems() as $purchaseItem)
+                    {
+                        if($purchaseItem->getProduct() == $product_card_fee)
+                        {
+                            // $purchase->removePurchaseItem($purchaseItem);
+                            //IF CARD THEN ADD CARD FEE Purchase Item AND CALCULATE ITS AMOUNT (FLIGHTS x FEE)
+                            // $purchaseItem->setAmount($paymentType->getFee());
+                            $cardFeeExists = true;
+                        }
+                        //Count the number of Flight Products in order to calculate the Card Fee.
+                        // if($purchaseItem->getProduct()->getProductCategory()->getDescription() == "FLIGHT")
+                        // {
+                        // $noOfFlights++;
+                        // }
+                    }
+                    if(!$cardFeeExists)
+                    {
+                        //Add Purchase Items to the Purchase
+                        $purchase_item_card_fee = new PurchaseItem($product_card_fee);
+                        $passenger->getPurchase()->addPurchaseItem($purchase_item_card_fee);
+                        $purchase_item_card_fee->setAmount($product_card_fee->getPrice());
+                    }
+                }
+            }
+
+            $passenger->setPurchase($passenger->getPurchase());
+
+            $form = $this->createForm(new PurchaseType($em), $passenger->getPurchase());
+
+            $form = $this->createFormBuilder($booking)
+                ->add('passengers', CollectionType::class, array('entry_type' => BPPassengerType::class, 'allow_add' => false, 'allow_delete' => false, 'by_reference' => false))
+                ->add('paymentType', EntityType::class, array('label' => 'Payment Type', 'class' => PaymentType::class, 'choice_label' => 'name', 'mapped' => false, 'expanded' => true))
+                ->add('paymentAmount', NumberType::class, array('scale' => 2, 'data' => $booking->calculateBalance(), 'mapped' => false))
+                ->add('sumupRef', TextType::class, array('mapped' => false, 'required' => false))
+                ->add('description', TextType::class, array('mapped' => false, 'required' => false))
+                ->add('pay', SubmitType::class)
+                ->add('cancel', SubmitType::class, array('attr' => array('formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )))
+                ->getForm();
+
+            $template = $this->renderView('booking/payment/booking.payment.summary.form.html.twig', array(
+                'payments' => $payments,
+                'paymentViewList' => $paymentViewList,
+                'booking' => $booking,
+                'form'	=> $form->createView(),
+            ));
+
+            $json = json_encode($template);
+            $response = new Response($json, 200);
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $paymentAmount = $form->get('paymentAmount')->getData();
+            $paymentType = $form->get('paymentType')->getData();
+            $paymentDescription = $form->get('description')->getData();
+            $paymentSumupRef = $form->get('sumupRef')->getData();
+            $transactionNo = date('YmdHis');
+
+            $passengers = $booking->getPassengers();
+
+            $bookingPaymentHelper = new BookingPaymentHelper($paymentAmount, $passengers);
+            if($bookingPaymentHelper->getOwingTotal() == 0.0)
+            {
+                $paymentMessage = 'BOOKING ALREADY PAID IN FULL. Payment '.$paymentAmount.' CHF not accepted!';
+                $messageType = 'danger';
+            }
+            else if($bookingPaymentHelper->hasEvenPaymentDistribution())
+            {
+                $passengerAmount = $bookingPaymentHelper->getPassengerPaymentAmount();
+                foreach ($passengers as $passenger)
+                {
+                    $thisPassengerPaymentAmount = $bookingPaymentHelper->getPassengerPaymentStatus()[$passenger->getId()];
+                    $passengerPayment = $thisPassengerPaymentAmount->getSubPaymentTotal();
+                    $passengerOwingBalance = $thisPassengerPaymentAmount->getOwingBalance();
+                    if($passengerOwingBalance <> 0.0)
+                    {
+                        $payment = new Payment();
+                        $payment->setAmount($paymentAmount);
+                        $payment->setSubAmount($passengerAmount);
+                        $payment->setPaymentType($paymentType);
+                        $payment->setDescription($paymentDescription);
+                        $payment->setSumupRef($paymentSumupRef);
+                        $payment->setTransactionNo($transactionNo);
+
+                        $purchase = $passenger->getPurchase();
+                        if($purchase === null)
+                        {
+                            $purchase = new Purchase();
+                        }
+                        $payment->addPurchase($purchase);
+                        $purchase->addPayment($payment);
+                    }
+                }
+                $paymentMessage = 'Payment '.number_format($paymentAmount,2).' CHF successful!';
+                $messageType = 'success';
+            }
+            else
+            {
+                if(number_format($paymentAmount,2) == number_format($bookingPaymentHelper->getOwingTotal(),2))
+                {
+                    foreach ($passengers as $passenger)
+                    {
+                        $payment = new Payment();
+                        $payment->setAmount($paymentAmount);
+                        $payment->setSubAmount($passenger->calculateOwing());
+                        $payment->setPaymentType($paymentType);
+                        $payment->setDescription($paymentDescription);
+                        $payment->setSumupRef($paymentSumupRef);
+                        $payment->setTransactionNo($transactionNo);
+
+                        $purchase = $passenger->getPurchase();
+                        if($purchase === null)
+                        {
+                            $purchase = new Purchase();
+                        }
+                        $payment->addPurchase($purchase);
+                        $purchase->addPayment($payment);
+                    }
+                }
+                else
+                {
+                   $paymentAmountBalance = $paymentAmount;
+                   while($paymentAmountBalance <> 0.0)
+                   {
+                       $calculatedPaymentAmount = $bookingPaymentHelper->process($paymentAmountBalance);
+                       if($calculatedPaymentAmount == 0.0)
+                       {
+                           $paymentAmountBalance = 0.0;
+                       }
+                       $paymentAmountBalance = $paymentAmountBalance - $calculatedPaymentAmount;
+                   }
+                   foreach ($passengers as $passenger)
+                   {
+                       $thisPassengerPaymentAmount = $bookingPaymentHelper->getPassengerPaymentStatus()[$passenger->getId()];
+                       $passengerPayment = $thisPassengerPaymentAmount->getSubPaymentTotal();
+                       $passengerOwingBalance = $thisPassengerPaymentAmount->getOwingBalance();
+                       if($passengerPayment > 0.0)
+                       {
+                           $payment = new Payment();
+                           $payment->setAmount($paymentAmount);
+                           $payment->setSubAmount($passengerPayment);
+                           $payment->setPaymentType($paymentType);
+                           $payment->setDescription($paymentDescription);
+                           $payment->setSumupRef($paymentSumupRef);
+                           $payment->setTransactionNo($transactionNo);
+
+                           $purchase = $passenger->getPurchase();
+                           if($purchase === null)
+                           {
+                               $purchase = new Purchase();
+                           }
+                           $payment->addPurchase($purchase);
+                           $purchase->addPayment($payment);
+                       }
+                   }
+                }
+                $paymentMessage = 'Payment '.number_format($paymentAmount,2).' CHF successful!';
+                $messageType = 'success';
+            }
+
+            if($booking->paidInFull())
+            {
+                $booking->setStatus(Booking::STATUS_PAYMENT_FULL);
+            }
+            else
+            {
+                $booking->setStatus(Booking::STATUS_PAYMENT_PART);
+            }
+
+            $em->persist($booking);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add($messageType, $paymentMessage);
+            return $this->redirect($this->generateUrl('booking_schedule_show', array ('id'=> $booking->getId())));
+        }
+        return $this->render('booking/booking.payment.summary.html.twig', array(
+            'paymentViewList' => $paymentViewList,
+            'payments' => $payments,
+            'booking' => $booking,
+            'form'	=> $form->createView(),
+        ));
+
+    }
+
+//    public function oldBookingPaymentAction($id)
 //    {
 //    	$request = Request::createFromGlobals();
 //        $em = $this->getDoctrine()->getManager();
@@ -1033,179 +1070,182 @@ class BookingController extends AbstractController
 //			));
 //	}
 //
-//	public function passengerPaymentAction($passenger_id)
-//    {
-//	    $request = Request::createFromGlobals();
-//	    $em = $this->getDoctrine()->getManager();
-//	    $passengerRepos = $em->getRepository('AazpBookingBundle:Passenger');
-//	    $productCategoryRepos = $em->getRepository('AazpBookingBundle:ProductCategory');
-//	    $productRepos = $em->getRepository('AazpBookingBundle:Product');
-//	    $paymentsRepos = $em->getRepository('AazpBookingBundle:Payment');
-//
-//		//Query the selected Passenger
-//		$passenger = $request->attributes->get('passenger', $passengerRepos->find($passenger_id));
-//	    if (!$passenger)
-//	    {
-//	        throw $this->createNotFoundException('Unable to find Passenger entity.');
-//        }
-//
-//		$purchase = $passenger->getPurchase();
-//		//Has this Passenger made a Payment. If yes then Purchase exists.
-//		if($purchase === NULL) //If Purchase does not exist then preload the form with default products.
-//		{
-//			$purchase = new Purchase();
-//
-//			$product_category_photo = $productCategoryRepos->findOneByName('FLIGHT-PHOTO');
-//
-//			$product_photo_option = $productRepos->findOneByProductCategory($product_category_photo);
-//		    if (!$product_photo_option)
-//		    {
-//		        throw $this->createNotFoundException('Unable to find Flight Photo Product entity.');
-//	        }
-//
-//			$purchase_item_flight = new PurchaseItem($passenger->getFlight());
-//			$purchase_item_photo_option = new PurchaseItem($product_photo_option);
-//
-//			//Add Purchase Items to the Purchase
-//			$purchase->addPurchaseItem($purchase_item_flight);
-//			$purchase->addPurchaseItem($purchase_item_photo_option);
-//
-//			//Set the Purchase on the Passenger
-//			$passenger->setPurchase($purchase);
-//		}
-//		$purchase->setPaymentAmount($passenger->calculateOwing());
-//
-//		$form = $this->createForm(new PurchaseType(), $purchase);
-//
-//		$form->handleRequest($request);
-//
-//			//Ajax call triggered by onChange event on PaymentType radio button in form
-//			if($request->isXmlHttpRequest() )
-//			{
-//				$paymentType = $form->get('paymentType')->getData();
-//
-//				$product_category_card_fee = $productCategoryRepos->findOneByName('CARD-FEE');
-//
-//				$product_card_fee = $productRepos->findOneByProductCategory($product_category_card_fee);
-//				if (!$product_card_fee)
-//				{
-//			        throw $this->createNotFoundException('Unable to find Card Fee Product entity.');
-//		        }
-//
-//				if($paymentType->isCardPayment())
-//				{
-//					//check if CARD FEE EXISTS
-//					//Add if it doesn't
-//					// $noOfFlights = 0;
-//					$cardFeeExists = false;
-//					foreach ($purchase->getPurchaseItems() as $purchaseItem)
-//					{
-//						if($purchaseItem->getProduct() == $product_card_fee)
-//						{
-//							// $purchase->removePurchaseItem($purchaseItem);
-//							//IF CARD THEN ADD CARD FEE Purchase Item AND CALCULATE ITS AMOUNT (FLIGHTS x FEE)
-//							// $purchaseItem->setAmount($paymentType->getFee());
-//							$cardFeeExists = true;
-//						}
-//						//Count the number of Flight Products in order to calculate the Card Fee.
-//						// if($purchaseItem->getProduct()->getProductCategory()->getDescription() == "FLIGHT")
-//						// {
-//							// $noOfFlights++;
-//						// }
-//					}
-//					if(!$cardFeeExists)
-//					{
-//						//Add Purchase Items to the Purchase
-//						$purchase_item_card_fee = new PurchaseItem($product_card_fee);
-//						$purchase->addPurchaseItem($purchase_item_card_fee);
-//						$purchase_item_card_fee->setAmount($product_card_fee->getPrice());
-//					}
-//				}
-//				//IF CASH OR INVOICE OR VOUCHER THEN REMOVE CARD FEE Purchase Item IF IT EXISTS
-//				else
-//				{
-//				    //check if CARD FEE EXISTS
-//				    foreach ($purchase->getPurchaseItems() as $purchaseItem)
-//				    {
-//				        //Remove if it does
-//				        if($purchaseItem->getProduct() == $product_card_fee)
-//				        {
-//				            //CAN ONLY REMOVE IF NO OTHER PAYMENT HAS BEEN MADE WITH A CARD FEE **********************************
-//				            if(!$purchase->hasNoPriorCardPayment())
-//				            {
-//				                $purchase->removePurchaseItem($purchaseItem);
-//				            }
-//				        }
-//				    }
-//				}
-//
-//				$passenger->setPurchase($purchase);
-//
-//				$form = $this->createForm(new PurchaseType(), $purchase);
-////                 if($paymentType->isCardPayment())
-////                 {
-////                     $form->remove('cardDigits');
-////                     $form->remove('sumupAccount');
-//
-////                     $form->add('cardDigits', 'hidden', array('mapped' => false, 'required' => false));
-////                     $form->add('sumupAccount', 'hidden', array('label' => false, 'mapped' => false, 'required' => false));
-////                 } else {
-////                     $form->remove('cardDigits');
-////                     $form->remove('sumupAccount');
-////                     $form->add('cardDigits', 'integer', array('mapped' => false, 'required' => false));
-////                     $form->add('sumupAccount', 'entity', array('mapped' => false, 'required' => false, 'label' => 'SumUp ACCOUNT', 'class' => 'AazpBookingBundle:Account','property' => 'name', 'expanded' => false, ));
-////                 }
-//				$template = $this->renderView('AazpBookingBundle:Purchase:passenger.payment.summary.form.html.twig', array(
-//		            'passenger' => $passenger,
-//		            'form'	=> $form->createView(),
-//			    ));
-//
-//			    $json = json_encode($template);
-//			    $response = new Response($json, 200);
-//			    $response->headers->set('Content-Type', 'application/json');
-//			    return $response;
-//			}
-//
-//		//If form is Valid create Payment and persist.
-//		if ($form->isValid())
-//		{
-//		    $transactionNo = date('YmdHis');
-//			$payment = new Payment();
-//			$payment->setAmount($form->get('paymentAmount')->getData());
-//// 			$payment->setSubAmount($form->get('paymentAmount')->getData());
-//			$payment->setPaymentType($form->get('paymentType')->getData());
-//			$payment->setSumUpRef($form->get('sumupRef')->getData());
-//			$payment->setDescription($form->get('description')->getData());
-//			$payment->setTransactionNo($transactionNo);
-//
-//			$passenger->getPurchase()->addPayment($payment);
-//			if($passenger->getBooking()->paidInFull())
-//			{
-//				$passenger->getBooking()->setStatus(Booking::STATUS_PAYMENT_FULL);
-//			}
-//			else
-//			{
-//				$passenger->getBooking()->setStatus(Booking::STATUS_PAYMENT_PART);
-//			}
-//
-//			$em->persist($passenger->getPurchase());
-//			$em->flush();
-//			$this->get('session')->getFlashBag()->add('success', 'Payment '.number_format($payment->getAmount(),2).' CHF has been successful!');
-//
-//			return $this->redirect($this->generateUrl('booking_show', array ('id'=> $passenger->getBooking()->getId())));
-//		}
-//
-//		$payments = $paymentsRepos->getPaymentsForPassenger($passenger);
-//// 		throw new \Exception("Her ".sizeof($payments));
-//		$paymentViewHelper = new PaymentViewHelper();
-//		$paymentViewList = $paymentViewHelper->processPassengerPayments($payments);
-//		return $this->render('AazpBookingBundle:Purchase:passenger.payment.summary.html.twig', array(
-//            'passenger' => $passenger,
-//		    'paymentViewList' => $paymentViewList,
-//            'form'	=> $form->createView(),
-//			));
-//	}
-//
+    /**
+     * @Route("/passenger/payment/{passenger_id}", name="booking_schedule_passenger_payment")
+     */
+	public function passengerPaymentAction($passenger_id)
+    {
+	    $request = Request::createFromGlobals();
+	    $em = $this->getDoctrine()->getManager();
+	    $passengerRepos = $em->getRepository(Passenger::class);
+	    $productCategoryRepos = $em->getRepository(ProductCategory::class);
+	    $productRepos = $em->getRepository(Product::class);
+	    $paymentsRepos = $em->getRepository(Payment::class);
+
+		//Query the selected Passenger
+		$passenger = $request->attributes->get('passenger', $passengerRepos->find($passenger_id));
+	    if (!$passenger)
+	    {
+	        throw $this->createNotFoundException('Unable to find Passenger entity.');
+        }
+
+		$purchase = $passenger->getPurchase();
+		//Has this Passenger made a Payment. If yes then Purchase exists.
+		if($purchase === NULL) //If Purchase does not exist then preload the form with default products.
+		{
+			$purchase = new Purchase();
+
+			$product_category_photo = $productCategoryRepos->findOneByName('FLIGHT-PHOTO');
+
+			$product_photo_option = $productRepos->findOneByProductCategory($product_category_photo);
+		    if (!$product_photo_option)
+		    {
+		        throw $this->createNotFoundException('Unable to find Flight Photo Product entity.');
+	        }
+
+			$purchase_item_flight = new PurchaseItem($passenger->getFlight());
+			$purchase_item_photo_option = new PurchaseItem($product_photo_option);
+
+			//Add Purchase Items to the Purchase
+			$purchase->addPurchaseItem($purchase_item_flight);
+			$purchase->addPurchaseItem($purchase_item_photo_option);
+
+			//Set the Purchase on the Passenger
+			$passenger->setPurchase($purchase);
+		}
+		$purchase->setPaymentAmount($passenger->calculateOwing());
+
+		$form = $this->createForm(PurchaseType::class, $purchase);
+
+		$form->handleRequest($request);
+
+			//Ajax call triggered by onChange event on PaymentType radio button in form
+			if($request->isXmlHttpRequest() )
+			{
+				$paymentType = $form->get('paymentType')->getData();
+
+				$product_category_card_fee = $productCategoryRepos->findOneByName('CARD-FEE');
+
+				$product_card_fee = $productRepos->findOneByProductCategory($product_category_card_fee);
+				if (!$product_card_fee)
+				{
+			        throw $this->createNotFoundException('Unable to find Card Fee Product entity.');
+		        }
+
+				if($paymentType->isCardPayment())
+				{
+					//check if CARD FEE EXISTS
+					//Add if it doesn't
+					// $noOfFlights = 0;
+					$cardFeeExists = false;
+					foreach ($purchase->getPurchaseItems() as $purchaseItem)
+					{
+						if($purchaseItem->getProduct() == $product_card_fee)
+						{
+							// $purchase->removePurchaseItem($purchaseItem);
+							//IF CARD THEN ADD CARD FEE Purchase Item AND CALCULATE ITS AMOUNT (FLIGHTS x FEE)
+							// $purchaseItem->setAmount($paymentType->getFee());
+							$cardFeeExists = true;
+						}
+						//Count the number of Flight Products in order to calculate the Card Fee.
+						// if($purchaseItem->getProduct()->getProductCategory()->getDescription() == "FLIGHT")
+						// {
+							// $noOfFlights++;
+						// }
+					}
+					if(!$cardFeeExists)
+					{
+						//Add Purchase Items to the Purchase
+						$purchase_item_card_fee = new PurchaseItem($product_card_fee);
+						$purchase->addPurchaseItem($purchase_item_card_fee);
+						$purchase_item_card_fee->setAmount($product_card_fee->getPrice());
+					}
+				}
+				//IF CASH OR INVOICE OR VOUCHER THEN REMOVE CARD FEE Purchase Item IF IT EXISTS
+				else
+				{
+				    //check if CARD FEE EXISTS
+				    foreach ($purchase->getPurchaseItems() as $purchaseItem)
+				    {
+				        //Remove if it does
+				        if($purchaseItem->getProduct() == $product_card_fee)
+				        {
+				            //CAN ONLY REMOVE IF NO OTHER PAYMENT HAS BEEN MADE WITH A CARD FEE **********************************
+				            if(!$purchase->hasNoPriorCardPayment())
+				            {
+				                $purchase->removePurchaseItem($purchaseItem);
+				            }
+				        }
+				    }
+				}
+
+				$passenger->setPurchase($purchase);
+
+				$form = $this->createForm(PurchaseType::class, $purchase);
+//                 if($paymentType->isCardPayment())
+//                 {
+//                     $form->remove('cardDigits');
+//                     $form->remove('sumupAccount');
+
+//                     $form->add('cardDigits', 'hidden', array('mapped' => false, 'required' => false));
+//                     $form->add('sumupAccount', 'hidden', array('label' => false, 'mapped' => false, 'required' => false));
+//                 } else {
+//                     $form->remove('cardDigits');
+//                     $form->remove('sumupAccount');
+//                     $form->add('cardDigits', 'integer', array('mapped' => false, 'required' => false));
+//                     $form->add('sumupAccount', 'entity', array('mapped' => false, 'required' => false, 'label' => 'SumUp ACCOUNT', 'class' => 'AazpBookingBundle:Account','property' => 'name', 'expanded' => false, ));
+//                 }
+				$template = $this->renderView('booking/payment/passenger.payment.summary.form.html.twig', array(
+		            'passenger' => $passenger,
+		            'form'	=> $form->createView(),
+			    ));
+
+			    $json = json_encode($template);
+			    $response = new Response($json, 200);
+			    $response->headers->set('Content-Type', 'application/json');
+			    return $response;
+			}
+
+		//If form is Valid create Payment and persist.
+		if ($form->isSubmitted() && $form->isValid())
+		{
+		    $transactionNo = date('YmdHis');
+			$payment = new Payment();
+			$payment->setAmount($form->get('paymentAmount')->getData());
+// 			$payment->setSubAmount($form->get('paymentAmount')->getData());
+			$payment->setPaymentType($form->get('paymentType')->getData());
+			$payment->setSumUpRef($form->get('sumupRef')->getData());
+			$payment->setDescription($form->get('description')->getData());
+			$payment->setTransactionNo($transactionNo);
+
+			$passenger->getPurchase()->addPayment($payment);
+			if($passenger->getBooking()->paidInFull())
+			{
+				$passenger->getBooking()->setStatus(Booking::STATUS_PAYMENT_FULL);
+			}
+			else
+			{
+				$passenger->getBooking()->setStatus(Booking::STATUS_PAYMENT_PART);
+			}
+
+			$em->persist($passenger->getPurchase());
+			$em->flush();
+			$this->get('session')->getFlashBag()->add('success', 'Payment '.number_format($payment->getAmount(),2).' CHF has been successful!');
+
+			return $this->redirect($this->generateUrl('booking_schedule_show', array ('id'=> $passenger->getBooking()->getId())));
+		}
+
+		$payments = $paymentsRepos->getPaymentsForPassenger($passenger);
+// 		throw new \Exception("Her ".sizeof($payments));
+		$paymentViewHelper = new PaymentViewHelper();
+		$paymentViewList = $paymentViewHelper->processPassengerPayments($payments);
+		return $this->render('booking/passenger.payment.summary.html.twig', array(
+            'passenger' => $passenger,
+		    'paymentViewList' => $paymentViewList,
+            'form'	=> $form->createView(),
+			));
+	}
+
 //    public function passengerPaymentAction_ORIG($passenger_id)
 //    {
 //    	$request = Request::createFromGlobals();
@@ -1296,49 +1336,52 @@ class BookingController extends AbstractController
 //			));
 //    }
 //
-//    public function newPaymentRefundAction($id, $transactionNo)
-//    {
-//        $em = $this->getDoctrine()->getManager();
-//        $paymentsRepos = $em->getRepository('AazpBookingBundle:Payment');
-//        $paymentsRefund = $em->getRepository('AazpBookingBundle:Payment')->findByTransactionNo($transactionNo);
-//        if (!$paymentsRefund) {
-//            throw $this->createNotFoundException('Unable to find Payment entities.');
-//        }
-//
-//        $paymentAmount = 0.0;
-//        foreach ($paymentsRefund as $paymentRefund)
-//        {
-//            $paymentRefund->setRefunded(true);
-//            $paymentAmount = $paymentRefund->getAmount();
-//        }
-//        $em->flush();
-//
-//        $this->get('session')->getFlashBag()->add('success', 'Payment '.$paymentAmount.' CHF has been refunded!');
-//
-//        $booking = $em->getRepository('AazpBookingBundle:Booking')->find($id);
-//        if (!$booking)
-//        {
-//            throw $this->createNotFoundException('Unable to find Booking entity.');
-//        }
-//
-//        $deleteForm = $this->createFormBuilder($booking)
-//            ->setAction($this->generateUrl('booking_delete', array ('id' => $id)))
-//            ->add('Delete', 'submit')
-//            ->getForm();
-//
-//        $payments = $paymentsRepos->getPaymentsForBooking($booking);
-//        $paymentViewHelper = new PaymentViewHelper();
-//        $paymentViewList = $paymentViewHelper->processPayments($payments);
-//
-//        return $this->render('AazpBookingBundle:Booking:show.html.twig', array(
-//            'entity'      => $booking,
-//            'delete_form' => $deleteForm->createView(),
-//            'payments' => $payments,
-//            'paymentViewList' => $paymentViewList,
-//        ));
-//    }
-//
-//    public function paymentRefundAction($id, $paymentId)
+    /**
+     * @Route("/payment/refund/{id}/{transactionNo}", name="booking_payment_refund")
+     */
+    public function paymentRefundAction($id, $transactionNo)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $paymentsRepos = $em->getRepository(Payment::class);
+        $paymentsRefund = $em->getRepository(Payment::class)->findByTransactionNo($transactionNo);
+        if (!$paymentsRefund) {
+            throw $this->createNotFoundException('Unable to find Payment entities.');
+        }
+
+        $paymentAmount = 0.0;
+        foreach ($paymentsRefund as $paymentRefund)
+        {
+            $paymentRefund->setRefunded(true);
+            $paymentAmount = $paymentRefund->getAmount();
+        }
+        $em->flush();
+
+        $this->get('session')->getFlashBag()->add('success', 'Payment '.$paymentAmount.' CHF has been refunded!');
+
+        $booking = $em->getRepository(Booking::class)->find($id);
+        if (!$booking)
+        {
+            throw $this->createNotFoundException('Unable to find Booking entity.');
+        }
+
+        $deleteForm = $this->createFormBuilder($booking)
+            ->setAction($this->generateUrl('booking_delete', array ('id' => $id)))
+            ->add('Delete', SubmitType::class)
+            ->getForm();
+
+        $payments = $paymentsRepos->getPaymentsForBooking($booking);
+        $paymentViewHelper = new PaymentViewHelper();
+        $paymentViewList = $paymentViewHelper->processPayments($payments);
+
+        return $this->render('booking/show.html.twig', array(
+            'entity'      => $booking,
+            'delete_form' => $deleteForm->createView(),
+            'payments' => $payments,
+            'paymentViewList' => $paymentViewList,
+        ));
+    }
+
+//    public function oldPaymentRefundAction($id, $paymentId)
 //    {
 //        $em = $this->getDoctrine()->getManager();
 //        $paymentsRepos = $em->getRepository('AazpBookingBundle:Payment');
@@ -1384,17 +1427,21 @@ class BookingController extends AbstractController
 //        ));
 //	}
 //
-//    public function productCostAction($id)
-//    {
-//        $em = $this->getDoctrine()->getManager();
-//		$product = $em->getRepository('AazpBookingBundle:Product')->find($id);
-//
-//	    $json = json_encode($product->getPrice());
-//	    $response = new Response($json, 200);
-//	    $response->headers->set('Content-Type', 'application/json');
-//	    return $response;
-//	}
-//
+
+    /**
+     * @Route("/product/cost/{id}", name="booking_product_cost")
+     */
+    public function productCostAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+		$product = $em->getRepository(Product::class)->find($id);
+
+	    $json = json_encode($product->getPrice());
+	    $response = new Response($json, 200);
+	    $response->headers->set('Content-Type', 'application/json');
+	    return $response;
+	}
+
 //	public function reportDailyPilotPaymentAction()
 //	{
 //	    $em = $this->getDoctrine()->getManager();

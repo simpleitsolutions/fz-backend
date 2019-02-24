@@ -1,0 +1,79 @@
+{% if payments|length > 0 %}
+<div class="modal fade" id="refundWarning" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content col-md-6 text-center">
+      <div class="modal-body">
+        <h4 class="modal-title">Confirm refund?</h4>
+      </div>
+      <div class="modal-footer">
+        <a class="clickable btn btn-danger btn-ok">Yes</a>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+	<div class="header nopadding col-sm-12 col-md-12">
+		<div class="col-sm-12 col-md-12">PAYMENT SUMMARY</div>
+	</div>
+	<div class="header nopadding col-sm-12 col-md-12 hidden-print">
+		<div class="col-xs-2 col-sm-2 col-md-2">DATE</div>
+		<div class="hidden-xs hidden-sm col-md-3">PAYMENT FOR</div>
+		<div class="visible-xs visible-sm col-xs-4 col-sm-4">FOR</div>
+		<div class="hidden-xs hidden-sm col-md-3">NOTES</div>
+		<div class="text-center col-xs-2 col-sm-2 col-md-2">TYPE</div>
+		<div class="text-right col-xs-2 col-sm-2 col-md-1">AMOUNT</div>
+		<div class="text-right hidden-xs hidden-sm col-md-1">REFUNDED</div>
+		<div class="text-right visible-xs visible-sm">&nbsp;</div>
+	</div>
+
+	{% set currentTransactionId = '' %}
+	{% for paymentView in paymentViewList %}
+	{#% if not payment.getRefunded %#}
+	
+	{% if paymentView.refunded %}
+		{% set refundedCss = 'payment-refunded' %}
+		{% set calcItemCss = '' %}
+	{% else %}
+		{% set refundedCss = '' %}
+		{% set calcItemCss = 'calc-item-payment' %}
+	{% endif %} 
+
+	{% if paymentView.paymentAmount != 0.0 %}
+	<div class="line nopadding col-xs-12 col-sm-12 col-md-12 {{ (paymentView.paymentAmount==0 or paymentView.refunded)?'hidden-print' }}">
+		<div class="col-xs-2 col-sm-2 col-md-2 hidden-print {{refundedCss}}">{{ paymentView.transactionNo==currentTransactionId?'':paymentView.paymentDateTime|date("d.m.y H:i") }}</div>
+		<div class="col-xs-3 col-sm-3 visible-print {{refundedCss}}">{{ paymentView.transactionNo==currentTransactionId?'':paymentView.paymentDateTime|date("d.m.y H:i") }}</div>
+		<div class="col-xs-4 col-sm-4 col-md-3 hidden-print {{refundedCss}}">
+	    {% for passenger in paymentView.passengers %}
+        	{{ passenger?passenger.name:'TBA' }}{{ loop.last?'':',' }}
+	    {% endfor %}
+		</div>
+		<div class="col-xs-5 visible-print {{refundedCss}}">
+	    {% for passenger in paymentView.passengers %}
+        	{{ passenger?passenger.name:'TBA' }}{{ loop.last?'':',' }}
+	    {% endfor %}
+		</div>
+		<div class="hidden-xs hidden-sm col-md-3 {{refundedCss}}">{{ paymentView.notes }}</div>
+		<div class="text-center col-xs-2 col-sm-2 col-md-2 hidden-print {{refundedCss}}">{{ paymentView.paymentType.shortName }}{{ paymentView.sumUpRef?' - '~paymentView.sumUpRef:'' }}</div>
+		<div class="text-center col-xs-2 visible-print {{refundedCss}}">{{ paymentView.paymentType.printName }}{{ paymentView.sumUpRef?' - '~paymentView.sumUpRef:'' }}</div>
+		<div class="text-right col-xs-2 col-sm-2 col-md-1 {{refundedCss}} {{ calcItemCss }}" style="text-align:right;" payment-total="{{ paymentView.subPaymentAmounts|length>0?paymentView.subPaymentAmounts|first:paymentView.paymentAmount }}"> {{ paymentView.subPaymentAmounts|length>0?paymentView.subPaymentAmounts|first~'/' }}{{ paymentView.paymentAmount }}</div>
+		<div class="text-center col-xs-2 col-sm-2 col-md-1 hidden-print">
+			{% if paymentView.transactionNo!=currentTransactionId %}
+			{% if(paymentView.refunded) %}
+				
+				<a href="#" data-toggle="tooltip" title="{{ paymentView.refundedDate|date("d.m.y H:i") }}">DATE</a>
+			
+			{% else %}
+				<a href="#" data-href="{{ path('booking_payment_refund', {'id': booking.id, 'transactionNo': paymentView.transactionNo?paymentView.transactionNo}) }}" class="btn btn-default btn-xs hidden-print" data-toggle="modal" data-target="#refundWarning">
+					 REFUND
+				</a>
+			{% endif %}
+			{% endif %}
+		</div>
+	</div>
+	{% endif %}
+	{% set currentTransactionId = paymentView.transactionNo %}
+	{% endfor %}
+</div>
+{% endif %}
