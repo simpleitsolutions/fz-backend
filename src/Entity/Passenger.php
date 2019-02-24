@@ -9,10 +9,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PassengerRepository")
  * @ORM\Table(name="passenger")
+ * @Gedmo\SoftDeleteable(fieldName="deleted")
  */
 
 
-class Passenger
+class Passenger extends BaseEntity
 {
     public function __construct() {
     }

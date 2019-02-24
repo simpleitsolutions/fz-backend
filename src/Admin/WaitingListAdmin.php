@@ -61,11 +61,8 @@ class WaitingListAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('waitingListItemDate')
             ->add('name')
             ->add('contactinfo')
-            ->add('noofpassengers')
-            ->add('notes')
         ;
     }
 

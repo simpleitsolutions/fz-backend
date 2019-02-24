@@ -54,11 +54,8 @@ class VoucherAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id')
+            ->add('id', null, array('global_search' => true))
             ->add('name')
-            ->add('flight')
-            ->add('withPhotos')
-            ->add('language')
         ;
     }
 

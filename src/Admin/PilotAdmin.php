@@ -52,8 +52,6 @@ class PilotAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('name')
-            ->add('flyZermattPilot')
-            ->add('sortOrder')
         ;
     }
 

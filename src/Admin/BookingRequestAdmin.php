@@ -59,7 +59,6 @@ class BookingRequestAdmin extends AbstractAdmin
             ->add('name')
             ->add('phone')
             ->add('email')
-            ->add('noPassengers')
         ;
     }
 

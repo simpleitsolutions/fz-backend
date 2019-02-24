@@ -55,7 +55,7 @@ class PassengerAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('name')
-            ->add('booking')
+            ->addIdentifier('booking')
             ->add('_action', null, array(
                 'actions' => array(
                     'edit' => [],
