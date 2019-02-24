@@ -27,34 +27,46 @@ sonata_admin:
                 items:
                     - route:        booking_schedule_view_list
                       label:        BookingSchedule
-            New Voucher:
+            Create Voucher:
                 on_top:               true
                 roles: [ROLE_USER]
                 icon:                 '<i class="fa fa-certificate"></i>'
                 items:
                     - route:        voucher_create
                       label:        Voucher
-            Booking Request:
-                on_top:               true
-                roles: [ROLE_USER]
-                icon:                 '<i class="fa fa-calendar-plus-o"></i>'
-                items:
-                    - route:        bookingrequest_list
-                      label:        BookingRequest
-            Waiting List:
-                on_top:               true
-                roles: [ROLE_USER]
-                icon:                 '<i class="fa fa-list"></i>'
-                items:
-                    - route:        waitinglist_list
-                      label:        Waiting List
-            Admin:
+#            Booking Request:
+#                on_top:               true
+#                roles: [ROLE_USER]
+#                icon:                 '<i class="fa fa-calendar-plus-o"></i>'
+#                items:
+#                    - route:        bookingrequest_list
+#                      label:        BookingRequest
+#            Waiting List:
+#                on_top:               true
+#                roles: [ROLE_USER]
+#                icon:                 '<i class="fa fa-list"></i>'
+#                items:
+#                    - route:        waitinglist_list
+#                      label:        Waiting List
+            Application:
                 icon:                 '<i class="fa fa-cog"></i>'
                 roles: [ROLE_ADMIN]
                 items:
                     - admin.booking
+                    - admin.bookingrequest
+                    - admin.voucher
+                    - admin.passenger
+
+            Administration:
+                icon:                 '<i class="fa fa-cog"></i>'
+                roles: [ROLE_ADMIN]
+                items:
                     - admin.pilot
                     - admin.user
+
+    global_search:
+        empty_boxes: fade
+        case_sensitive: false
 
 
 #    assets:
@@ -65,3 +77,5 @@ sonata_block:
     blocks:
         sonata.admin.block.admin_list:
             contexts: [admin]
+        sonata.admin.block.search_result:
+            contexts:   [admin]

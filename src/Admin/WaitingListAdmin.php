@@ -15,6 +15,8 @@ class WaitingListAdmin extends AbstractAdmin
 
     protected $baseRouteName = 'waitinglist';
 
+    protected $searchResultActions = ['show'];
+
     public function getNewInstance()
     {
         $instance = parent::getNewInstance();

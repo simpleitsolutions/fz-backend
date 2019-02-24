@@ -15,6 +15,8 @@ class UserAdmin extends AbstractAdmin
 
     protected $baseRouteName = 'user';
 
+    protected $searchResultActions = ['show'];
+
     public function getNewInstance()
     {
         $instance = parent::getNewInstance();

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Admin;
-
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -14,6 +12,8 @@ class PassengerAdmin extends AbstractAdmin
     protected $baseRoutePattern = 'passenger';
 
     protected $baseRouteName = 'passenger';
+
+    protected $searchResultActions = ['show'];
 
     public function getNewInstance()
     {
@@ -47,7 +47,7 @@ class PassengerAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name')
+            ->add('name', null, array('global_search' => true))
         ;
     }
 
@@ -69,6 +69,7 @@ class PassengerAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('name')
+            ->add('booking')
         ;
     }
 

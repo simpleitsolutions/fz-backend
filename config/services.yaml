@@ -49,7 +49,7 @@ services:
             - App\Entity\BookingRequest
             -
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Booking Request }
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Booking Request, pager_type: 'simple' }
         public: true
 
     admin.waitinglist:
@@ -69,7 +69,7 @@ services:
             - App\Entity\Voucher
             -
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Voucher }
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Voucher, pager_type: 'simple' }
         public: true
 
     admin.passenger:
@@ -79,7 +79,7 @@ services:
             - App\Entity\Passenger
             -
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Passenger }
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Passenger }
         public: true
 
     admin.booking:

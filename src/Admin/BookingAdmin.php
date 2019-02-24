@@ -3,7 +3,6 @@
 namespace App\Admin;
 
 
-use App\Entity\MeetingLocation;
 use App\Entity\Passenger;
 use App\Form\PassengerType;
 use App\Repository\BookingOwnerRepository;
@@ -14,21 +13,11 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-//use Sonata\CoreBundle\Form\Type\CollectionType;
 use Sonata\AdminBundle\Form\Type\CollectionType;
-//use Sonata\Form\Type\CollectionType;
 
-use Sonata\AdminBundle\Form\Type\ModelListType;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\CoreBundle\Form\Type\StatusType;
-use Sonata\Form\Type\BaseStatusType;
-use Sonata\Form\Type\DatePickerType;
-use Sonata\Form\Type\DateRangePickerType;
-use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 
 class BookingAdmin extends AbstractAdmin
@@ -36,6 +25,8 @@ class BookingAdmin extends AbstractAdmin
     protected $baseRoutePattern = 'booking';
 
     protected $baseRouteName = 'booking';
+
+    protected $searchResultActions = ['show'];
 
     public $supportsPreviewMode = true;
 
@@ -151,11 +142,12 @@ class BookingAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
+            ->add('id', null, array('global_search' => true))
             ->add('contactinfo')
-            ->add('flightdate')
-            ->add('flight')
-            ->add('passengers')
-            ->add('meetingTime')
+//            ->add('flightdate', null, array('global_search' => true))
+//            ->add('flight')
+//            ->add('passengers')
+//            ->add('meetingTime')
         ;
     }
 
