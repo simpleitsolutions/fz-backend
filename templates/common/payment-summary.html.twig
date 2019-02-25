@@ -65,7 +65,7 @@
 				<a href="#" data-toggle="tooltip" title="{{ paymentView.refundedDate|date("d.m.y H:i") }}">DATE</a>
 			
 			{% else %}
-				<a href="#" data-href="{{ path('booking_payment_refund', {'id': booking.id, 'transactionNo': paymentView.transactionNo?paymentView.transactionNo}) }}" class="btn btn-default btn-xs hidden-print" data-toggle="modal" data-target="#refundWarning">
+				<a href="#" data-href="{{ path('booking_custom_payment_refund', {'id': booking.id, 'transactionNo': paymentView.transactionNo?paymentView.transactionNo}) }}" class="btn btn-default btn-xs hidden-print" data-toggle="modal" data-target="#refundWarning">
 					 REFUND
 				</a>
 			{% endif %}

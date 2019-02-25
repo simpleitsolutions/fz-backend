@@ -25,7 +25,7 @@ sonata_admin:
                 roles: [ROLE_USER]
                 icon:                 '<i class="fa fa-calendar"></i>'
                 items:
-                    - route:        booking_schedule_view_list
+                    - route:        booking_custom_schedule
                       label:        BookingSchedule
             Create Voucher:
                 on_top:               true

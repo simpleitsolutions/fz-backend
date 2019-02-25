@@ -34,9 +34,9 @@
 	    {% endif %}
 		#{{booking.id}}</br>
 	    {% if (booking.status == constant('App\\Entity\\Booking::STATUS_NEW')) %}
-			<a href="{{ path('booking_confirm', { 'id': booking.id }) }}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+			<a href="{{ path('booking_custom_confirm', { 'id': booking.id }) }}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-thumbs-up"></span></a>
 	    {% elseif (booking.status == constant('App\\Entity\\Booking::STATUS_CONFIRMED') ) %}
-			<a href="{{ path('booking_unconfirm', { 'id': booking.id }) }}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-thumbs-down"></span></a>
+			<a href="{{ path('booking_custom_unconfirm', { 'id': booking.id }) }}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-thumbs-down"></span></a>
 		{% endif %}
 		
 	</td>
@@ -66,9 +66,9 @@
 	</td>
 	<td class="no-gutter text-center" style="width:115px;" rowspan="3">
 		<div class="btn-group" role="group" aria-label="actions" style="margin-bottom:5px;">
-			<a href="{{ path('booking_schedule_show', { 'id': booking.id }) }}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-search"></span></a>
+			<a href="{{ path('booking_custom_show', { 'id': booking.id }) }}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-search"></span></a>
 			<a href="{{ path('booking_edit', { 'id': booking.id }) }}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-edit"></span></a>
-			<a href="#" data-href="{{ path('booking_schedule_delete', { 'id': booking.id }) }}" class="btn btn-default btn-sm hidden-xs" data-toggle="modal" data-target="#deleteWarning"><span class="glyphicon glyphicon-remove"></span></a>
+			<a href="#" data-href="{{ path('booking_custom_delete', { 'id': booking.id }) }}" class="btn btn-default btn-sm hidden-xs" data-toggle="modal" data-target="#deleteWarning"><span class="glyphicon glyphicon-remove"></span></a>
 	    </div>
 	    {% for sumUpPayment in booking.sumupPayments %}
     	    <div>
@@ -93,9 +93,9 @@
 		#{{booking.id}}
 	    <span style="margin-top:10px;display:block;"> 
 	    {% if (booking.status == constant('App\\Entity\\Booking::STATUS_NEW')) %}
-			<a href="{#{ path('booking_confirm', { 'id': booking.id }) }#}" class="btn btn-default btn-md"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+			<a href="{{ path('booking_custom_confirm', { 'id': booking.id }) }}" class="btn btn-default btn-md"><span class="glyphicon glyphicon-thumbs-up"></span></a>
 	    {% elseif (booking.status == constant('App\\Entity\\Booking::STATUS_CONFIRMED') ) %}
-			<a href="{#{ path('booking_unconfirm', { 'id': booking.id }) }#}" class="btn btn-default btn-md"><span class="glyphicon glyphicon-thumbs-down"></span></a>
+			<a href="{{ path('booking_custom_unconfirm', { 'id': booking.id }) }}" class="btn btn-default btn-md"><span class="glyphicon glyphicon-thumbs-down"></span></a>
 		{% endif %}
 		</span>
 	</td>
@@ -119,9 +119,9 @@
 		    <span class="glyphicon glyphicon-cog"></span>
 		  </button>
 		  <ul class="dropdown-menu dropdown-menu-left text-left" role="menu" aria-labelledby="">
-		    <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('booking_schedule_show', { 'id': booking.id }) }}">View</a></li>
+		    <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('booking_custom_show', { 'id': booking.id }) }}">View</a></li>
 		    <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('booking_edit', { 'id': booking.id }) }}">Edit</a></li>
-		    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-href="{{ path('booking_schedule_delete', { 'id': booking.id }) }}" data-toggle="modal" data-target="#deleteWarning">Delete</a></li>
+		    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-href="{{ path('booking_custom_delete', { 'id': booking.id }) }}" data-toggle="modal" data-target="#deleteWarning">Delete</a></li>
 		  </ul>
 		</div>		
 	    {% for sumUpPayment in booking.sumupPayments %}

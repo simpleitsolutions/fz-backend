@@ -11,6 +11,7 @@ use App\Entity\PurchaseItem;
 use App\Form\BPPassengerType;
 use App\Form\DateSelectorType;
 use App\Form\PurchaseType;
+use App\Helper\BookingDailySchedule;
 use App\Helper\BookingPaymentHelper;
 use App\Helper\PaymentViewHelper;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -104,9 +105,106 @@ class BookingController extends AbstractController
             $session->set('current_date', $targetDate->format('Y-m-d'));
         }
 
-        return $this->redirect($this->generateUrl('booking_schedule_view_list', array('date' => $targetDate->format('Y-m-d'))));
+        return $this->redirect($this->generateUrl('booking_custom_schedule', array('date' => $targetDate->format('Y-m-d'))));
     }
 
+
+    /**
+     * @Route("/schedule", name="booking_custom_schedule")
+     */
+    public function dailySchedule(Request $request)
+    {
+//        $request = $this->getRequest();
+        $session = $request->getSession();
+        $em = $this->getDoctrine()->getManager();
+
+        $reposBooking = $this->getDoctrine()->getRepository('App\Entity\Booking');
+        $reposWaitingList = $this->getDoctrine()->getRepository('App\Entity\WaitingListItem');
+        $reposBookingRequest = $this->getDoctrine()->getRepository('App\Entity\BookingRequest');
+        $flightScheduleRepos = $this->getDoctrine()->getRepository('App\Entity\FlightSchedule');
+        $reposPilot = $this->getDoctrine()->getRepository('App\Entity\Pilot');
+        $reposPurchase = $this->getDoctrine()->getRepository('App\Entity\Purchase');
+
+        $pilot = $reposPilot->find(1);
+        $startDate = new \DateTime();
+        $startDate->modify('-40 days');
+        $endDate = new \DateTime();
+        $purchases = $reposPurchase->getAllFlightsForPilotOverDateRange($pilot, $startDate, $endDate);
+
+        $filter = $em->getFilters()->enable('softdeleteable');
+        $filter->disableForEntity('App\Entity\WaitingListItem');
+
+        $dateStr = $request->query->get('date', '');
+        if($dateStr == '')
+        {
+            if($session->get('current_date') == '')
+            {
+                $indexdate = new \DateTime();
+            }
+            else
+            {
+                $indexdate = new \DateTime($session->get('current_date'));
+            }
+        }
+        else
+        {
+            $indexdate = new \DateTime($dateStr);
+        }
+        $session->set('current_date', $indexdate->format('Y-m-d'));
+//         $bookingrequests_enddate = clone $indexdate;
+//         $bookingrequests_enddate->modify('+ 2 months');
+
+
+        $defaultData = array();
+        $defaultData['targetDate'] = $indexdate->format("d-m-Y");
+        $dateForm = $this->createForm(DateSelectorType::class, $defaultData);
+        $dateForm->handleRequest($request);
+
+        $flightSchedule = $flightScheduleRepos->getFlightScheduleForDate($indexdate);
+        $pilots = $reposPilot->getFlyZermattPilots();
+        $bookings = $reposBooking->getBookingsForDate($indexdate);
+        $waitingList = $reposWaitingList->getWaitingListForDate($indexdate);
+        $bookingRequests = $reposBookingRequest->getBookingRequestsForDate($indexdate);
+//        throw new \Exception("HERE".sizeof($bookings));
+
+        if($flightSchedule === null)
+        {
+            $this->get('session')->getFlashBag()->add('danger', 'No Flight Schedule active on this date');
+            $bookingDailySchedule = new BookingDailySchedule($pilots);
+        }
+        else
+        {
+            $bookingDailySchedule = new BookingDailySchedule($pilots);
+            $bookingDailySchedule->generateSchedule($indexdate, $bookings, $flightSchedule);
+            $bookingDailySchedule->setWaitingList($waitingList);
+            $bookingDailySchedule->setBookingRequests($bookingRequests);
+        }
+
+//        return $this->render('AazpBookingBundle:Booking:index.schedule.html.twig', array(
+//            'bookingDailySchedule' => $bookingDailySchedule,
+//            'bookings' => $bookings,
+//            'indexdate' => $indexdate,
+//            'dateForm' => $dateForm->createView(),
+//            'purchases' => $purchases,
+//        ));
+
+
+//        return $this->render('AppBundle:Booking:index.html.twig', array(
+//            'entities' => $bookings,
+//            'indexdate' => $indexdate,
+//            'waitingList' => $waitingList,
+//            'booking_requests_today' => $booking_requests_today,
+//            'report' => $report,
+//        ));
+
+        return $this->render('admin/booking-schedule-view.html.twig', array(
+            'bookingDailySchedule' => $bookingDailySchedule,
+            'bookings' => $bookings,
+            'indexdate' => $indexdate,
+            'dateForm' => $dateForm->createView(),
+            'purchases' => $purchases,
+        ));
+    }
 
 //    public function recentIndexAction()
 //    {
@@ -122,7 +220,7 @@ class BookingController extends AbstractController
 //    }
 //
     /**
-     * @Route("/show/{id}", name="booking_schedule_show")
+     * @Route("/show/{id}", name="booking_custom_show")
      */
     public function showAction($id)
     {
@@ -407,7 +505,7 @@ class BookingController extends AbstractController
 //     }
 //
     /**
-     * @Route("/confirm/{id}", name="booking_confirm")
+     * @Route("/confirm/{id}", name="booking_custom_confirm")
      */
      public function confirmAction($id)
      {
@@ -425,11 +523,11 @@ class BookingController extends AbstractController
 
          $this->get('session')->getFlashBag()->add('success', 'Booking has been successfully confirmed!');
 
-         return $this->redirect($this->generateUrl('booking_schedule_view_list'));
+         return $this->redirect($this->generateUrl('booking_custom_schedule'));
      }
 
     /**
-     * @Route("/unconfirm/{id}", name="booking_unconfirm")
+     * @Route("/unconfirm/{id}", name="booking_custom_unconfirm")
      */
      public function unconfirmAction($id)
      {
@@ -447,11 +545,11 @@ class BookingController extends AbstractController
 
          $this->get('session')->getFlashBag()->add('success', 'Booking has been successfully unconfirmed!');
 
-         return $this->redirect($this->generateUrl('booking_schedule_view_list'));
+         return $this->redirect($this->generateUrl('booking_custom_schedule'));
      }
 
     /**
-     * @Route("/delete/{id}", name="booking_schedule_delete")
+     * @Route("/delete/{id}", name="booking_custom_delete")
      */
       public function deleteAction($id)
     {
@@ -469,11 +567,11 @@ class BookingController extends AbstractController
 
  		$this->get('session')->getFlashBag()->add('success', 'Booking has been successfully deleted!');
 
-        return $this->redirect($this->generateUrl('booking_schedule_view_list'));
+        return $this->redirect($this->generateUrl('booking_custom_schedule'));
     }
 
     /**
-     * @Route("/payment/{id}", name="booking_schedule_payment")
+     * @Route("/payment/{id}", name="booking_custom_payment")
      */
     public function bookingPaymentAction($id)
     {
@@ -750,7 +848,7 @@ class BookingController extends AbstractController
             $em->persist($booking);
             $em->flush();
             $this->get('session')->getFlashBag()->add($messageType, $paymentMessage);
-            return $this->redirect($this->generateUrl('booking_schedule_show', array ('id'=> $booking->getId())));
+            return $this->redirect($this->generateUrl('booking_custom_show', array ('id'=> $booking->getId())));
         }
         return $this->render('booking/booking.payment.summary.html.twig', array(
             'paymentViewList' => $paymentViewList,
@@ -1071,7 +1169,7 @@ class BookingController extends AbstractController
 //	}
 //
     /**
-     * @Route("/passenger/payment/{passenger_id}", name="booking_schedule_passenger_payment")
+     * @Route("/passenger/payment/{passenger_id}", name="booking_custom_passenger_payment")
      */
 	public function passengerPaymentAction($passenger_id)
     {
@@ -1232,7 +1330,7 @@ class BookingController extends AbstractController
 			$em->flush();
 			$this->get('session')->getFlashBag()->add('success', 'Payment '.number_format($payment->getAmount(),2).' CHF has been successful!');
 
-			return $this->redirect($this->generateUrl('booking_schedule_show', array ('id'=> $passenger->getBooking()->getId())));
+			return $this->redirect($this->generateUrl('booking_custom_show', array ('id'=> $passenger->getBooking()->getId())));
 		}
 
 		$payments = $paymentsRepos->getPaymentsForPassenger($passenger);
@@ -1337,7 +1435,7 @@ class BookingController extends AbstractController
 //    }
 //
     /**
-     * @Route("/payment/refund/{id}/{transactionNo}", name="booking_payment_refund")
+     * @Route("/payment/refund/{id}/{transactionNo}", name="booking_custom_payment_refund")
      */
     public function paymentRefundAction($id, $transactionNo)
     {

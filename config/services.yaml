@@ -32,16 +32,6 @@ services:
 #            $logger: '@monolog.logger.markdown'
 
 
-    admin.bookingscheduleview:
-        class: App\Admin\BookingScheduleViewAdmin
-        arguments:
-            -
-            -
-            - App\Controller\BookingScheduleViewCRUDController
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Booking Schedule}
-        public: true
-
     admin.bookingrequest:
         class: App\Admin\BookingRequestAdmin
         arguments:

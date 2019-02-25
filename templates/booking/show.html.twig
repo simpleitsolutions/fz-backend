@@ -63,7 +63,7 @@
     <div class="panel-heading hidden-print">
 	  	BOOKING #{{entity.id}} {{ (constant('App\\Entity\\Booking::STATUS_CONFIRMED') == entity.status) ? '- CONFIRMED':'' }} {{entity.owner and entity.owner.name != 'FlyZermatt'?'('~entity.owner.name~')':'' }}
 	    <div class="visible-xs pull-right">
-	        <a href="{{ path('booking_schedule_view_list') }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-list"></span></a>
+	        <a href="{{ path('booking_custom_schedule') }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-list"></span></a>
 	        <a href="{{ path('booking_edit', { 'id': entity.id }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
 		</div>
 	    <div class="pull-right hidden-print">&nbsp;</div>
@@ -74,7 +74,7 @@
 	    </div>
 	    <div class="pull-right hidden-print">&nbsp;</div>
 	    <div class="hidden-xs pull-right">
-	        <a href="#" data-href="{{ path('booking_schedule_delete', { 'id': entity.id }) }}" class="btn btn-default btn-sm" data-toggle="modal" data-target="#deleteWarning"><span class="glyphicon glyphicon-trash"></span> Trash</a>
+	        <a href="#" data-href="{{ path('booking_custom_delete', { 'id': entity.id }) }}" class="btn btn-default btn-sm" data-toggle="modal" data-target="#deleteWarning"><span class="glyphicon glyphicon-trash"></span> Trash</a>
         </div>
 	    <div class="pull-right hidden-print">&nbsp;</div>
 	    <div class="hidden-xs pull-right">
@@ -82,7 +82,7 @@
         </div>
 	    <div class="pull-right hidden-print">&nbsp;</div>
 	    <div class="hidden-xs pull-right">
-	        <a href="{{ path('booking_schedule_view_list') }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-list"></span> List</a>
+	        <a href="{{ path('booking_custom_schedule') }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-list"></span> List</a>
         </div>
     </div>
     <div class="panel-body">
