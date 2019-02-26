@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Repository\MeetingLocationRepository;
@@ -43,15 +44,15 @@ class BookingType extends AbstractType
 		        'data-format' => 'dd-MM-yyyy',
 		    )));
 
-		$builder->add('meetingTime', TextType::class, array(
+		$builder->add('meetingTime', TimeType::class, array(
 		    'required' => true,
 		    'label' => 'Meeting Time',
-		    'translation_domain' => 'AazpBookingBundle',
+//		    'translation_domain' => 'AazpBookingBundle',
 // 		    'required' => false,
 		    'attr' => array(
-		        'class' => 'form-control input-inline datetimepicker',
-		        'data-provide' => 'datepicker',
-		        'data-format' => 'HH:mm',
+//		        'class' => 'form-control input-inline',
+//		        'data-provide' => 'datepicker',
+//		        'data-format' => 'HH:mm',
 		    )));
 		
 		$builder->add('flight', EntityType::class, array('label' => 'Flight',
@@ -76,7 +77,7 @@ class BookingType extends AbstractType
 		));
 		
 		$builder->add('passengers', CollectionType::class, array('entry_type' => PassengerType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => false));
-		$builder->add('contactinfo', TextareaType::class, array('label' => 'Contact'));
+		$builder->add('contactinfo', TextareaType::class, array('label' => 'Contact', 'attr' => ['class' => 'form-control']));
 		$builder->add('meetinglocation', EntityType::class, array('label' => 'Meeting Location',
 		                                                 'class' => 'App\Entity\MeetingLocation',
 //		                                                 'property' => 'name',
@@ -96,10 +97,10 @@ class BookingType extends AbstractType
 		                        ->orderBy('bo.sortOrder', 'ASC');}
             ) );
 		
-		$builder->add('notes', TextareaType::class, array('label' => 'Comments', 'required' => false));
+		$builder->add('notes', TextareaType::class, array('label' => 'Comments', 'required' => false, 'attr' => ['class' => 'form-control']));
 
 		$builder->get('flightdate')->addModelTransformer(new DateTransformer());
-		$builder->get('meetingTime')->addModelTransformer(new TimeTransformer());
+//		$builder->get('meetingTime')->addModelTransformer(new TimeTransformer());
 	}
 
 	public function setDefaultOptions(OptionsResolverInterface $resolver)

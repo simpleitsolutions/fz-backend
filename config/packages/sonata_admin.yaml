@@ -8,10 +8,6 @@ sonata_admin:
         role_admin: ROLE_ADMIN
         role_super_admin: ROLE_SUPER_ADMIN
 
-    templates:
-#        show:   '@App/Admin/display_client.html.twig'
-        layout: '/sonataadmin/standard_layout.html.twig'
-        user_block: '/sonataadmin/Core/user_block.html.twig'
     options:
         dropdown_number_groups_per_colums:  2
         lock_protection: true
@@ -30,7 +26,7 @@ sonata_admin:
             Create Voucher:
                 on_top:               true
                 roles: [ROLE_USER]
-                icon:                 '<i class="fa fa-certificate"></i>'
+                icon:                 '<i class="fa fa-gift"></i>'
                 items:
                     - route:        voucher_create
                       label:        Voucher
@@ -48,8 +44,16 @@ sonata_admin:
 #                items:
 #                    - route:        waitinglist_list
 #                      label:        Waiting List
+            Reports:
+#                on_top:               true
+                roles: [ROLE_USER]
+                icon:                 '<i class="fa fa-wpforms"></i>'
+                items:
+                    - route:        payment_type
+                      label:        Payment Type Report
+
             Application:
-                icon:                 '<i class="fa fa-cog"></i>'
+                icon:                 '<i class="fa fa-globe"></i>'
                 roles: [ROLE_ADMIN]
                 items:
                     - admin.booking
@@ -58,7 +62,7 @@ sonata_admin:
                     - admin.passenger
 
             Administration:
-                icon:                 '<i class="fa fa-cog"></i>'
+                icon:                 '<i class="fa fa-cogs"></i>'
                 roles: [ROLE_ADMIN]
                 items:
                     - admin.pilot
@@ -68,8 +72,17 @@ sonata_admin:
         empty_boxes: fade
         case_sensitive: false
 
+    templates:
+        #        show:   '@App/Admin/display_client.html.twig'
+        layout: '/base/standard_layout.html.twig'
+        user_block: '/sonataadmin/Core/user_block.html.twig'
 
-#    assets:
+    assets:
+        extra_stylesheets:
+            - '//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker.css'
+            - '//fonts.googleapis.com/css?family=Assistant'
+            - 'css/aazp.css'
+            - 'css/aazp-legacy.css'
 #        javascripts:
 #            extra_javascripts: 'js/aazp.js'
 

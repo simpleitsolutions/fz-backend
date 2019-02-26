@@ -111,7 +111,7 @@ file that was distributed with this source code.
     </head>
     <body
             {% block body_attributes -%}
-                class="sonata-bc skin-black fixed
+                class="aazp-custom sonata-bc skin-black fixed
                 {% if app.request.cookies.get('sonata_sidebar_hide') -%}
                     sidebar-collapse
                 {%- endif -%}"
@@ -131,7 +131,7 @@ file that was distributed with this source code.
                 {% endblock %}
                 {% block logo %}
                     {% spaceless %}
-                        <a class="logo" href="{{ path('sonata_admin_dashboard') }}">
+                        <a class="logo" href="{{ path('booking_custom_schedule') }}">
                             {% if 'single_image' == sonata_admin.adminPool.getOption('title_mode') or 'both' == sonata_admin.adminPool.getOption('title_mode') %}
                                 <img src="{{ asset(sonata_admin.adminPool.titlelogo) }}" alt="{{ sonata_admin.adminPool.title }}">
                             {% endif %}
@@ -370,5 +370,12 @@ file that was distributed with this source code.
         {% endblock %}
     {% endif %}
 
+    {% block javascript_last %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
+
+        <script type="text/javascript" src="{{ asset('js/aazp.js') }}"></script>
+
+    {%  endblock javascript_last %}
     </body>
 </html>

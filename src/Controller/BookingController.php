@@ -7,6 +7,7 @@ use App\Entity\Payment;
 use App\Entity\PaymentType;
 use App\Entity\Product;
 use App\Entity\ProductCategory;
+use App\Entity\Purchase;
 use App\Entity\PurchaseItem;
 use App\Form\BPPassengerType;
 use App\Form\DateSelectorType;
@@ -82,6 +83,7 @@ class BookingController extends AbstractController
      */
     public function dateSelectorAction(Request $request)
     {
+//        $request = Request::createFromGlobals();
         $session = $request->getSession();
 
         if($session->get('current_date') == '')
@@ -92,7 +94,6 @@ class BookingController extends AbstractController
         {
             $targetDate = new \DateTime($session->get('current_date'));
         }
-        
         $defaultData = array();
         $defaultData['targetDate'] = $targetDate->format("d-m-Y");
         $dateForm = $this->createForm(DateSelectorType::class, $defaultData);
@@ -104,6 +105,7 @@ class BookingController extends AbstractController
             $targetDate = \DateTime::createFromFormat('d-m-Y', $targetDateStr);
             $session->set('current_date', $targetDate->format('Y-m-d'));
         }
+//        throw new \Exception("HERE ".$targetDate->format("d-m-Y"));
 
         return $this->redirect($this->generateUrl('booking_custom_schedule', array('date' => $targetDate->format('Y-m-d'))));
     }
@@ -197,7 +199,7 @@ class BookingController extends AbstractController
 //            'report' => $report,
 //        ));
 
-        return $this->render('admin/booking-schedule-view.html.twig', array(
+        return $this->render('booking/schedule.html.twig', array(
             'bookingDailySchedule' => $bookingDailySchedule,
             'bookings' => $bookings,
             'indexdate' => $indexdate,
@@ -622,8 +624,8 @@ class BookingController extends AbstractController
             ->add('paymentAmount', NumberType::class, array('scale' => 2, 'data' => $booking->calculateBalance(), 'mapped' => false))
             ->add('sumupRef', TextType::class, array('mapped' => false, 'required' => false))
             ->add('description', TextType::class, array('mapped' => false, 'required' => false))
-            ->add('pay', SubmitType::class)
-            ->add('cancel', SubmitType::class, array('attr' => array('formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )))
+            ->add('pay', SubmitType::class, ['attr' => ['class' => 'btn btn-success']])
+            ->add('cancel', SubmitType::class, array('attr' => array('class' => 'btn', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )))
             ->getForm();
 
         $form->handleRequest($request);
@@ -709,8 +711,8 @@ class BookingController extends AbstractController
                 ->add('paymentAmount', NumberType::class, array('scale' => 2, 'data' => $booking->calculateBalance(), 'mapped' => false))
                 ->add('sumupRef', TextType::class, array('mapped' => false, 'required' => false))
                 ->add('description', TextType::class, array('mapped' => false, 'required' => false))
-                ->add('pay', SubmitType::class)
-                ->add('cancel', SubmitType::class, array('attr' => array('formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )))
+                ->add('pay', SubmitType::class, ['attr' => ['class' => 'btn btn-success']])
+                ->add('cancel', SubmitType::class, array('attr' => array('class' => 'btn', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )))
                 ->getForm();
 
             $template = $this->renderView('booking/payment/booking.payment.summary.form.html.twig', array(

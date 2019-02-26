@@ -13,6 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Voucher extends BaseEntity
 {
+    const ENGLISH = 0;
+    const GERMAN = 1;
+
     public function __construct() {
     }
 

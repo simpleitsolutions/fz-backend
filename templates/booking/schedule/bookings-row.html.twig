@@ -25,18 +25,18 @@
 {% endif %}
 
 <tr class="hidden-xs hidden-sm {{cssClass}} booking-{{ booking.id }}">
-	<td rowspan="3" class="text-center">
+	<td rowspan="3" class="text-center" style="line-height:30px;">
 	    {{booking.meetingTime|date("H:i:s") == '00:00:00'?booking.flightdate|date("H:i"):booking.meetingTime|date("H:i")}}<br/>
 	    {% if booking.owner and booking.owner.name != 'FlyZermatt' %}
 		    <span style="padding:9px 3px;background-color:#996600;" class="label label-status">{{booking.owner.name}}</span><br/>
 	    {% else %}
-		    <span style="padding:9px 3px;" class="label label-status label-{{cssClass}}">{{status}}</span><br/>
+		    <span style="padding:7px 15px;display:block;" class="label label-status label-{{cssClass}}">{{status}}</span><br/>
 	    {% endif %}
 		#{{booking.id}}</br>
 	    {% if (booking.status == constant('App\\Entity\\Booking::STATUS_NEW')) %}
-			<a href="{{ path('booking_custom_confirm', { 'id': booking.id }) }}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+			<a href="{{ path('booking_custom_confirm', { 'id': booking.id }) }}" class="btn btn-default btn-sm btn-block hidden-xs"><span class="glyphicon glyphicon-thumbs-up"></span></a>
 	    {% elseif (booking.status == constant('App\\Entity\\Booking::STATUS_CONFIRMED') ) %}
-			<a href="{{ path('booking_custom_unconfirm', { 'id': booking.id }) }}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-thumbs-down"></span></a>
+			<a href="{{ path('booking_custom_unconfirm', { 'id': booking.id }) }}" class="btn btn-default btn-sm btn-block hidden-xs"><span class="glyphicon glyphicon-thumbs-down"></span></a>
 		{% endif %}
 		
 	</td>

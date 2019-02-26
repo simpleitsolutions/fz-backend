@@ -1,0 +1,182 @@
+@media print {
+
+	@page 
+	{
+	    size: auto;   /* auto is the current printer page size */
+	    margin: 0mm;  /* this affects the margin in the printer settings */
+	}
+        
+	.pdf-page-half {
+		height: 490px;
+	}
+
+	.pdf-page-half-a5 {
+		height: 290px;
+	}
+
+	.pdf-page-spacer-a5 {
+		height: 20px;
+	}
+
+	.pdf-page-half-spacer-a5 {
+		height: 100px;
+	}
+
+	.pdf-page-half-a4 {
+		height: 495px;
+	}
+
+	.pdf-page-spacer-a4 {
+		height: 10px;
+	}
+
+	.pdf-page-half-spacer-a4 {
+		height: 7px;
+	}
+
+	pdf-page-half-voucher-spacer-a4 {
+		height: 40px;
+	}
+
+	.pdf-page-top-margin-a4 {
+		height: 39px;
+	}
+	
+	.pdf-page-bottom-margin-a4 {
+		height: 0px;
+		/* page-break-after: always; */
+	}
+
+	.pdf-page-voucher-bottom-margin-a4 {
+		height: 0px;
+		/* page-break-after: always; */
+	}
+
+
+	div.pdf-page { 
+	   page-break-after: always; 
+	   page-break-inside: avoid;
+	}
+
+	a[href]:after {
+	  content: none;
+	}
+	
+	.label {
+		color: white !important;
+	}
+	.label-info {
+	  background-color: #5bc0de !important;
+	}
+	.label-warning {
+	  background-color: #f0ad4e !important;
+	}
+	.label-danger {
+	  background-color: #d9534f !important;
+	}
+	.label-success {
+	  background-color: #5cb85c !important;
+	}
+	.label-primary {
+	  background-color: #428bca !important;
+	}
+
+	
+	.panel-default > .panel-heading {
+	  background-color: #F5F5F5 !important;
+	}
+
+}
+
+@media(min-width:367px) and (max-width: 768px) {
+  th[class~="visible-sm"], td[class~="visible-sm"] {
+  		display: table-cell !important;
+	}		
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+.table > thead > tr > td.info,
+.table > tbody > tr > td.info,
+.table > tfoot > tr > td.info,
+.table > thead > tr > th.info,
+.table > tbody > tr > th.info,
+.table > tfoot > tr > th.info,
+.table > thead > tr.info > td,
+.table > tbody > tr.info > td,
+.table > tfoot > tr.info > td,
+.table > thead > tr.info > th,
+.table > tbody > tr.info > th,
+.table > tfoot > tr.info > th {
+  background-color: #d9edf7;
+}
+.table-hover > tbody > tr > td.info:hover,
+.table-hover > tbody > tr > th.info:hover,
+.table-hover > tbody > tr.info:hover > td,
+.table-hover > tbody > tr.info:hover > th {
+  background-color: #c4e3f3;
+}
+
+.paymentType .radio {
+	margin: 0 35px;
+}
+
+.nopadding {
+   padding: 0 !important;
+   margin: 5px 0 !important;
+}
+
+div.lined div {
+   border-bottom: 1px solid #dddddd;
+}
+
+div.header div {
+   border-bottom: 1px solid #dddddd;
+   font-weight: 500;	
+}
+
+.label-status {
+   /*width: 100%;*/
+   /*float: left;*/
+   margin: 3px auto;
+}
+
+div.purchase-balance-owing-section {
+   height: 10px;
+   margin: 5px -15px;
+}
+
+div.purchase-balance-owing-section div {
+   padding: 10px 0px;
+}
+
+div.purchase-payment-type-section {
+   padding: 10px 0px;
+   margin: 0px 0px 0px 0px;
+   text-align: center;
+}
+
+div.purchase-payment-type-section div div{
+   padding: 7px 0px;
+   margin: 0px 15px;
+}
+
+div.purchase-payment-section div > span {
+   font-weight: 500;
+}
+
+div.purchase-payment-section div.field-label {
+   font-weight: 500;
+   padding: 6px 0px;
+}
+
+div.buttons {
+   height: 100px;
+   padding: 20px 0px;
+}
+
+ .payment-refunded {
+	text-decoration: line-through;
+}

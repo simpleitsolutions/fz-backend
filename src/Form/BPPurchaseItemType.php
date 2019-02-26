@@ -16,7 +16,7 @@ class BPPurchaseItemType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
     {
     	// $builder->add('product', 'entity', array('class' => 'AazpBookingBundle:Product', 'property' => 'name', 'empty_value' => 'Please Select', 'empty_data' => null, 'required' => false));
-        $builder->add('product', EntityType::class, array('label' => 'Flight', 'class' => Product::class, 'choice_label' => 'description', 'placeholder' => 'Please Select', 'required' => false, 'attr'=>array('class'=>'form-control', 'data-sonata-select2'=>'false')));
+        $builder->add('product', EntityType::class, array('label' => 'Flight', 'class' => Product::class, 'choice_label' => 'description', 'placeholder' => 'Please Select', 'required' => false));
 		// $builder->add('description');
     	$builder->add('amount', NumberType::class, array('scale' => 2));
     }

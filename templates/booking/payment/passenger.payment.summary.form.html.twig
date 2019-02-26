@@ -37,7 +37,7 @@
 					<div class="col-md-1 hidden-sm hidden-xs">#{{ loop.index }}</div>
 					<div class="text-left col-md-6 col-sm-6 col-xs-6">{{ form_row(purchaseItem.product, {'label':false, 'attr':{'onchange':'updatePurchase(this)'}}) }}</div>
 					<div id="product_price_{{ loop.index-1 }}" class="text-right col-md-2 col-sm-2 col-xs-2" style="margin:7px 0px;">{{ passenger.purchase.purchaseItems[key].product.price }}</div>
-					<div class="text-left col-md-2 col-sm-3 col-xs-3">{{ form_row(purchaseItem.amount, {'label':false, 'attr': {'class':'text-right calc-item'}}) }}</div>
+					<div class="text-left col-md-2 col-sm-3 col-xs-3">{{ form_row(purchaseItem.amount, {'label':false, 'attr': {'class':'text-right calc-item form-control'}}) }}</div>
 				</div>
 				{% endfor %}
 			</div>
@@ -77,9 +77,9 @@
 					<div class="text-center visible-md visible-lg col-md-1" >&nbsp;</div>
 				</div>
 				<div class="nopadding col-xs-12 col-sm-12 col-md-12">
-					<div class="text-center col-xs-7 col-sm-7 col-md-6">{{ form_row(form.description, {'label':false, 'attr': {'class':'notes-field'}}) }}</div>
-					<div class="text-center col-xs-3 col-sm-3 col-md-3">{{ form_row(form.sumupRef, {'label':false, 'attr': {'class':'text-right sumup-field;'}}) }}</div>
-					<div class="text-center col-xs-2 col-sm-2 col-md-2" >{{ form_row(form.paymentAmount, {'label':false, 'attr': {'class':'text-right payment-amount-field;'}}) }}</div>
+					<div class="text-center col-xs-7 col-sm-7 col-md-6">{{ form_row(form.description, {'label':false, 'attr': {'class':'notes-field form-control full-width'}}) }}</div>
+					<div class="text-center col-xs-3 col-sm-3 col-md-3">{{ form_row(form.sumupRef, {'label':false, 'attr': {'class':'text-right sumup-field form-control'}}) }}</div>
+					<div class="text-center col-xs-2 col-sm-2 col-md-2" >{{ form_row(form.paymentAmount, {'label':false, 'attr': {'class':'text-right payment-amount-field form-control'}}) }}</div>
 					<div class="text-center visible-md visible-lg col-md-1" >&nbsp;</div>
 				</div>
 			</div>

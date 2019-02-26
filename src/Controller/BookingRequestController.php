@@ -1,7 +1,11 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\BookingOwner;
 use App\Entity\BookingRequest;
+use App\Entity\FlightScheduleTime;
+use App\Entity\MeetingLocation;
+use App\Entity\Product;
 use App\Form\BookingType;
 use App\Entity\Booking;
 use App\Entity\Passenger;
@@ -45,10 +49,11 @@ class BookingRequestController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $em = $this->getDoctrine()->getManager();
-        $booking_request = $em->getRepository('App\Entity\BookingRequest')->find($id);
-        $flightScheduleTimeRepos = $this->getDoctrine()->getRepository('App\Entity\FlightScheduleTime');
-        $productRepository = $this->getDoctrine()->getRepository('App\Entity\Product');
-        $meetingLocationRepository = $this->getDoctrine()->getRepository('App\Entity\MeetingLocation');
+        $booking_request = $em->getRepository(BookingRequest::class)->find($id);
+        $flightScheduleTimeRepos = $this->getDoctrine()->getRepository(FlightScheduleTime::class);
+        $productRepository = $this->getDoctrine()->getRepository(Product::class);
+        $meetingLocationRepository = $this->getDoctrine()->getRepository(MeetingLocation::class);
+        $bookingOwnerRepository = $this->getDoctrine()->getRepository(BookingOwner::class);
 
         if (!$booking_request) {
             throw $this->createNotFoundException('Unable to find Booking Request.');
@@ -82,6 +87,8 @@ class BookingRequestController extends AbstractController
         {
             $notes = $notes.', '.$groupCondition->getName();
         }
+        $flyZermattOwner = $bookingOwnerRepository->findOneBy(array('name' => 'FlyZermatt'));
+        $booking->setOwner($flyZermattOwner);
         $booking->setNotes($notes);
         $booking->setContactinfo($booking_request->getPhone().' '.$booking_request->getEmail());
 
@@ -92,12 +99,13 @@ class BookingRequestController extends AbstractController
         $form = $this->createForm(BookingType::class, $booking, array(
             'flightScheduleTimes' => $flightScheduleTimes,
             'preferredFlights' => $preferredFlights,
-            'preferredMeetingLocations' => $preferredMeetingLocations));
+            'preferredMeetingLocations' => $preferredMeetingLocations)
+        );
 
         // $form->add('save', 'submit', array('label' => 'Confirm'));
-        $form->add('saveAndExit', SubmitType::class, array('label' => 'Save'));
-        $form->add('saveAndConfirm', SubmitType::class, array('label' => 'Save & Confirm'));
-        $form->add('cancel', SubmitType::class, array('attr' => array('formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )));
+        $form->add('saveAndExit', SubmitType::class, array('label' => 'Save', 'attr' => ['class' => 'form-control']));
+        $form->add('saveAndConfirm', SubmitType::class, array('label' => 'Save & Confirm', 'attr' => ['class' => 'form-control']));
+        $form->add('cancel', SubmitType::class, array('attr' => array('class' => 'form-control', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )));
 
         $form->handleRequest($request);
 

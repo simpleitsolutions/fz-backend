@@ -43,11 +43,11 @@
     {{ form_start(dateForm, {'action': path('booking_date_select'), 'attr': { 'id':'targetDateForm' }} ) }}
     {{ form_errors(dateForm.targetDate) }}
    <div class="form-group">
-        <div class='input-group date' id='datetimepicker'>
+        <div class='input-group date' id='datepicker'>
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>
-            {{ form_widget(dateForm.targetDate, {'attr': {'class': 'form-control input-inline datetimepicker'}}) }}
+            {{ form_widget(dateForm.targetDate, {'attr': {'class': 'form-control '}}) }}
         </div>
     </div>
     {{ form_end(dateForm) }}

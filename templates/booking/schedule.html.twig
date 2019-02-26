@@ -1,0 +1,231 @@
+{% extends 'base/standard_layout.html.twig' %}
+
+{% block sonata_admin_content %}
+        {% set waitingList = bookingDailySchedule.waitingList %}
+        {% set bookingRequests = bookingDailySchedule.bookingRequests %}
+        {% set timeSchedules = bookingDailySchedule.timeSchedules %}
+        {% set bookingsUnallocated = bookingDailySchedule.bookingsUnallocated %}
+        {% set pilots = bookingDailySchedule.pilots %}
+<div class="row content">
+        <div class="modal fade" id="deleteWarning" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content col-md-6 text-center">
+                    <div class="modal-body">
+                        <h4 class="modal-title">Delete Booking?</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="clickable btn btn-danger btn-ok">Yes</a>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden-print">
+            <ul class="nav nav-pills nav-justified visible-xs visible-sm">
+                <li class="active"><a href="{#{ path('booking_quick') }#}">Quick Booking <span class="glyphicon glyphicon-plane"></span></a></li>
+            </ul>
+        </div>
+
+        <div class="visible-xs visible-sm clearfix">&nbsp;</div>
+
+    <div class="col-md-12">
+        {{ include('booking/schedule/pagination.html.twig') }}
+    </div>
+
+    {% if app.request.hasPreviousSession %}
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="col-md-12 alert alert-{{ type }} alert-dismissable">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="col-md-12" style="padding-left:0px;padding-right:0px;">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    {{ include('booking/schedule/main-header.html.twig') }}
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                {% set bookingCollection = bookingDailySchedule.bookingsUnallocated %}
+                {{ include('booking/schedule/bookings.html.twig', {'title':'UNSCHEDULED BOOKINGS'}) }}
+            </div>
+
+            {% for timeSchedule in bookingDailySchedule.timeSchedules %}
+                <div class="panel panel-default">
+                    <a name="{{ timeSchedule.flightScheduleTime.scheduleStartTime|date("H:i") }}"></a>
+                    {% set bookingCollection = timeSchedule.bookings %}
+                    {{ include('booking/schedule/bookings.html.twig') }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-6 booking-requests">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <h4>BOOKING REQUESTS TODAY</h4>
+                </div>
+                {% if bookingRequests is not empty %}
+                <table class="table table-hover table-condensed">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th class="hidden-xs hidden-sm hidden-md hidden-lg">Phone</th>
+                        <th><span class="glyphicon glyphicon-user"></span></th>
+                        <th class="hidden-xs hidden-sm hidden-md hidden-lg">Comments</th>
+                        <th>Flight</th>
+                        <th class="hidden-xs">Arrival</th>
+                        <th class="visible-xs">Arriv.</th>
+                        <th class="hidden-xs">Departure</th>
+                        <th class="visible-xs">Dep.</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+
+                    {% for bookingrequest in bookingRequests %}
+                        <tr>
+                            <td>{{bookingrequest.name}}</td>
+                            <td class="hidden-xs hidden-sm hidden-md hidden-lg">{{bookingrequest.phone}}</td>
+                            <td>{{bookingrequest.nopassengers}}</td>
+                            <td class="hidden-xs hidden-sm hidden-md hidden-lg">{{bookingrequest.comments}}</td>
+                            <td class="visible-xs visible-sm">{{bookingrequest.flightdate is empty ? "" : bookingrequest.flightdate|date("d M")}}</td>
+                            <td class="hidden-xs hidden-sm">{{bookingrequest.flightdate is empty ? "" : bookingrequest.flightdate|date("d-m-Y")}}</td>
+                            <td class="visible-xs visible-sm">{{bookingrequest.arrivaldate is empty ? "" : bookingrequest.arrivaldate|date("d M")}}</td>
+                            <td class="hidden-xs hidden-sm">{{bookingrequest.arrivaldate is empty ? "" : bookingrequest.arrivaldate|date("d-m-Y")}}</td>
+                            <td class="visible-xs visible-sm">{{bookingrequest.departuredate is empty ? "" : bookingrequest.departuredate|date("d M")}}</td>
+                            <td class="hidden-xs hidden-sm">{{bookingrequest.departuredate is empty ? "" : bookingrequest.departuredate|date("d-m-Y")}}</td>
+                            <td class="visible-sm visible-xs text-right">
+                                <div class="btn-group pull-right hidden-print">
+                                    <a href="{{ path('booking_request_confirm', { 'id': bookingrequest.id }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-check"></span></a>
+                                </div>
+                            </td>
+                            <td class="hidden-sm hidden-xs text-right">
+                                <div class="pull-right hidden-print">
+                                    <a href="{{ path('booking_request_confirm', { 'id': bookingrequest.id }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-check"></span></a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% else %}
+                        <div class="panel-body">NONE</div>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6 waiting-list">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <h4>
+                        WAITING LIST
+                        <div class="pull-right hidden-print">
+                            <a href="{#{ path('waiting_list_new', {'date':indexdate|date("Y-m-d")})  }#}" class="btn btn-default btn-md visible-xs"><span class="glyphicon glyphicon-plus"></span></a>
+                        </div>
+                        <div class="btn-group pull-right hidden-print">
+                            <a href="{#{ path('waiting_list_new', {'date':indexdate|date("Y-m-d")})  }#}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-plus"></span></a>
+                        </div>
+                    </h4>
+                </div>
+                {% if waitingList is not empty %}
+                <table class="table table-hover table-condensed">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th class="hidden-xs">Contact</th>
+                        <th><span class="glyphicon glyphicon-user"></span></th>
+                        <th>Notes</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+
+                    {% for waitingListItem in waitingList %}
+                        {% if(waitingListItem.deleted is null) %}
+                            {% set strikeStart = '' %}
+                            {% set strikeEnd = '' %}
+                        {% else %}
+                            {% set strikeStart = '<strike>' %}
+                            {% set strikeEnd = '</strike>' %}
+                        {% endif %}
+                        <tr>
+                            <td>{{strikeStart|raw}}{{loop.index}}{{strikeEnd|raw}}</td>
+                            <td class="hidden-xs">{{strikeStart|raw}}{{waitingListItem.name}}{{strikeEnd|raw}}</td>
+                            <td class="hidden-xs">{{strikeStart|raw}}{{waitingListItem.contactinfo}}{{strikeEnd|raw}}</td>
+                            <td class="visible-xs">
+                                {{strikeStart|raw}}{{waitingListItem.name}}{{strikeEnd|raw}}</br>{{strikeStart|raw}}{{waitingListItem.contactinfo}}{{strikeEnd|raw}}
+                            </td>
+                            <td>{{strikeStart|raw}}{{waitingListItem.nopassengers}}{{strikeEnd|raw}}</td>
+                            <td>{{strikeStart|raw}}{{waitingListItem.notes}}{{strikeEnd|raw}}</td>
+                            <td>
+                                {% if(waitingListItem.deleted is null) %}
+                                    <div class="btn-group pull-right hidden-print">
+                                        <a href="{#{ path('waiting_list_delete', {'id':waitingListItem.id}) }#}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-minus-sign"></span></a>
+                                    </div>
+                                {% else %}
+                                    &nbsp;
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    {% else %}
+                        <div class="panel-body">NONE</div>
+                    {% endif %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</div>
+{% endblock %}
+
+{% block javascript_last %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+        $('#availability_checkAllTimes').on('change', function (e) {
+            if($('#availability_checkAllTimes').is(':checked')) {
+                $('[id^=availability_flightTimes_]').prop('checked', true);
+            }
+            else {
+                $('[id^=availability_flightTimes_]').prop('checked', false);
+            }
+        });
+
+        {% for booking in bookings %}
+        $('{{'.booking-'~booking.id}}').hover( function () {
+                if ($(this).hasClass('info')) {
+                    $('{{'.booking-'~booking.id}}').children().css('background-color', '#c4e3f3');
+                } else if ($(this).hasClass('success')) {
+                    $('{{'.booking-'~booking.id}}').children().css('background-color', '#d0e9c6');
+                } else if ($(this).hasClass('danger')) {
+                    $('{{'.booking-'~booking.id}}').children().css('background-color', '#ebcccc');
+                } else if ($(this).hasClass('warning')) {
+                    $('{{'.booking-'~booking.id}}').children().css('background-color', '#faf2cc');
+                } else {
+                }
+            },
+            function () {
+                if ($(this).hasClass('info')) {
+                    $('{{'.booking-'~booking.id}}').children().css('background-color', '#d9edf7');
+                } else if ($(this).hasClass('success')) {
+                    $('{{'.booking-'~booking.id}}').children().css('background-color', '#dff0d8');
+                } else if ($(this).hasClass('danger')) {
+                    $('{{'.booking-'~booking.id}}').children().css('background-color', '#f2dede');
+                } else if ($(this).hasClass('warning')) {
+                    $('{{'.booking-'~booking.id}}').children().css('background-color', '#fcf8e3');
+                } else {
+                }
+            });
+        {% endfor %}
+    </script>
+{% endblock %}

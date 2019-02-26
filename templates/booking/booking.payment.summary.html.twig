@@ -1,4 +1,4 @@
-{% extends '@SonataAdmin/standard_layout.html.twig' %}
+{% extends 'base/standard_layout.html.twig' %}
 
 {% form_theme form _self %}
 
@@ -35,66 +35,66 @@
 
 
 
-	<script type="text/javascript" src="{{ asset('js/aazp.js') }}"></script>
-
 	<script>
-    	$purchaseItemsHolder1 = $('div.purchaseItems1');
-	    
-		$purchaseItemsHolder1.append($newPurchaseItemLink1);
 
-	    $purchaseItemsHolder1.data('index', $purchaseItemsHolder1.children().length);
-	
-	    $addPurchaseItemLink1.on('click', function(e) {
-	        // prevent the link from creating a "#" on the URL
-	        e.preventDefault();
-	
-	        // add a new purchaseItem form (see next code block)
-	        createPurchaseItemAddLink($purchaseItemsHolder1, $newPurchaseItemLink1);
+		$(document).ready(function() {
+			$purchaseItemsHolder1 = $('div.purchaseItems1');
+
+			$purchaseItemsHolder1.append($newPurchaseItemLink1);
+
+			$purchaseItemsHolder1.data('index', $purchaseItemsHolder1.children().length);
+
+			$addPurchaseItemLink1.on('click', function (e) {
+				// prevent the link from creating a "#" on the URL
+				e.preventDefault();
+
+				// add a new purchaseItem form (see next code block)
+				createPurchaseItemAddLink($purchaseItemsHolder1, $newPurchaseItemLink1);
+			});
+
+			// add a delete link to all of the existing tag form li elements
+			$purchaseItemsHolder1.find('div.purchaseItem').each(function () {
+				createPurchaseItemDeleteLink($(this));
+			});
+
+			$purchaseItemsHolder2 = $('div.purchaseItems2');
+
+			$purchaseItemsHolder2.append($newPurchaseItemLink2);
+
+			$purchaseItemsHolder2.data('index', $purchaseItemsHolder2.children().length);
+
+			$addPurchaseItemLink2.on('click', function (e) {
+				// prevent the link from creating a "#" on the URL
+				e.preventDefault();
+
+				// add a new purchaseItem form (see next code block)
+				createPurchaseItemAddLink($purchaseItemsHolder2, $newPurchaseItemLink2);
+			});
+
+			// add a delete link to all of the existing tag form li elements
+			$purchaseItemsHolder2.find('div.purchaseItem').each(function () {
+				createPurchaseItemDeleteLink($(this));
+			});
+
+			$purchaseItemsHolder3 = $('div.purchaseItems3');
+
+			$purchaseItemsHolder3.append($newPurchaseItemLink3);
+
+			$purchaseItemsHolder3.data('index', $purchaseItemsHolder3.children().length);
+
+			$addPurchaseItemLink3.on('click', function (e) {
+				// prevent the link from creating a "#" on the URL
+				e.preventDefault();
+
+				// add a new purchaseItem form (see next code block)
+				createPurchaseItemAddLink($purchaseItemsHolder3, $newPurchaseItemLink3);
+			});
+
+			// add a delete link to all of the existing tag form li elements
+			$purchaseItemsHolder3.find('div.purchaseItem').each(function () {
+				createPurchaseItemDeleteLink($(this));
+			});
 		});
-	
-	    // add a delete link to all of the existing tag form li elements
-	    $purchaseItemsHolder1.find('div.purchaseItem').each(function() {
-	        createPurchaseItemDeleteLink($(this));
-	    });
-
-		$purchaseItemsHolder2 = $('div.purchaseItems2');
-	    
-		$purchaseItemsHolder2.append($newPurchaseItemLink2);
-
-	    $purchaseItemsHolder2.data('index', $purchaseItemsHolder2.children().length);
-	
-	    $addPurchaseItemLink2.on('click', function(e) {
-	        // prevent the link from creating a "#" on the URL
-	        e.preventDefault();
-	
-	        // add a new purchaseItem form (see next code block)
-	        createPurchaseItemAddLink($purchaseItemsHolder2, $newPurchaseItemLink2);
-		});
-	
-	    // add a delete link to all of the existing tag form li elements
-	    $purchaseItemsHolder2.find('div.purchaseItem').each(function() {
-	        createPurchaseItemDeleteLink($(this));
-	    });
-
-		$purchaseItemsHolder3 = $('div.purchaseItems3');
-	    
-		$purchaseItemsHolder3.append($newPurchaseItemLink3);
-
-	    $purchaseItemsHolder3.data('index', $purchaseItemsHolder3.children().length);
-	
-	    $addPurchaseItemLink3.on('click', function(e) {
-	        // prevent the link from creating a "#" on the URL
-	        e.preventDefault();
-	
-	        // add a new purchaseItem form (see next code block)
-	        createPurchaseItemAddLink($purchaseItemsHolder3, $newPurchaseItemLink3);
-		});
-	
-	    // add a delete link to all of the existing tag form li elements
-	    $purchaseItemsHolder3.find('div.purchaseItem').each(function() {
-	        createPurchaseItemDeleteLink($(this));
-	    });
-
 
 </script>
 

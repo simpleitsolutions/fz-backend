@@ -50,13 +50,13 @@
 <div class="row">
     <table style="border:0px solid #f2f2f2;margin-bottom:0px;" class="table table-hover table-condensed">
     	{% if bookingCollection|length > 0 %}
-    	{{ include('admin/bookings-header.html.twig') }}
+    	{{ include('booking/schedule/bookings-header.html.twig') }}
     	{% endif %}
     	<tbody>
     
         {% for booking in bookingCollection %}
             
-            {{ include('admin/bookings-row.html.twig') }}
+            {{ include('booking/schedule/bookings-row.html.twig') }}
         
         {% endfor %}
     	</tbody>

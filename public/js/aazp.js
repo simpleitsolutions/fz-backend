@@ -1,64 +1,64 @@
 // aazp\aazpDemoBundle\Resources\public\js\file.js
 
-aazp = function(){
-var locale = "";
-return{
-initLocale : function(){
-      if(global.locale){
-        locale = global.locale;
-      }
-      else{
-        //Set a default locale if the user's one is not managed
-        console.error('The locale is missing, default locale will be set (fr_FR)');
-        locale = "en_UK";
-      }
-},
-getLocale : function(length){
-      if(length == 2){
-          return locale.split('_')[0];
-      }
-      return locale;
-},
-// initDatePicker : function(){
-// 
-    // if($.datepicker.regional[aazp.getLocale(4)] != undefined ){
-        // $.datepicker.setDefaults( $.datepicker.regional[aazp.getLocale(4)] );
-    // }else if($.datepicker.regional[aazp.getLocale(2)] != undefined){
-        // $.datepicker.setDefaults( $.datepicker.regional[aazp.getLocale(2) ] );
-    // }else{
-        // $.datepicker.setDefaults( $.datepicker.regional['']);
-    // }
-// 
-    // $('.aazpDatePicker').each(function(){
-        // var id_input=this.id.split('_datepicker')[0];
-        // var sfInput = $('#'+id_input)[0];
-        // if(! (sfInput)){
-            // console.error('An error has occurred while creating the datepicker');
-        // }
-        // $(this).datepicker({
-            // 'yearRange':$(this).data('yearrange'),
-            // 'changeMonth':$(this).data('changemonth'),
-            // 'changeYear':$(this).data('changeyear'),
-            // 'altField' : '#'+id_input,
-            // 'altFormat' : 'yy-mm-dd',
-            // 'minDate' : null,
-            // 'maxDate': null
-        // });
-// 
-        // $(this).keyup(function(e) {
-            // if(e.keyCode == 8 || e.keyCode == 46) {
-                // $.datepicker._clearDate(this);
-                // $('#'+id_input)[0].value = '';
-            // }
-        // });
-        // var dateSf = $.datepicker.parseDate('yy-mm-dd',sfInput.value);
-// 
-        // $(this).datepicker('setDate',dateSf);
-        // $(this).show();
-        // $(sfInput).hide();
-    // })
-// }
-}}()
+// aazp = function(){
+// var locale = "";
+// return{
+// initLocale : function(){
+//       if(global.locale){
+//         locale = global.locale;
+//       }
+//       else{
+//         //Set a default locale if the user's one is not managed
+//         console.error('The locale is missing, default locale will be set (fr_FR)');
+//         locale = "en_UK";
+//       }
+// },
+// getLocale : function(length){
+//       if(length == 2){
+//           return locale.split('_')[0];
+//       }
+//       return locale;
+// },
+// // initDatePicker : function(){
+// //
+//     // if($.datepicker.regional[aazp.getLocale(4)] != undefined ){
+//         // $.datepicker.setDefaults( $.datepicker.regional[aazp.getLocale(4)] );
+//     // }else if($.datepicker.regional[aazp.getLocale(2)] != undefined){
+//         // $.datepicker.setDefaults( $.datepicker.regional[aazp.getLocale(2) ] );
+//     // }else{
+//         // $.datepicker.setDefaults( $.datepicker.regional['']);
+//     // }
+// //
+//     // $('.aazpDatePicker').each(function(){
+//         // var id_input=this.id.split('_datepicker')[0];
+//         // var sfInput = $('#'+id_input)[0];
+//         // if(! (sfInput)){
+//             // console.error('An error has occurred while creating the datepicker');
+//         // }
+//         // $(this).datepicker({
+//             // 'yearRange':$(this).data('yearrange'),
+//             // 'changeMonth':$(this).data('changemonth'),
+//             // 'changeYear':$(this).data('changeyear'),
+//             // 'altField' : '#'+id_input,
+//             // 'altFormat' : 'yy-mm-dd',
+//             // 'minDate' : null,
+//             // 'maxDate': null
+//         // });
+// //
+//         // $(this).keyup(function(e) {
+//             // if(e.keyCode == 8 || e.keyCode == 46) {
+//                 // $.datepicker._clearDate(this);
+//                 // $('#'+id_input)[0].value = '';
+//             // }
+//         // });
+//         // var dateSf = $.datepicker.parseDate('yy-mm-dd',sfInput.value);
+// //
+//         // $(this).datepicker('setDate',dateSf);
+//         // $(this).show();
+//         // $(sfInput).hide();
+//     // })
+// // }
+// }}()
 
 
 var $PassengerHolder;
@@ -120,7 +120,6 @@ $(document).ready(function(){
 	// return false; // no please http://fuelyourcoding.com/jquery-events-stop-misusing-return-false/
 	});
 
-
 	$('#deleteWarning').on('show.bs.modal', function(e) {
 	    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
 	});
@@ -151,6 +150,14 @@ $(document).ready(function(){
 		// defaultSelect: true,
 		// yearStart: '2014'
 	  // });
+
+    $('#datepicker').datepicker({
+        format: 'dd-mm-yyyy',
+        autoclose: true,
+        todayBtn: true,
+    }).on("change", function (e) {
+        $('#targetDateForm').submit();
+    });
 
 	$('#waitingListItem_waitingListItemDate').datetimepicker( {
 		format:'d-m-Y',
@@ -434,14 +441,14 @@ function bookingPaymentSummaryUpdatePurchaseItem(selectEl)
 function updatePurchase(selectEl) {
 	
 	selectIdParts = selectEl.id.split('_');
-	alert(selectIdParts[0]);
+	// alert(selectIdParts[0]);
 	
 	productPriceId = 'product_price_' + selectIdParts[2];
 	amountId = selectIdParts[0] +'_'+ selectIdParts[1] +'_'+ selectIdParts[2] +'_'+ 'amount';
 
   $.ajax({
     type        : 'GET',
-    url         : '/product/cost/' + selectEl.value,
+    url         : '/booking/product/cost/' + selectEl.value,
     data        : selectEl.value,
   })
   .done(function(response){

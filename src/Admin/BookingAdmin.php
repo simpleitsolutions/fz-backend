@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 
+use App\Entity\BookingOwner;
 use App\Entity\Passenger;
 use App\Form\PassengerType;
 use App\Repository\BookingOwnerRepository;
@@ -14,6 +15,8 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\Type\CollectionType;
+use Knp\Menu\ItemInterface;
+use Sonata\AdminBundle\Admin\AdminInterface;
 
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -33,8 +36,8 @@ class BookingAdmin extends AbstractAdmin
     public function getNewInstance()
     {
         $instance = parent::getNewInstance();
-        $entityManager = $this->getModelManager()->getEntityManager('App\Entity\BookingOwner');
-        $bookingOwner = $entityManager->getRepository('App\Entity\BookingOwner')->findOneBy(array('name' => 'FlyZermatt'));
+        $entityManager = $this->getModelManager()->getEntityManager(BookingOwner::class);
+        $bookingOwner = $entityManager->getRepository(BookingOwner::class)->findOneBy(array('name' => 'FlyZermatt'));
 
         $instance->setOwner($bookingOwner);
         if ($this->hasRequest()) { //Pre-load new Booking from Booking Schedule view.
@@ -198,6 +201,25 @@ class BookingAdmin extends AbstractAdmin
             $passenger->setFlight($object->getFlight());
         }
     }
+
+//    public function getActionButtons($action, $object = null)
+//    {
+//        $actions = parent::getActionButtons($action, $object);
+//        if ($action == 'edit') {
+//            $actions['myKey'] = ['template' => 'booking/edit.html.twig'];
+//        }
+//        return $actions;
+//    }
+
+//    protected function configureTabMenu(ItemInterface $menu, $action, AdminInterface $childAdmin = null)
+//    {
+//        // ...other tab menu stuff
+//
+//        $admin = $this->isChild() ? $this->getParent() : $this;
+//        $menu->addChild('passengers', array('attributes' => array('dropdown' => true)));
+//        $menu['passengers']->addChild('list', array('uri' => $admin->generateUrl('list')));
+////        $menu['comments']->addChild('create', array('uri' => $admin->generateUrl('addComment', array('id' => $id))));
+//    }
 
     public function __toString()
     {

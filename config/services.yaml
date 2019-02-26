@@ -57,7 +57,7 @@ services:
         arguments:
             -
             - App\Entity\Voucher
-            -
+            - App\Controller\VoucherCRUDController
         tags:
             - { name: sonata.admin, manager_type: orm, group: Admin, label: Voucher, pager_type: 'simple' }
         public: true

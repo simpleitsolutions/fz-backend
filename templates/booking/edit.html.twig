@@ -1,4 +1,4 @@
-{% extends '@SonataAdmin/standard_layout.html.twig' %}
+{% extends 'base/standard_layout.html.twig' %}
 
 {% block sonata_admin_content %}
 
@@ -16,7 +16,7 @@
   </div>
 </div>
 
-  <div class="panel panel-default">
+  <div class="panel panel-default box box-primary">
     <div class="panel-heading">BOOKING #{{entity.id}} {{entity.owner and entity.owner.name != 'FlyZermatt'?'('~entity.owner.name~')':'' }}</div>
     <div class="panel-body">
 
@@ -30,23 +30,23 @@
 		    <div class="col-xs-7 col-sm-4 col-md-12">
 			    {{ form_label(form.flightdate, null, { 'label_attr': {'class': 'control-label'} }) }}{{ form_errors(form.flightdate) }}
                <div class="form-group">
-                    <div class='input-group date' id='flightDatePicker'>
+                    <div class='input-group date' id='datepicker'>
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                         {#{ form_widget(form.flightdate) }#}
-                        {{ form_widget(form.flightdate, {'attr': {'class': 'form-control input-inline js-datepicker'}}) }}
+                        {{ form_widget(form.flightdate, {'attr': {'class': 'form-control'}}) }}
                     </div>
                 </div>
             </div>
 			<div class="col-xs-5 col-md-12" >
                 {{ form_label(form.meetingTime, null, { 'label_attr': {'class': 'control-label'} }) }}{{ form_errors(form.meetingTime) }}
                <div class="form-group">
-                    <div class='input-group date' id='meetingTimePicker'>
+                    <div class='input-group date' id='timepicker1'>
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-time"></span>
                         </span>
-                        {{ form_widget(form.meetingTime, {'attr': {'class': 'form-control input-inline datetimepicker'}}) }}
+                        {{ form_widget(form.meetingTime) }}
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
 					{% else %}
 					<div class="col-md-12 row">
 					{% endif %}
-						<div class="col-xs-5 col-sm-5 col-sm-7 col-md-4">{{ form_row(passenger.name, {'label':false}) }}</div>
+						<div class=" {{ passenger.flight is defined?'col-xs-5 col-sm-5 col-sm-7 col-md-4':'col-md-4' }}">{{ form_row(passenger.name, {'label':false}) }}</div>
 
                         {% if passenger.flight is defined %}
 						<div class="hidden-xs hidden-sm col-sm-12 col-md-4">{{ form_row(passenger.flight, {'label':false}) }}</div>
@@ -96,18 +96,22 @@
 					{% endfor %}
 					</div>
 				</div>
-				{{ form_row(form.notes) }}
+				{{ form_row(form.notes, {'attr': { 'rows':'6' }}) }}
 			</div>
 	    </div>
 	    <div class="col-xs-12 col-md-12">
             {{ form_row(form.owner,{ 'attr': { 'class': 'owner' } }) }}
 		</div>
-	    <div class="col-xs-12 col-md-12">
+	    <div class="col-xs-12 col-md-2">
 			{#{ form_widget(form.save) }#}
 			{{ form_widget(form.saveAndExit) }}
+        </div>
+        <div class="col-xs-12 col-md-2">
 		{% if (entity.status == constant('App\\Entity\\Booking::STATUS_NEW')) %}
 			{{ form_widget(form.saveAndConfirm) }}
 		{% endif %}
+        </div>
+        <div class="col-xs-12 col-md-2">
 			{{ form_widget(form.cancel) }}
 		</div>
     </div>
@@ -115,28 +119,5 @@
 {{ form_end(form, {'render_rest': false}) }}
 
     </div>
-
   </div>
-
-    <script type="text/javascript" src="{{ asset('js/aazp.js') }}"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-
-    <script type="text/javascript">
-        $('#flightDatePicker').datetimepicker({
-            format: 'DD-MM-YYYY',
-            locale: 'en_UK',
-            useCurrent: false,
-            sideBySide: true,
-            calendarWeeks: true,
-            showTodayButton: true,
-            dayViewHeaderFormat: 'MMMM YYYY',
-            /* minDate: moment(), */
-        // }).on("dp.change", function (e) {
-        //     $('#targetDateForm').submit();//do your action here
-        });
-
-    </script>
-
 {% endblock sonata_admin_content %}

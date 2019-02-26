@@ -22,7 +22,7 @@ class PurchaseItemType extends AbstractType
                                 ->orderBy('p.sortOrder', 'ASC');
                         }, ));
 		// $builder->add('description');
-    	$builder->add('amount', NumberType::class, array('scale' => 2));
+    	$builder->add('amount', NumberType::class, ['scale' => 2]);
     }
 
 //	public function setDefaultOptions(OptionsResolverInterface $resolver)

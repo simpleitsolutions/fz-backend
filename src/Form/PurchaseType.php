@@ -21,8 +21,8 @@ class PurchaseType extends AbstractType
         $builder->add('paymentAmount', NumberType::class, array('scale' => 2));
 		$builder->add('sumupRef', TextType::class, array('mapped' => false, 'required' => false));
 		$builder->add('description', TextType::class, array('mapped' => false, 'required' => false));
-		$builder->add('pay', SubmitType::class);
-		$builder->add('cancel', SubmitType::class, array('attr' => array('formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )));
+		$builder->add('pay', SubmitType::class, ['attr' => ['class' => 'btn btn-success']]);
+		$builder->add('cancel', SubmitType::class, array('attr' => array('class' => 'btn', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )));
 
 	}
 

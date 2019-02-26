@@ -165,6 +165,6 @@ class User implements UserInterface, \Serializable
 
     public function __toString()
     {
-        return $this->getPilot()?$this->getPilot()->getName():$this->getUsername();
+        return $this->getPilot()?$this->getPilot()->getName():$this->getUsername()."";
     }
 }

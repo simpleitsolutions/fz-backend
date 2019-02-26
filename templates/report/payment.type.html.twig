@@ -1,0 +1,101 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+{% block sonata_admin_content %}
+	
+<style>
+.payment-type .checkbox {
+  margin-top:0px;
+  float:left;
+  min-width:220px;
+}
+</style>
+
+<div class="">
+
+    <div class="panel panel-default pdf-page" style="width:100%;margin:0px auto;float:left;">
+    	<div class="panel-heading">
+            <div class="row">
+                <div class="col-md-12 visible-print">
+                	<h3>PAYMENT TYPE REPORT - {{ reportMonth }} {{ reportYear }}</h3>
+                	<h5>
+                	{% for reportPaymentType in reportPaymentTypes %}
+                	    {{ reportPaymentType.name }}{{ loop.last?'':',' }}
+                	{% endfor %}
+                	</h5>
+                </div>
+                <div class="col-md-3 hidden-print">
+                	<h3>PAYMENT TYPE REPORT</h3>
+                </div>
+                <div class="col-md-9 hidden-print">
+	{{ form_start(form) }}
+	{#{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }#}
+		    <div class="col-xs-12 col-md-12">
+			    <div class="col-xs-12 col-md-12">
+				    <div class="col-xs-12 col-md-12 col-sm-6">
+						{{ form_row(form.paymentType,{ 'attr': { 'class': 'payment-type' } }) }}
+					</div>
+				</div>
+			    <div class="col-xs-12 col-md-12">
+				    <div class="col-xs-6 col-md-4 col-sm-6">
+						{{ form_widget(form.monthYear.day,{ 'attr': { 'style': 'display:none' } }) }}
+						{{ form_widget(form.monthYear.month ) }}
+					</div>
+				    <div class="col-xs-6 col-md-4 col-sm-6">
+						{{ form_widget(form.monthYear.year) }}
+					</div>
+				    <div class="col-xs-12 col-md-4">
+						{{ form_widget(form.generate, {'attr':{'class':'form-control btn btn-success'}}) }}
+					</div>
+				</div>
+		    </div>
+	{{ form_widget(form._token) }}
+	{{ form_end(form, {'render_rest': false}) }}
+    			</div>
+    		</div>
+    	</div>
+    	<div class="panel-body">
+    		<table class="table table-condensed">
+            	<thead>
+            		<th style="text-align:center;width:10%;">Transaction Date/Time</th>
+            		<th style="text-align:center;">Transaction No.</th>
+            		<th style="text-align:center;">SumUp Ref.</th>
+            		<th style="text-align:right;">Amount</th>
+            		<th style="text-align:center;">Booking No.</th>
+            		<th style="text-align:center;">Flight Time/Date</th>
+            		<th style="text-align:center;">Pilots</th>
+            		<th>Notes</th>
+            	</thead>
+        	{% set paymentTotal = 0 %}
+            {% for paymentView in paymentViewList %}
+            {% set paymentTotal = paymentTotal + paymentView.paymentAmount %}
+            	<tr>
+            	    <td style="text-align:center;">{{ paymentView.paymentDateTime|date('d.m.y') }}  {{ paymentView.paymentDateTime|date('H:i') }}</td>
+            	    <td style="text-align:center;">{{ paymentView.transactionNo }}</td>
+            	    <td style="text-align:center;">{{ paymentView.sumUpRef }}</td>
+            	    <td style="text-align:right;">{{ paymentView.paymentAmount|number_format(2) }}</td>
+            	    <td style="text-align:center;">
+            	        {{ paymentView.bookingNo }}
+            	    </td>
+            	    <td style="text-align:center;">
+                        {{ paymentView.meetingTime|date('H:i') }} - {{ paymentView.flightdate|date('d.m.y') }}
+            	    </td>
+            	    <td style="text-align:center;">
+            	    {% for pilot in paymentView.pilots %}
+                    	{{ pilot?pilot.name:'TBA' }}{{ loop.last?'':',' }}
+            	    {% endfor %}
+            	    </td>
+            	    <td>{{ paymentView.notes }}</td>
+            	</tr>
+            {% endfor %}
+            	<tr>
+            		<td colspan="2"></td>
+            		<td style="text-align:right;">TOTAL</td>
+            		<td style="text-align:right;">{{ paymentTotal|number_format(2) }}</td>
+            		<td colspan="4"></td>
+            	</tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
