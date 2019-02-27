@@ -67,6 +67,8 @@ sonata_admin:
                 items:
                     - admin.pilot
                     - admin.user
+                    - admin.product
+                    - admin.meeting.location
 
     global_search:
         empty_boxes: fade

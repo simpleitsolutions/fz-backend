@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Admin;
+
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -7,11 +9,11 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class PassengerAdmin extends AbstractAdmin
+class MeetingLocationAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'passenger';
+    protected $baseRoutePattern = 'meeting_location';
 
-    protected $baseRouteName = 'passenger';
+    protected $baseRouteName = 'meeting_location';
 
     protected $searchResultActions = ['show'];
 
@@ -28,26 +30,31 @@ class PassengerAdmin extends AbstractAdmin
         '_page' => 1,
 
         // reverse order (default = 'ASC')
-        '_sort_order' => 'DESC',
+        '_sort_order' => 'ASC',
 
         // name of the ordered field (default = the model's id field, if any)
-        // 			'_sort_by' => 'updatedAt',
+        '_sort_by' => 'name',
     );
 
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->with('Meeting Location', array('class' => 'col-md-6'))
 //            ->add('id')
             ->add('name')
-//            ->add('flight')
-//            ->add('booking')
+            ->add('shortName')
+            ->add('description')
+            ->add('sortOrder')
+            ->end()
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name', null, array('global_search' => true))
+            ->add('name')
+            ->add('shortName')
+            ->add('description')
         ;
     }
 
@@ -55,7 +62,9 @@ class PassengerAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('name')
-            ->addIdentifier('booking')
+            ->add('shortName')
+            ->add('description')
+            ->add('sortOrder')
             ->add('_action', null, array(
                 'actions' => array(
                     'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
@@ -69,7 +78,9 @@ class PassengerAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('name')
-            ->add('booking')
+            ->add('shortName')
+            ->add('description')
+            ->add('sortOrder')
         ;
     }
 

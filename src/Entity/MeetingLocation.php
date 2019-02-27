@@ -319,6 +319,6 @@ class MeetingLocation
 
     public function __toString()
     {
-        return $this->getName();
+        return $this->getName()."";
     }
 }
