@@ -1,0 +1,5 @@
+{% if availability %}
+    <a href="{{ path('availability_edit', {'id': availability.id}) }}" class="btn btn-default btn-sm pull-right"><span class="glyphicon glyphicon-cog"></span></a>
+{% else %}
+    <a href="{{ path('availability_create', {'pilotId': pilot.id, 'targetDate':targetDate|date("Y-m-d")}) }}" class="btn btn-default btn-sm pull-right"><span class="glyphicon glyphicon-cog"></span></a>
+{% endif %}

@@ -1,7 +1,9 @@
 <?php
-
 namespace App\Controller;
 
+use App\Entity\Availability;
+use App\Entity\Pilot;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -36,7 +38,26 @@ class AvailabilityController extends AbstractController
         
         return $this->redirect($this->generateUrl('pilot_availability', array('date' => $scheduleDate->format('Y-m-d'))));
     }
-    
+
+    public function manageAvailability($pilotId, $targetDateStr)
+    {
+        $availabilityRepos = $this->getDoctrine()->getRepository(Availability::class);
+        $reposPilot = $this->getDoctrine()->getRepository(Pilot::class);
+
+        $pilot = $reposPilot->find($pilotId);
+        $targetDate = \DateTime::createFromFormat('Y-m-d', $targetDateStr);
+
+//        throw new \Exception("HERE ".$pilot->getId());
+        $availability = $availabilityRepos->getAvailabilityForPilotOnDate($pilot, $targetDate);
+
+        return $this->render(
+            'availability/manage.html.twig',
+            ['availability' => $availability,
+                'pilot'=> $pilot,
+                'targetDate' => $targetDate]
+        );
+    }
+
     public function pilotAvailabilityAction()
     {
         $request = Request::createFromGlobals();

@@ -67,6 +67,10 @@ class Availability
         $this->id = $id;
         return $this;
     }
+    public function getId()
+    {
+        return $this->id;
+    }
     
     public function getUnavailableFlightDate()
     {

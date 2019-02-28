@@ -2,6 +2,9 @@
 namespace App\Controller;
  
 use App\Entity\Booking;
+use App\Entity\BookingOwner;
+use App\Entity\FlightScheduleTime;
+use App\Entity\MeetingLocation;
 use App\Entity\Passenger;
 use App\Entity\Payment;
 use App\Entity\PaymentType;
@@ -9,6 +12,7 @@ use App\Entity\Product;
 use App\Entity\ProductCategory;
 use App\Entity\Purchase;
 use App\Entity\PurchaseItem;
+use App\Form\BookingType;
 use App\Form\BPPassengerType;
 use App\Form\DateSelectorType;
 use App\Form\PurchaseType;
@@ -269,90 +273,98 @@ class BookingController extends AbstractController
         ));
     }
 
-//    public function newAction(Request $request)
-//    {
-//        $flightScheduleTimeRepos = $this->getDoctrine()->getRepository('AazpBookingBundle:FlightScheduleTime');
-//        $productRepository = $this->getDoctrine()->getRepository('AazpBookingBundle:Product');
-//        $meetingLocationRepository = $this->getDoctrine()->getRepository('AazpBookingBundle:MeetingLocation');
-//        $bookingOwnerRepository = $this->getDoctrine()->getRepository('AazpBookingBundle:BookingOwner');
-//
-//        $booking = new Booking();
-//		$booking->setCreatedBy($this->getUser());
-//		$booking->setLastUpdatedBy($this->getUser());
-//		$date = new \DateTime();
-//		$dateStr = $request->query->get('date', $date->format('Y-m-d'));
-//		$date = new \DateTime($dateStr);
-//
-//		$flightScheduleTimeId = $request->query->get('flightScheduleTimeId', null);
-//		if($flightScheduleTimeId != null || $flightScheduleTimeId != '')
-//		{
-//		    $flightScheduleTime = $flightScheduleTimeRepos->findOneById($flightScheduleTimeId);
-//		    $booking->setFlightScheduleTime($flightScheduleTime);
-//		    $booking->setMeetingTime($flightScheduleTime->getScheduleStartTime());
-//        }
-//
-//		$booking->setFlightdate($date);
-//		$booking->addPassenger(new Passenger());
-//
-//		$flightScheduleTimes = $flightScheduleTimeRepos->getFlightScheduleTimesFor($date);
-//
-//		$preferredFlights = $productRepository->getPreferredFlightProducts();
-//		$preferredMeetingLocations = $meetingLocationRepository->getPreferredMeetingLocations();
-//		$defaultOwner = $bookingOwnerRepository->findOneBy(array('name' => 'FlyZermatt'));
-//		$booking->setOwner($defaultOwner);
-//
-//		$form = $this->createForm(new BookingType($flightScheduleTimes, $preferredFlights, $preferredMeetingLocations), $booking);
-//		$form->remove('flightScheduleTime');
-//		$form->add('save', 'submit');
-//		$form->add('saveAndExit', 'submit', array('label' => 'Save'));
-//		$form->add('saveAndConfirm', 'submit', array('label' => 'Confirm'));
-// 		$form->add('cancel', 'submit', array('attr' => array('formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning',)));
-//
-//		$form->handleRequest($request);
-//
-//		if($form->get('cancel')->isClicked())
-//		{
-//			return $this->redirect($this->generateUrl('booking_index_schedule'));
-//		}
-//
-//	    if ($form->isValid())
-//	    {
-//	        foreach ($flightScheduleTimes as $flightScheduleTime)
-//	        {
-//	            if($booking->getMeetingTime()->format('H:i') >= $flightScheduleTime->getScheduleStartTime()->format('H:i') &&
-//	                $booking->getMeetingTime()->format('H:i') <= $flightScheduleTime->getScheduleEndTime()->format('H:i') &&
-//	                $booking->getFlightScheduleTime() === null )
-//	            {
-//	               $booking->setFlightScheduleTime($flightScheduleTime);
-//	            }
-//	        }
-//
-//	    	$em = $this->getDoctrine()->getManager();
-//		    $em->persist($booking);
-//
-//			foreach ($booking->getPassengers() as $passenger)
-//			{
-//				$passenger->setFlight($booking->getFlight());
-//			}
-//
-//			if($form->get('saveAndConfirm')->isClicked())
-//			{
-//				$booking->setStatus(Booking::STATUS_CONFIRMED);
-//			}
-//
-//		    $em->flush();
-//
-//			$this->get('session')->getFlashBag()->add('success', 'New Booking has been successfully created!');
-//			$this->get('session')->set('current_date', $booking->getFlightDate()->format('Y-m-d'));
-//
-//			$nextAction = ($form->get('saveAndExit')->isClicked() or $form->get('saveAndConfirm')->isClicked())
-//			        ? $this->generateUrl('booking_show', array('id'=> $booking->getId()))
-//			        : $this->generateUrl('booking_new');
-//	        return $this->redirect($nextAction);
-//	    }
-//		return $this->render('AazpBookingBundle:Booking:new.html.twig', array('form' => $form->createView()));
-//    }
-//
+    /**
+     * @Route("/create", name="booking_custom_create")
+     */
+    public function createAction(Request $request)
+    {
+        $flightScheduleTimeRepos = $this->getDoctrine()->getRepository(FlightScheduleTime::class);
+        $productRepository = $this->getDoctrine()->getRepository(Product::class);
+        $meetingLocationRepository = $this->getDoctrine()->getRepository(MeetingLocation::class);
+        $bookingOwnerRepository = $this->getDoctrine()->getRepository(BookingOwner::class);
+
+        $booking = new Booking();
+		$booking->setCreatedBy($this->getUser());
+		$booking->setLastUpdatedBy($this->getUser());
+		$date = new \DateTime();
+		$dateStr = $request->query->get('date', $date->format('Y-m-d'));
+		$date = new \DateTime($dateStr);
+
+		$flightScheduleTimeId = $request->query->get('flightScheduleTimeId', null);
+		if($flightScheduleTimeId != null || $flightScheduleTimeId != '')
+		{
+		    $flightScheduleTime = $flightScheduleTimeRepos->findOneById($flightScheduleTimeId);
+		    $booking->setFlightScheduleTime($flightScheduleTime);
+		    $booking->setMeetingTime($flightScheduleTime->getScheduleStartTime());
+        }
+
+		$booking->setFlightdate($date);
+		$booking->addPassenger(new Passenger());
+
+		$flightScheduleTimes = $flightScheduleTimeRepos->getFlightScheduleTimesFor($date);
+
+		$preferredFlights = $productRepository->getPreferredFlightProducts();
+		$preferredMeetingLocations = $meetingLocationRepository->getPreferredMeetingLocations();
+		$defaultOwner = $bookingOwnerRepository->findOneBy(array('name' => 'FlyZermatt'));
+		$booking->setOwner($defaultOwner);
+
+        $form = $this->createForm(BookingType::class, $booking, array(
+                'flightScheduleTimes' => $flightScheduleTimes,
+                'preferredFlights' => $preferredFlights,
+                'preferredMeetingLocations' => $preferredMeetingLocations)
+        );
+
+		$form->remove('flightScheduleTime');
+		$form->add('save', SubmitType::class, ['attr' => ['class' => 'form-control btn-success']]);
+		$form->add('saveAndExit', SubmitType::class, ['label' => 'Save', 'attr' => ['class' => 'form-control btn-success']]);
+		$form->add('saveAndConfirm', SubmitType::class, ['label' => 'Confirm', 'attr' => ['class' => 'form-control btn-success']]);
+ 		$form->add('cancel', SubmitType::class, ['attr' => ['class' => 'form-control btn-danger', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning',]]);
+
+		$form->handleRequest($request);
+
+		if($form->get('cancel')->isClicked())
+		{
+			return $this->redirect($this->generateUrl('booking_custom_schedule'));
+		}
+
+	    if ($form->isSubmitted() && $form->isValid())
+	    {
+	        foreach ($flightScheduleTimes as $flightScheduleTime)
+	        {
+	            if($booking->getMeetingTime()->format('H:i') >= $flightScheduleTime->getScheduleStartTime()->format('H:i') &&
+	                $booking->getMeetingTime()->format('H:i') <= $flightScheduleTime->getScheduleEndTime()->format('H:i') &&
+	                $booking->getFlightScheduleTime() === null )
+	            {
+	               $booking->setFlightScheduleTime($flightScheduleTime);
+	            }
+	        }
+
+	    	$em = $this->getDoctrine()->getManager();
+		    $em->persist($booking);
+
+			foreach ($booking->getPassengers() as $passenger)
+			{
+				$passenger->setFlight($booking->getFlight());
+			}
+
+			if($form->get('saveAndConfirm')->isClicked())
+			{
+				$booking->setStatus(Booking::STATUS_CONFIRMED);
+			}
+
+		    $em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'New Booking has been successfully created!');
+			$this->get('session')->set('current_date', $booking->getFlightDate()->format('Y-m-d'));
+
+			$nextAction = ($form->get('saveAndExit')->isClicked() or $form->get('saveAndConfirm')->isClicked())
+			        ? $this->generateUrl('booking_custom_show', array('id'=> $booking->getId()))
+			        : $this->generateUrl('booking_custom_create');
+	        return $this->redirect($nextAction);
+	    }
+		return $this->render('booking/new.html.twig', array('form' => $form->createView()));
+    }
+
 //    public function quickBookingAction(Request $request)
 //    {
 //    	$em = $this->getDoctrine()->getManager();
@@ -411,101 +423,113 @@ class BookingController extends AbstractController
 //	    }
 //		return $this->render('AazpBookingBundle:Booking:quick.html.twig', array('form' => $form->createView()));
 //    }
-//
-//    public function updateAction($id)
-//    {
-//    	$request = $this->get('request');
-//    	$flightScheduleTimeRepos = $this->getDoctrine()->getRepository('AazpBookingBundle:FlightScheduleTime');
-//    	$productRepository = $this->getDoctrine()->getRepository('AazpBookingBundle:Product');
-//    	$meetingLocationRepository = $this->getDoctrine()->getRepository('AazpBookingBundle:MeetingLocation');
-//
-//        $em = $this->getDoctrine()->getManager();
-//        $entity = $em->getRepository('AazpBookingBundle:Booking')->find($id);
-//
-//        if (!$entity) {
-//            throw $this->createNotFoundException('Unable to find Booking entity.');
-//        }
-//
-//	    $originalPassengers = new ArrayCollection();
-//
-//	    // Create an ArrayCollection of the current Passenger objects in the database
-//	    foreach ($entity->getPassengers() as $passenger)
-//	    {
-//	        $originalPassengers->add($passenger);
-//	    }
-//
-//	    $flightScheduleTimes = $flightScheduleTimeRepos->getFlightScheduleTimesFor($entity->getFlightDate());
-//	    $preferredFlights = $productRepository->getPreferredFlightProducts();
-//	    $preferredMeetingLocations = $meetingLocationRepository->getPreferredMeetingLocations();
-//
-//	    if($entity->getMeetingTime() === null || $entity->getMeetingTime()->format('H:i:s') == '00:00:00')
-//	    {
-//	        $meetingTime = clone $entity->getFlightdate();
-//// 	        $meetingTime = \DateTime::createFromFormat('d-m-Y', $entity->getFlightdate()->format('H:i'));
-//	        $entity->setMeetingTime($meetingTime);
-//
-//	        foreach ($flightScheduleTimes as $flightScheduleTime)
-//	        {
-//	            if($entity->getMeetingTime()->format('H:i') >= $flightScheduleTime->getScheduleStartTime()->format('H:i') &&
-//	                $entity->getMeetingTime()->format('H:i') <= $flightScheduleTime->getScheduleEndTime()->format('H:i') &&
-//	                $entity->getFlightScheduleTime() === null )
-//	            {
-//	                $entity->setFlightScheduleTime($flightScheduleTime);
-//	            }
-//	        }
-//	    }
-//
-//
-//	    $form = $this->createForm(new BookingType($flightScheduleTimes, $preferredFlights, $preferredMeetingLocations), $entity);
+
+    /**
+     * @Route("/edit/{id}", name="booking_custom_edit")
+     */
+    public function editAction($id)
+    {
+    	$request = Request::createFromGlobals();
+    	$flightScheduleTimeRepos = $this->getDoctrine()->getRepository(FlightScheduleTime::class);
+    	$productRepository = $this->getDoctrine()->getRepository(Product::class);
+    	$meetingLocationRepository = $this->getDoctrine()->getRepository(MeetingLocation::class);
+
+        $em = $this->getDoctrine()->getManager();
+        $booking = $em->getRepository(Booking::class)->find($id);
+
+        if (!$booking) {
+            throw $this->createNotFoundException('Unable to find Booking entity.');
+        }
+
+	    $originalPassengers = new ArrayCollection();
+
+	    // Create an ArrayCollection of the current Passenger objects in the database
+	    foreach ($booking->getPassengers() as $passenger)
+	    {
+	        $originalPassengers->add($passenger);
+	    }
+
+	    $flightScheduleTimes = $flightScheduleTimeRepos->getFlightScheduleTimesFor($booking->getFlightDate());
+	    $preferredFlights = $productRepository->getPreferredFlightProducts();
+	    $preferredMeetingLocations = $meetingLocationRepository->getPreferredMeetingLocations();
+
+	    if($booking->getMeetingTime() === null || $booking->getMeetingTime()->format('H:i:s') == '00:00:00')
+	    {
+	        $meetingTime = clone $booking->getFlightdate();
+// 	        $meetingTime = \DateTime::createFromFormat('d-m-Y', $booking->getFlightdate()->format('H:i'));
+	        $booking->setMeetingTime($meetingTime);
+
+	        foreach ($flightScheduleTimes as $flightScheduleTime)
+	        {
+	            if($booking->getMeetingTime()->format('H:i') >= $flightScheduleTime->getScheduleStartTime()->format('H:i') &&
+	                $booking->getMeetingTime()->format('H:i') <= $flightScheduleTime->getScheduleEndTime()->format('H:i') &&
+	                $booking->getFlightScheduleTime() === null )
+	            {
+	                $booking->setFlightScheduleTime($flightScheduleTime);
+	            }
+	        }
+	    }
+
+
+        $form = $this->createForm(BookingType::class, $booking, array(
+                'flightScheduleTimes' => $flightScheduleTimes,
+                'preferredFlights' => $preferredFlights,
+                'preferredMeetingLocations' => $preferredMeetingLocations)
+        );
+
+        $form->add('saveAndExit', SubmitType::class, ['label' => 'Save', 'attr' => ['class' => 'form-control btn-success']]);
+        $form->add('saveAndConfirm', SubmitType::class, ['label' => 'Confirm', 'attr' => ['class' => 'form-control btn-success']]);
+        $form->add('cancel', SubmitType::class, ['attr' => ['class' => 'form-control btn-danger', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning',]]);
+
 //		$form->add('saveAndExit', 'submit', array('label' => 'Save'));
 //		$form->add('saveAndConfirm', 'submit', array('label' => 'Confirm'));
 // 		$form->add('cancel', 'submit', array('attr' => array('formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )));
 //
-//		$form->handleRequest($request);
-//
-//		if($form->get('cancel')->isClicked())
-//		{
-//			return $this->redirect($this->generateUrl('booking_index_schedule', array('date' => $entity->getFlightdate()->format('Y-m-d'))));
-//		}
-//
-//        if ($form->isValid()) {
-//	        // remove the relationship between the Passenger and the Booking
-//	        foreach ($originalPassengers as $passenger) {
-//	            if (false === $entity->getPassengers()->contains($passenger)) {
-//	                $em->remove($passenger);
-//	            }
-//	        }
-//			foreach($entity->getPassengers() as $passenger)
-//			{
-//				if($passenger->getFlight() == null)
-//				{
-//					$passenger->setFlight($entity->getFlight());
-//				}
-//			}
-//			if($form->get('saveAndConfirm')->isClicked())
-//			{
-//				$entity->setStatus(Booking::STATUS_CONFIRMED);
-//			}
-//			$entity->setLastUpdatedBy($this->getUser());
-//
-//            $em->persist($entity);
-//            $em->flush();
-//
-//			$this->get('session')->getFlashBag()->add('success', 'Booking has been successfully updated!');
-//			$this->get('session')->set('current_date', $entity->getFlightDate()->format('Y-m-d'));
-//
-//			$nextAction = ($form->get('saveAndExit')->isClicked() or $form->get('saveAndConfirm')->isClicked())
-//			        ? $this->generateUrl('booking_show', array('id'=> $entity->getId()))
-//			        : $this->generateUrl('booking_update', array ('id'=> $id));
-//	        return $this->redirect($nextAction);
-//        }
-//		return $this->render('AazpBookingBundle:Booking:edit.html.twig', array(
-//            'entity'      => $entity,
-//            'form'   => $form->createView(),
-//        ));
-//
-//     }
-//
+		$form->handleRequest($request);
+
+		if($form->get('cancel')->isClicked())
+		{
+			return $this->redirect($this->generateUrl('booking_custom_schedule', array('date' => $booking->getFlightdate()->format('Y-m-d'))));
+		}
+
+        if ($form->isSubmitted() && $form->isValid()) {
+	        // remove the relationship between the Passenger and the Booking
+	        foreach ($originalPassengers as $passenger) {
+	            if (false === $booking->getPassengers()->contains($passenger)) {
+	                $em->remove($passenger);
+	            }
+	        }
+			foreach($booking->getPassengers() as $passenger)
+			{
+				if($passenger->getFlight() == null)
+				{
+					$passenger->setFlight($booking->getFlight());
+				}
+			}
+			if($form->get('saveAndConfirm')->isClicked())
+			{
+				$booking->setStatus(Booking::STATUS_CONFIRMED);
+			}
+			$booking->setLastUpdatedBy($this->getUser());
+
+            $em->persist($booking);
+            $em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'Booking has been successfully updated!');
+			$this->get('session')->set('current_date', $booking->getFlightDate()->format('Y-m-d'));
+
+			$nextAction = ($form->get('saveAndExit')->isClicked() or $form->get('saveAndConfirm')->isClicked())
+			        ? $this->generateUrl('booking_custom_show', array('id'=> $booking->getId()))
+			        : $this->generateUrl('booking_custom_edit', array ('id'=> $id));
+	        return $this->redirect($nextAction);
+        }
+		return $this->render('booking/edit.html.twig', array(
+            'entity'      => $booking,
+            'form'   => $form->createView(),
+        ));
+
+     }
+
     /**
      * @Route("/confirm/{id}", name="booking_custom_confirm")
      */

@@ -1,7 +1,7 @@
 
 <div class="col-xs-5 col-sm-5 {{ form.flight is defined?'col-md-4':'col-md-10' }}">{{ form_row(form.name, {'label':false, 'attr':{'class':'form-control'}}) }}</div>
 {% if form.flight is defined %}
-<div class="hidden-xs hidden-sm col-md-4">{{ form_row(form.flight, {'label':false, 'attr':{'class':'form-control'}}) }}</div>
+<div class="hidden-xs hidden-sm col-md-4">{{ form_row(form.flight, {'label':false, 'attr':{'class':'form-control', 'disabled':disabled}}) }}</div>
 {% endif %}
 {% if form.pilot is defined %}
 <div class="col-xs-5 col-sm-5 col-md-3">{{ form_row(form.pilot, {'label':false, 'attr':{'class':'form-control'}}) }}</div>

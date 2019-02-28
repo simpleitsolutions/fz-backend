@@ -5,6 +5,7 @@ namespace App\Admin;
 
 use App\Entity\FlightScheduleTime;
 use App\Repository\FlightScheduleTimeRepository;
+use DateTime;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -25,6 +26,15 @@ class AvailabilityAdmin extends AbstractAdmin
     {
         $instance = parent::getNewInstance();
 
+        if ($this->hasRequest())
+        {
+            $targetDate = $this->getRequest()->get('targetDate', null);
+            if ($targetDate)
+            {
+                $instance->setUnavailableFlightDate(DateTime::createFromFormat('Y-m-d', $targetDate));
+            }
+        }
+
         return $instance;
     }
 
@@ -44,6 +54,9 @@ class AvailabilityAdmin extends AbstractAdmin
     {
         $formMapper->with('User', array('class' => 'col-md-6'));
 
+
+
+
         if ($this->isCurrentRoute('edit')) {
             $formMapper->add('unavailableFlightDate', null, ['disabled'=> true]);
             $formMapper->add('pilot', null, ['disabled'=> true]);
@@ -53,16 +66,17 @@ class AvailabilityAdmin extends AbstractAdmin
             $formMapper->add('unavailableFlightDate');
             $formMapper->add('pilot');
         }
-
         $formMapper->add('flightScheduleTimes', null, [
             'expanded' => true,
             'class' => FlightScheduleTime::class,
             'query_builder' => function(FlightScheduleTimeRepository $er) {
+                $currentDate = $this->getSubject()->getUnavailableFlightDate();
+                if($currentDate === null) {$currentDate = new \DateTime();}
                 return $er->createQueryBuilder('ft')
                     ->join('ft.flightSchedule', 'fs')
                     ->where('fs.affectiveStartDate <= :now')
                     ->andWhere('fs.affectiveEndDate >= :now')
-                    ->setParameter('now', $this->subject->getUnavailableFlightDate()->format("Y-m-d"))
+                    ->setParameter('now', $currentDate->format("Y-m-d"))
                     ->orderBy('ft.scheduleStartTime', 'ASC');}
         ]);
 
@@ -103,10 +117,10 @@ class AvailabilityAdmin extends AbstractAdmin
         ;
     }
 
-    protected function configureRoutes(RouteCollection $collection)
-    {
-        $collection->remove('create');
-    }
+//    protected function configureRoutes(RouteCollection $collection)
+//    {
+//        $collection->remove('create');
+//    }
 
     public function createQuery($context = 'list')
     {

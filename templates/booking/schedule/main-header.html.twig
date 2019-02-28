@@ -18,13 +18,17 @@
     		{% if is_granted('ROLE_ADMIN') %}
     	   	{% endif %}
           	{% if app.user.pilot is not null %}
-          	<div class="pull-right hidden-print">
-	            <a href="{#{ path('pilot_availability', {'pilotId':app.user.pilot.id}) }#}" class="btn btn-default btn-sm pull-right"><span class="glyphicon glyphicon-cog"></span></a>
+			<div class="pull-right hidden-print">
+				{{ render(controller(
+					'App\\Controller\\AvailabilityController::manageAvailability',
+					{ 'pilotId':app.user.pilot.id, 'targetDateStr':indexdate|date("Y-m-d")}
+				)) }}
 	        </div>
 	    	{% endif %}
     	    <div class="pull-right hidden-print">&nbsp;</div>
     	    <div class="pull-right hidden-print">
-    			<a href="{{ path('booking_create', {'date':indexdate|date("Y-m-d")}) }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></a>
+				<!--<a href="{#{ path('booking_create', {'date':indexdate|date("Y-m-d")}) }#}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></a>-->
+				<a href="{{ path('booking_custom_create', {'date':indexdate|date("Y-m-d")}) }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></a>
     	    </div>
     	</h4>
     </div>

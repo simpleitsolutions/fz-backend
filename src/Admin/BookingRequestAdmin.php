@@ -82,6 +82,7 @@ class BookingRequestAdmin extends AbstractAdmin
                 'actions' => array(
                     'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
                     'delete' => ['template' => '/sonataadmin/CRUD/list__action_delete.html.twig'],
+                    'confirm' => ['template' => '/bookingrequest/list__action_confirm.html.twig'],
                 )
             ))
         ;

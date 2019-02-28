@@ -1,0 +1,5 @@
+{% if object %}
+
+    <a href="{{ path('booking_request_custom_confirm', {'id':object.id}) }}" class="btn btn-sm btn-default" title="{{ 'action_confirm'|trans({}, 'application') }}" ><i class="fa fa-check" aria-hidden="true"></i></a>
+{% endif %}
+

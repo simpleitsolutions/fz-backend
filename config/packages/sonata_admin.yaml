@@ -86,6 +86,7 @@ sonata_admin:
         #        show:   '@App/Admin/display_client.html.twig'
         layout: '/base/standard_layout.html.twig'
         user_block: '/sonataadmin/Core/user_block.html.twig'
+#        edit: '/bundles/SonataAdminBundle/CRUD/edit.html.twig'
 
     assets:
         extra_stylesheets:

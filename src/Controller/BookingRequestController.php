@@ -139,7 +139,7 @@ class BookingRequestController extends AbstractController
 
             return $this->redirect($this->generateUrl('booking_custom_show', array('id' => $booking->getId())));
         }
-        return $this->render('bookingrequest\confirm.html.twig', array('entity' => $booking, 'form' => $form->createView()));
+        return $this->render('booking\new.html.twig', array('entity' => $booking, 'form' => $form->createView()));
     }
 
 }
