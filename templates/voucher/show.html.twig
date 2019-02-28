@@ -1,0 +1,123 @@
+{% extends 'base/standard_layout.html.twig' %}
+
+{% block sonata_admin_content %}
+<style>
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed);
+@import url(https://fonts.googleapis.com/css?family=Play);
+
+ * .panel p, * h2, * h3, * h4 {
+/*    font-family: 'Roboto Condensed', sans-serif; */
+    font-family: 'Play', sans-serif;
+    font-weight: 500;
+}
+
+ * .panel p {
+ 	font-size:1.2em;
+ }
+ 	
+ * .panel p.conditions {
+ 	font-size:0.9em;
+ }
+ 	
+.panel {
+    margin-top: 10px;
+}
+</style>
+
+
+	<div class="modal fade" id="cancelWarning" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content col-md-6 text-center">
+      <div class="modal-body">
+        <h4 class="modal-title">Cancel without saving?</h4>
+      </div>
+      <div class="modal-footer">
+        <a href="{{ path('voucher_list') }}" class="btn btn-primary">Yes</a>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% for flashMessage in app.session.flashbag.get('message') %}
+	<div class="alert alert-success hidden-print">
+        {{ flashMessage }}
+    </div>
+{% endfor %}
+  <div class="pdf-page-spacer-a4"></div>
+
+  <div class="panel panel-default pdf-page-half-a4" >
+    <div class="panel-heading hidden-print"></div>
+    <div class="panel-body">
+		<div class="row" style="height:200px;">
+			<div class="text-center" style="padding-top:120px;">
+				<div class="col-md-3 col-sm-2"></div>
+				<div class="col-md-6 col-sm-8">
+					<h3 style="font-size:3em;">{{ voucher.message }}</h3>
+				</div>
+				<div class="col-md-3 col-sm-2"></div>
+			</div>
+	    </div>
+    </div>
+  </div>
+
+  <div class="pdf-page-half-voucher-spacer-a4" style="height:50px;"></div>
+
+  <div class="panel panel-default pdf-page-half-a4">
+    <div class="panel-heading hidden-print"></div>
+    <div class="panel-body text-center">
+		<div class="row">
+			<div>
+				<img src="{{ app.request.scheme ~ '://' ~ app.request.host}}{{app.request.port == 80?'': ':'~app.request.port}}/img/fly-zermatt-logo.png">
+			</div>
+			<div style="margin-top:-20px;">
+		    	<h3>GIFT VOUCHER</h3>
+				<div class="span offset4" style="height:50px;"></div>
+				<div class="span offset4" style="height:50px;">
+					<p>This voucher entitles <strong>{{ voucher.name }}</strong> to a <strong>{{ voucher.flight.description }}</strong> paragliding flight.
+						{% if(voucher.withPhotos) %}<br/>Including photos & movies.{% endif %}</p>
+				</div>
+				<div class="span offset4" style="margin-top:50px;">
+					<p>For bookings contact: +41 79 643 6808 or visit our website<br/><strong>www.flyzermatt.com</strong></p>
+					<p class="conditions">Valid 2 years from date of purchase - date of purchase <strong>{{voucher.created|date('d/m/Y')}}</strong> - Ref #{{voucher.id}}</p>
+				</div>
+			</div>				
+	    </div>
+    </div>
+  </div>
+
+  <div class="visible-print pdf-page-bottom-margin-a4">&nbsp;</div>
+  <div class="visible-print pdf-page-top-margin-a4">&nbsp;</div>
+
+  <div class="panel panel-default visible-print pdf-page-half-a4">
+    <div class="panel-body">
+		<div class="row">
+			<div class="text-center">
+				<h3>How to confirm your flight</h3>
+				<p>Paragliding is weather dependant so it is important to contact Alpine Adventures Zermatt before making any time or travel comitments. Please phone the following number +41 (0)79 643 6808 to speak with one of our representatives regarding weather and availabilty.</p>
+				<h3>What to bring</h3>
+				<p>Warm clothing, boots or sturdy footware, sunglasses. Camera or video camera if you have one.</p>
+				<h3>What to expect</h3>
+				<p>Once you have confirmed your flight date and time you will meet with your pilot at one of the designated meeting points in Zermatt. There is no prior training required.  Once at the take off area your pilot will fit you with your flight equipment and when ready will give you a short description of the starting procedure.  With just a few steps or a short run down a gentle slope you and your pilot will become airborn and will then experience the freedom of free flight.</p>
+			</div>
+	    </div>
+    </div>
+  </div>
+
+  <div class=" pdf-page-half-spacer-a4"></div>
+
+  <div class="panel panel-default visible-print pdf-page-half-a4">
+    <div class="panel-heading hidden-print"></div>
+    <div class="panel-body text-center">
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<img src="{{ app.request.scheme ~ '://' ~ app.request.host}}{{app.request.port == 80?'': ':'~app.request.port}}/img/fly-zermatt-logo.png">
+			</div>
+			<div style="margin-top:0px;">
+		    	<h2>GIFT VOUCHER</h2>
+		    </div>
+	    </div>
+    </div>
+  </div>
+
+{% endblock %}

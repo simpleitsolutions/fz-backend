@@ -43,56 +43,56 @@ class BookingRequestController extends AbstractController
     }
 
     /**
-     * @Route("/confirm/{id}", name="booking_request_confirm")
+     * @Route("/confirm/{id}", name="booking_request_custom_confirm")
      */
     public function confirmAction($id)
     {
         $request = Request::createFromGlobals();
         $em = $this->getDoctrine()->getManager();
-        $booking_request = $em->getRepository(BookingRequest::class)->find($id);
+        $bookingRequest = $em->getRepository(BookingRequest::class)->find($id);
         $flightScheduleTimeRepos = $this->getDoctrine()->getRepository(FlightScheduleTime::class);
         $productRepository = $this->getDoctrine()->getRepository(Product::class);
         $meetingLocationRepository = $this->getDoctrine()->getRepository(MeetingLocation::class);
         $bookingOwnerRepository = $this->getDoctrine()->getRepository(BookingOwner::class);
 
-        if (!$booking_request) {
+        if (!$bookingRequest) {
             throw $this->createNotFoundException('Unable to find Booking Request.');
         }
         $booking = new Booking();
         $i=0;
-        while($i++ < $booking_request->getNoPassengers())
+        while($i++ < $bookingRequest->getNoPassengers())
         {
             $passenger = new Passenger();
             if($i==1)
             {
-                $passenger->setName($booking_request->getName());
+                $passenger->setName($bookingRequest->getName());
             } else {
                 $passenger->setName('Passenger '.$i);
             }
             $booking->addPassenger($passenger);
         }
 
-        $booking->setFlight($booking_request->getFlight());
+        $booking->setFlight($bookingRequest->getFlight());
 
-        if ($booking_request->getFlightdate() != null) {
-            $booking->setFlightDate($booking_request->getFlightdate());
-        } else if ($booking_request->getArrivaldate() != null) {
-            $booking->setFlightDate($booking_request->getArrivaldate());
+        if ($bookingRequest->getFlightdate() != null) {
+            $booking->setFlightDate($bookingRequest->getFlightdate());
+        } else if ($bookingRequest->getArrivaldate() != null) {
+            $booking->setFlightDate($bookingRequest->getArrivaldate());
         } else {
             $now = new \DateTime();
             $booking->setFlightDate(new \DateTime($now->format('Y-m-d')));
         }
-        $notes = $booking_request->getComments();
-        foreach ($booking_request->getGroupConditions() as $groupCondition)
+        $notes = $bookingRequest->getComments();
+        foreach ($bookingRequest->getGroupConditions() as $groupCondition)
         {
-            $notes = $notes.', '.$groupCondition->getName();
+            $notes = $notes.'--[ '.$groupCondition->getName().' ]';
         }
         $flyZermattOwner = $bookingOwnerRepository->findOneBy(array('name' => 'FlyZermatt'));
         $booking->setOwner($flyZermattOwner);
         $booking->setNotes($notes);
-        $booking->setContactinfo($booking_request->getPhone().' '.$booking_request->getEmail());
+        $booking->setContactinfo($bookingRequest->getPhone().' '.$bookingRequest->getEmail());
 
-        $flightScheduleTimes = $flightScheduleTimeRepos->getFlightScheduleTimesFor($booking_request->getArrivaldate());
+        $flightScheduleTimes = $flightScheduleTimeRepos->getFlightScheduleTimesFor($bookingRequest->getArrivaldate());
         $preferredFlights = $productRepository->getPreferredFlightProducts();
         $preferredMeetingLocations = $meetingLocationRepository->getPreferredMeetingLocations();
 //        $form = $this->createForm(new BookingType($flightScheduleTimes, $preferredFlights, $preferredMeetingLocations), $booking);
@@ -103,15 +103,15 @@ class BookingRequestController extends AbstractController
         );
 
         // $form->add('save', 'submit', array('label' => 'Confirm'));
-        $form->add('saveAndExit', SubmitType::class, array('label' => 'Save', 'attr' => ['class' => 'form-control']));
-        $form->add('saveAndConfirm', SubmitType::class, array('label' => 'Save & Confirm', 'attr' => ['class' => 'form-control']));
-        $form->add('cancel', SubmitType::class, array('attr' => array('class' => 'form-control', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )));
+        $form->add('saveAndExit', SubmitType::class, array('label' => 'Save', 'attr' => ['class' => 'form-control btn-success']));
+        $form->add('saveAndConfirm', SubmitType::class, array('label' => 'Save & Confirm', 'attr' => ['class' => 'form-control btn-success']));
+        $form->add('cancel', SubmitType::class, array('attr' => array('class' => 'form-control btn-danger', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )));
 
         $form->handleRequest($request);
 
         if($form->get('cancel')->isClicked())
         {
-            return $this->redirect($this->generateUrl('booking_request_index'));
+            return $this->redirect($this->generateUrl('booking_custom_schedule'));
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -131,18 +131,15 @@ class BookingRequestController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($booking);
 
-            $booking_request->setConfirmed(true);
-            $em->persist($booking_request);
+            $bookingRequest->setConfirmed(true);
+            $em->persist($bookingRequest);
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('message', 'Booking Request has been successfully confirmed!');
 
-            $nextAction = $form->get('saveAndExit')->isClicked()
-                ? $this->generateUrl('booking_show', array('id' => $booking->getId()))
-                : $this->generateUrl('booking_update', array ('id'=> $booking->getId()));
-            return $this->redirect($nextAction);
+            return $this->redirect($this->generateUrl('booking_custom_show', array('id' => $booking->getId())));
         }
-        return $this->render('booking\edit.html.twig', array('entity' => $booking, 'form' => $form->createView()));
+        return $this->render('bookingrequest\confirm.html.twig', array('entity' => $booking, 'form' => $form->createView()));
     }
 
 }

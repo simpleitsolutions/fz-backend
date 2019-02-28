@@ -23,6 +23,13 @@ sonata_admin:
                 items:
                     - route:        booking_custom_schedule
                       label:        BookingSchedule
+            My Availability:
+                on_top:               true
+                roles: [ROLE_USER]
+                icon:                 '<i class="fa fa-calendar-o"></i>'
+                items:
+                    - route:        availability_list
+                      label:        Availability
             Create Voucher:
                 on_top:               true
                 roles: [ROLE_USER]
@@ -59,6 +66,7 @@ sonata_admin:
                     - admin.booking
                     - admin.bookingrequest
                     - admin.voucher
+                    - admin.availability
                     - admin.passenger
 
             Administration:

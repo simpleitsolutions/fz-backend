@@ -103,12 +103,12 @@
                             <td class="hidden-xs hidden-sm">{{bookingrequest.departuredate is empty ? "" : bookingrequest.departuredate|date("d-m-Y")}}</td>
                             <td class="visible-sm visible-xs text-right">
                                 <div class="btn-group pull-right hidden-print">
-                                    <a href="{{ path('booking_request_confirm', { 'id': bookingrequest.id }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-check"></span></a>
+                                    <a href="{{ path('booking_request_custom_confirm', { 'id': bookingrequest.id }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-check"></span></a>
                                 </div>
                             </td>
                             <td class="hidden-sm hidden-xs text-right">
                                 <div class="pull-right hidden-print">
-                                    <a href="{{ path('booking_request_confirm', { 'id': bookingrequest.id }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-check"></span></a>
+                                    <a href="{{ path('booking_request_custom_confirm', { 'id': bookingrequest.id }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-check"></span></a>
                                 </div>
                             </td>
                         </tr>

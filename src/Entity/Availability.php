@@ -185,7 +185,7 @@ class Availability
     
     public function __toString()
     {
-        return $this->unavailableFlightDate->format("d-m-Y");
+        return $this->unavailableFlightDate===null?"Availability":$this->unavailableFlightDate->format("d-m-Y")."";
     }
 
 }

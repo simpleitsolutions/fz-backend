@@ -39,3 +39,16 @@ h4 {
     border-color: #eea236;
 }
 
+
+.passengers div div {
+    margin-bottom: 3px;
+}
+
+#booking_owner {
+    margin: 20px 0px;
+}
+
+#booking_owner label {
+    margin-right: 30px;
+    margin-left: 5px;
+}

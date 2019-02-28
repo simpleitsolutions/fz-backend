@@ -77,7 +77,7 @@ services:
         arguments:
             -
             - App\Entity\Booking
-            -
+            - App\Controller\BookingCRUDController
         tags:
             - { name: sonata.admin, manager_type: orm, group: Admin, label: Booking, pager_type: 'simple' }
         public: true
@@ -110,6 +110,16 @@ services:
             -
         tags:
             - { name: sonata.admin, manager_type: orm, group: Admin,  label: Pilot }
+        public: true
+
+    admin.availability:
+        class: App\Admin\AvailabilityAdmin
+        arguments:
+            -
+            - App\Entity\Availability
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Availability, pager_type: 'simple' }
         public: true
 
     admin.user:

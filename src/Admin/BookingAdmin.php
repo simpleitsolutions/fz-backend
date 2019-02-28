@@ -4,6 +4,8 @@ namespace App\Admin;
 
 
 use App\Entity\BookingOwner;
+use App\Entity\BookingRequest;
+use App\Entity\FlightScheduleTime;
 use App\Entity\Passenger;
 use App\Form\PassengerType;
 use App\Repository\BookingOwnerRepository;
@@ -18,6 +20,7 @@ use Sonata\AdminBundle\Form\Type\CollectionType;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -35,36 +38,34 @@ class BookingAdmin extends AbstractAdmin
 
     public function getNewInstance()
     {
+//        throw new \Exception("HHHKK11");
         $instance = parent::getNewInstance();
-        $entityManager = $this->getModelManager()->getEntityManager(BookingOwner::class);
+        $entityManager = $this->modelManager->getEntityManager(BookingOwner::class);
         $bookingOwner = $entityManager->getRepository(BookingOwner::class)->findOneBy(array('name' => 'FlyZermatt'));
 
         $instance->setOwner($bookingOwner);
-        if ($this->hasRequest()) { //Pre-load new Booking from Booking Schedule view.
+        if ($this->hasRequest())
+        { //Pre-load new Booking from Booking Schedule view.
             $targetDate = $this->getRequest()->get('date', null);
-            if($targetDate != null) {
+            if($targetDate)
+            {
                 $instance->setFlightDate(DateTime::createFromFormat('Y-m-d', $targetDate));
             }
 
             $flightScheduleTimeId = $this->getRequest()->get('flightScheduleTimeId', null);
-            if($flightScheduleTimeId != null) {
-                $entityManager = $this->getModelManager()->getEntityManager('App\Entity\FlightScheduleTime');
-                $flightScheduleTime = $entityManager->getRepository('App\Entity\FlightScheduleTime')->find($flightScheduleTimeId);
+            if($flightScheduleTimeId)
+            {
+                $entityManager = $this->getModelManager()->getEntityManager(FlightScheduleTime::class);
+                $flightScheduleTime = $entityManager->getRepository(FlightScheduleTime::class)->find($flightScheduleTimeId);
                 $instance->setFlightScheduleTime($flightScheduleTime);
                 $instance->setMeetingTime($flightScheduleTime->getScheduleStartTime());
             }
         }
 
-//        $meetingLocation = $entityManager->getRepository('App\Entity\MeetingLocation')->find(3);
-//        $flight = $entityManager->getRepository('App\Entity\Product')->find(1);
-//
-//        $instance->setStatus(1);
-//        $instance->setContactInfo("0799610043");
-////        $instance->setFlightDate("2019-03-02 00:00:00");
-//        $instance->setMeetingTime(new \DateTime());
-//        $instance->setFlight($flight);
-//        $instance->setNotes("Some notes...");
-        $instance->addPassenger(new Passenger());
+        if(!$instance->getPassengers() || sizeof($instance->getPassengers()) == 0)
+        {
+            $instance->addPassenger(new Passenger());
+        }
 //        $instance->setMeetingLocation($meetingLocation);
 
         return $instance;
@@ -220,6 +221,7 @@ class BookingAdmin extends AbstractAdmin
 //        $menu['passengers']->addChild('list', array('uri' => $admin->generateUrl('list')));
 ////        $menu['comments']->addChild('create', array('uri' => $admin->generateUrl('addComment', array('id' => $id))));
 //    }
+
 
     public function __toString()
     {

@@ -144,55 +144,28 @@ class VoucherController extends AbstractController
 //		return $this->render('AazpVoucherBundle:Voucher:redeem.html.twig', array('form' => $form->createView()));
 	}
 
+    /**
+     * @Route("/show/{id}", name="voucher_custom_show")
+     */
     public function showAction($id)
 	{
-    	$request = $this->get('request');
-		$report = $request->query->get('report', false);
+    	$request = Request::createFromGlobals();
+//		$report = $request->query->get('report', false);
 
         $em = $this->getDoctrine()->getManager();
-        $voucher = $em->getRepository('AazpVoucherBundle:Voucher')->find($id);
+        $voucher = $em->getRepository(Voucher::class)->find($id);
 
         if (!$voucher)
         {
             throw $this->createNotFoundException('Unable to find Voucher entity.');
         }
 
-		$form = $this->createFormBuilder($voucher)
-			->add('print', 'submit', array('label' => 'Print'))
-			->add('cancel', 'submit', array('label' => 'Cancel'))
-        	->getForm();
-
-		$form->handleRequest($request);
-		
-		if($form->get('cancel')->isClicked())
+		if($voucher->getLanguage() == Voucher::GERMAN)
 		{
-			return $this->redirect($this->generateUrl('voucher_index'));
-		}
-		if($form->get('print')->isClicked())
-		{
-			return $this->redirect($this->generateUrl('voucher_report_giftvoucher', array('id' => $voucher->getId())));
-		}
-		
-
-		if($report)
-		{
-			$html = $this->renderView('AazpVoucherBundle:Voucher:show.de.html.twig', array('form' => $form->createView(), 'voucher' => $voucher, 'report' => $report));
-
-	        return new Response(
-	            $this->container->get('knp_snappy.pdf')->getOutputFromHtml($html, array('page-size'=>'A5', 'margin-left' => '2', 'margin-right' => '2', 'margin-top' => '2', 'margin-bottom' => '2')),
-	            200,
-	            array(
-	                'Content-Type'          => 'application/pdf',
-	                'Content-Disposition'   => 'attachment; filename="gift-voucher-'.$voucher->getId().'-'.$voucher->getName().'.pdf"'
-	            )
-	        );
-	    }
-		
-		if($voucher->getLanguage() == 1)
-		{
-			return $this->render('AazpVoucherBundle:Voucher:show.de.html.twig', array('form' => $form->createView(), 'voucher' => $voucher, 'report' => $report));;
-		} else {
-			return $this->render('AazpVoucherBundle:Voucher:show.html.twig', array('form' => $form->createView(), 'voucher' => $voucher, 'report' => $report));;
+			return $this->render('voucher/show.de.html.twig', array('voucher' => $voucher));
+		} else if($voucher->getLanguage() == Voucher::ENGLISH)
+        {
+			return $this->render('voucher/show.html.twig', array('voucher' => $voucher));
 		}
 		
     }
