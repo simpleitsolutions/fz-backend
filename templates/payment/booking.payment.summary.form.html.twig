@@ -1,37 +1,41 @@
-<style>
-@media only screen and (min-width: 768px) {
-    .notes-field {
-      width: 450px;
-    }
-    .payment-amount-field {
-      width: 120px;
-    }
-}
-</style>
+{#TODO Page needs correct use of the bootstrap row col-x-x. col-x-x child of row #}
+	<div class="box-header">
+		PAYMENT SUMMARY - #{{booking.id}}
+	</div>
 
-    <div class="panel-heading hidden-print">PAYMENT SUMMARY - #{{booking.id}}</div>
-    <div class="panel-body">
+    <div class="box-body">
 		<div class="col-md-12">
 
 				{{ form_start(form, {'attr': {'class':'payment form-inline'} }) }}
+			{#<div class="row">#}
+				{#<div class="header nopadding col-md-12 col-sm-12 col-xs-12">#}
+					{#<div class="col-md-1 hidden-sm hidden-xs">ITEM</div>#}
+					{#<div class="text-left col-md-6 col-sm-6 col-xs-7">DESCRIPTION</div>#}
+					{#<div class="text-right visible-xs col-xs-2">ACTUAL</div>#}
+					{#<div class="hidden-xs text-right col-md-2 col-sm-2">ACTUAL PRICE</div>#}
+					{#<div class="text-center col-md-3 col-sm-3 col-xs-3">PRICE</div>#}
+				{#</div>#}
+			{#</div>		#}
+    {% for passenger in booking.passengers %}
+	<div class="box box-default pdf-page-half">
+	    <div class="box-header hidden-print"><h5>{{passenger.name}}</h5></div>
+    	<div class="box-body">
 			<div class="row">
 				<div class="header nopadding col-md-12 col-sm-12 col-xs-12">
 					<div class="col-md-1 hidden-sm hidden-xs">ITEM</div>
 					<div class="text-left col-md-6 col-sm-6 col-xs-7">DESCRIPTION</div>
 					<div class="text-right visible-xs col-xs-2">ACTUAL</div>
 					<div class="hidden-xs text-right col-md-2 col-sm-2">ACTUAL PRICE</div>
-					<div class="text-center col-md-3 col-sm-3 col-xs-3">PRICE</div>
+					<div class="text-right col-md-2 col-sm-2 col-xs-2">PRICE</div>
+					<div class="text-right col-md-1 col-sm-1 col-xs-1">&nbsp;</div>
 				</div>
-			</div>		
-    {% for passenger in booking.passengers %}
-	<div class="panel1 panel-default pdf-page-half">
-	    <div class="panel-heading1 hidden-print"><h5>{{passenger.name}}</h5></div>
-    	<div class="panel-body1">
+			</div>
 
 			{% set itemNo = 1 %}
 			{% set passengerIndex = loop.index-1 %}
 
-			<div class="row purchaseItems{{loop.index}}" data-prototype="{% filter escape %}{% include 'booking/payment/bookingPurchaseItem.new.html.twig' with {'form': form.passengers[loop.index0].purchase.purchaseItems.vars.prototype} %}{% endfilter %}">
+			{#TODO Need to layout the purchase items better as teh DELETE ITEM button shifts left over content as the page is resized. #}
+			<div class="row purchaseItems{{loop.index}}" data-prototype="{% filter escape %}{% include 'payment/bookingPurchaseItem.new.html.twig' with {'form': form.passengers[loop.index0].purchase.purchaseItems.vars.prototype} %}{% endfilter %}">
 
 			{% for key,purchaseItem in form.passengers[loop.index0].purchase.purchaseItems %}
 				{% set purchaseItemIndex = loop.index0-1 %}
@@ -55,14 +59,14 @@
 	<div class="row col-md-12" style="margin:15px 0px;"><div class=" col-md-12"></div></div>
     {% endfor %}
 
-		<div class="row panel-body1 purchase-balance-owing-section">
+		<div class="row box-body purchase-balance-owing-section">
 			<div class="lined nopadding col-xs-12 col-sm-12 col-md-12">
 				<div class="field-label text-right col-xs-9 col-sm-9 col-md-10">AMOUNT OWING</div>
 				<div class="text-right col-sm-2 col-md-1" style="padding-right:27px;"><strong><span id="form_balanceAmount">{{ booking.calculateBalance|number_format(2) }}</span></strong></div>
 				<div class="col-md-1">&nbsp;</div>
 			</div>
 		</div>
-		<div class="row purchase-payment-type-section col-xs-12 col-sm-12 col-md-12">
+		<div class="row1 purchase-payment-type-section">
 			<div class="nopadding col-xs-12 col-sm-12 col-md-12">
 				{% for paymentType in form.paymentType %}
 			    {% set index = paymentType.vars.value %}{# get array index #}
@@ -82,7 +86,7 @@
 				{#{ form_widget(form.paymentType, {'attr' : {'class' : 'paymentType'}}) }#}
 			</div>
 		</div>
-		<div class="row panel-body1 purchase-payment-section">
+		<div class="row box-body1 purchase-payment-section">
 			<div class="nopadding col-xs-12 col-sm-12 col-md-12">
 				<div class="nopadding col-xs-12 col-md-12 col-sm-12">
 					<div class="text-center col-xs-7 col-sm-7 col-md-6">NOTES</div>
@@ -112,5 +116,4 @@
 
 		{{ form_end(form) }}
 	</div>
-	</div>
-	</div>
+</div>

@@ -20,28 +20,16 @@
         {% set bookingsUnallocated = bookingDailySchedule.bookingsUnallocated %}
         {% set pilots = bookingDailySchedule.pilots %}
 <div class="row">
-    <div class="col-md-12 hidden-print">
+    <div class="visible-xs visible-sm col-xs-12 col-sm-12 hidden-print">
         <a type="button" href="{{ path('booking_custom_schedule') }}">
             <button class="btn btn-primary nav-justified" type="button" style="margin-top:10px;">
                 QUICK BOOKING
             </button>
         </a>
-
     </div>
 
     <div class="visible-xs visible-sm clearfix">&nbsp;</div>
 
-    <div class="col-md-12 hidden-print">
-    {% if app.request.hasPreviousSession %}
-        {% for type, messages in app.session.flashbag.all() %}
-            {% for message in messages %}
-                <div class="col-md-12 alert alert-{{ type }} alert-dismissable">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-    {% endif %}
-    </div>
     <div class="col-md-12">
         <div class="box box-primary">
             <!-- Default box contents -->

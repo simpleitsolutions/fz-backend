@@ -1,14 +1,12 @@
 {% extends 'base/standard_layout.html.twig' %}
 
-
 {% block sonata_admin_content %}
 
-<div id="ajaxreplace" class="panel panel-default pdf-page-half">
-
-	{% include ('booking/payment/booking.payment.summary.form.html.twig') %}
-
+<div id="ajaxreplace" class="box box-primary pdf-page-half">
+	{% include ('payment/booking.payment.summary.form.html.twig') %}
 </div>
 
+	{#TODO move this script to central location. Can we make it dynamic?? #}
 	<script>
 
 		$(document).ready(function() {

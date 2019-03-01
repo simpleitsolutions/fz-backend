@@ -429,7 +429,7 @@ class BookingController extends AbstractController
     /**
      * @Route("/edit/{id}", name="booking_custom_edit")
      */
-    public function editAction($id)
+        public function editAction($id)
     {
     	$request = Request::createFromGlobals();
     	$flightScheduleTimeRepos = $this->getDoctrine()->getRepository(FlightScheduleTime::class);
@@ -517,7 +517,8 @@ class BookingController extends AbstractController
             $em->persist($booking);
             $em->flush();
 
-			$this->get('session')->getFlashBag()->add('success', 'Booking has been successfully updated!');
+            $this->addFlash('sonata_flash_success','Booking has been successfully updated!');
+//            $this->addFlash('sonata_flash_success','Booking has been successfully updated!');
 			$this->get('session')->set('current_date', $booking->getFlightDate()->format('Y-m-d'));
 
 			$nextAction = ($form->get('saveAndExit')->isClicked() or $form->get('saveAndConfirm')->isClicked())
@@ -549,7 +550,7 @@ class BookingController extends AbstractController
 
          $em->flush();
 
-         $this->get('session')->getFlashBag()->add('success', 'Booking has been successfully confirmed!');
+         $this->addFlash('sonata_flash_success','Booking has been successfully confirmed!');
 
          return $this->redirect($this->generateUrl('booking_custom_schedule'));
      }
@@ -571,7 +572,7 @@ class BookingController extends AbstractController
 
          $em->flush();
 
-         $this->get('session')->getFlashBag()->add('success', 'Booking has been successfully unconfirmed!');
+         $this->addFlash('sonata_flash_success','Booking has been successfully unconfirmed!');
 
          return $this->redirect($this->generateUrl('booking_custom_schedule'));
      }
@@ -593,7 +594,7 @@ class BookingController extends AbstractController
         $em->remove($entity);
         $em->flush();
 
- 		$this->get('session')->getFlashBag()->add('success', 'Booking has been successfully deleted!');
+ 		$this->addFlash('sonata_flash_success','Booking has been successfully deleted!');
 
         return $this->redirect($this->generateUrl('booking_custom_schedule'));
     }
@@ -755,7 +756,7 @@ class BookingController extends AbstractController
                         'data-modal-title' => 'Are you want to cancel this payment?']])
                 ->getForm();
 
-            $template = $this->renderView('booking/payment/booking.payment.summary.form.html.twig', array(
+            $template = $this->renderView('payment/booking.payment.summary.form.html.twig', array(
                 'payments' => $payments,
                 'paymentViewList' => $paymentViewList,
                 'booking' => $booking,
@@ -892,7 +893,7 @@ class BookingController extends AbstractController
             $this->get('session')->getFlashBag()->add($messageType, $paymentMessage);
             return $this->redirect($this->generateUrl('booking_custom_show', array ('id'=> $booking->getId())));
         }
-        return $this->render('booking/booking.payment.summary.html.twig', array(
+        return $this->render('payment/booking.payment.summary.html.twig', array(
             'paymentViewList' => $paymentViewList,
             'payments' => $payments,
             'booking' => $booking,
@@ -1087,7 +1088,7 @@ class BookingController extends AbstractController
 //			$em->persist($booking);
 //			$em->flush();
 //
-//			$this->get('session')->getFlashBag()->add('success', 'Payment '.$paymentAmount.' CHF has been successful!');
+//			$this->addFlash('sonata_flash_success','Payment '.$paymentAmount.' CHF has been successful!');
 //
 //			return $this->redirect($this->generateUrl('booking_show', array ('id'=> $booking->getId())));
 //	        return $this->redirect($this->generateUrl('booking_index_schedule'));
@@ -1196,7 +1197,7 @@ class BookingController extends AbstractController
 //			$em->persist($payment);
 //			$em->flush();
 //
-//			$this->get('session')->getFlashBag()->add('success', 'Payment '.$payment->getAmount().' CHF has been successful!');
+//			$this->addFlash('sonata_flash_success','Payment '.$payment->getAmount().' CHF has been successful!');
 //
 //			return $this->redirect($this->generateUrl('booking_show', array ('id'=> $booking->getId())));
 //	        return $this->redirect($this->generateUrl('booking_index_schedule'));
@@ -1354,7 +1355,7 @@ class BookingController extends AbstractController
 //                     $form->add('cardDigits', 'integer', array('mapped' => false, 'required' => false));
 //                     $form->add('sumupAccount', 'entity', array('mapped' => false, 'required' => false, 'label' => 'SumUp ACCOUNT', 'class' => 'AazpBookingBundle:Account','property' => 'name', 'expanded' => false, ));
 //                 }
-				$template = $this->renderView('booking/payment/passenger.payment.summary.form.html.twig', array(
+				$template = $this->renderView('payment/passenger.payment.summary.form.html.twig', array(
 		            'passenger' => $passenger,
 		            'form'	=> $form->createView(),
 			    ));
@@ -1389,7 +1390,7 @@ class BookingController extends AbstractController
 
 			$em->persist($passenger->getPurchase());
 			$em->flush();
-			$this->get('session')->getFlashBag()->add('success', 'Payment '.number_format($payment->getAmount(),2).' CHF has been successful!');
+			$this->addFlash('sonata_flash_success','Payment '.number_format($payment->getAmount(),2).' CHF has been successful!');
 
 			return $this->redirect($this->generateUrl('booking_custom_show', array ('id'=> $passenger->getBooking()->getId())));
 		}
@@ -1398,7 +1399,7 @@ class BookingController extends AbstractController
 // 		throw new \Exception("Her ".sizeof($payments));
 		$paymentViewHelper = new PaymentViewHelper();
 		$paymentViewList = $paymentViewHelper->processPassengerPayments($payments);
-		return $this->render('booking/passenger.payment.summary.html.twig', array(
+		return $this->render('payment/passenger.payment.summary.html.twig', array(
             'passenger' => $passenger,
 		    'paymentViewList' => $paymentViewList,
             'form'	=> $form->createView(),
@@ -1482,7 +1483,7 @@ class BookingController extends AbstractController
 //
 //			$em->persist($passenger->getPurchase());
 //			$em->flush();
-//			$this->get('session')->getFlashBag()->add('success', 'Payment '.$payment->getAmount().' CHF has been successful!');
+//			$this->addFlash('sonata_flash_success','Payment '.$payment->getAmount().' CHF has been successful!');
 //
 //	        return $this->redirect($this->generateUrl('booking_show', array ('id'=> $passenger->getBooking()->getId())));
 //		}
@@ -1515,7 +1516,7 @@ class BookingController extends AbstractController
         }
         $em->flush();
 
-        $this->get('session')->getFlashBag()->add('success', 'Payment '.$paymentAmount.' CHF has been refunded!');
+        $this->addFlash('sonata_flash_success','Payment '.$paymentAmount.' CHF has been refunded!');
 
         $booking = $em->getRepository(Booking::class)->find($id);
         if (!$booking)

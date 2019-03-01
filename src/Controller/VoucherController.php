@@ -53,7 +53,7 @@ class VoucherController extends AbstractController
 //		    $em->persist($voucher);
 //		    $em->flush();
 //
-//			$this->get('session')->getFlashBag()->add('message', 'New Voucher has been successfully created!');
+//			$this->addFlash('sonata_flash_message','New Voucher has been successfully created!');
 //
 //			$nextAction = $form->get('saveAndExit')->isClicked()
 //			        ? $this->generateUrl('voucher_show', array('id' => $voucher->getId()))
@@ -91,7 +91,7 @@ class VoucherController extends AbstractController
 //            $em->persist($voucher);
 //            $em->flush();
 //
-//			$this->get('session')->getFlashBag()->add('message', 'Voucher has been successfully updated!');
+//			$this->addFlash('sonata_flash_message','Voucher has been successfully updated!');
 //
 //			$nextAction = $form->get('saveAndExit')->isClicked()
 //			        ? $this->generateUrl('voucher_show', array('id' => $id))
@@ -136,7 +136,7 @@ class VoucherController extends AbstractController
             $em->persist($voucher);
             $em->flush();
 
-			$this->get('session')->getFlashBag()->add('message', 'Voucher has been successfully redeemed!');
+			$this->addFlash('sonata_flash_message','Voucher has been successfully redeemed!');
 			return $this->redirect($this->generateUrl('voucher_index'));
 		}
         return $this->redirect($this->generateUrl('app_voucher_list'));

@@ -135,7 +135,7 @@ class BookingRequestController extends AbstractController
             $em->persist($bookingRequest);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('message', 'Booking Request has been successfully confirmed!');
+            $this->addFlash('sonata_flash_message', 'Booking Request has been successfully confirmed!');
 
             return $this->redirect($this->generateUrl('booking_custom_show', array('id' => $booking->getId())));
         }

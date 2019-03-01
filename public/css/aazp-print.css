@@ -1,0 +1,22 @@
+@media print {
+
+    * .panel, * h3, * h4, * h5, * small {
+        /*    font-family: 'Roboto Condensed', sans-serif; */
+        font-family: 'Play', sans-serif;
+        font-weight: 500;
+    }
+
+    small {
+        font-size:0.85em;
+    }
+
+    .panel {
+        margin-top: 10px;
+        font-size:1.07em;
+    }
+
+    .panel-body {
+        font-size:0.9em;
+    }
+
+}

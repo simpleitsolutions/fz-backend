@@ -127,18 +127,18 @@ $(document).ready(function(){
         $(this).find('.modal-title').text($(e.relatedTarget).data('modal-title'));
     });
 
-    $('#redeemWarning').on('show.bs.modal', function(e) {
-        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-    });
-
-    $('#deleteWarning').on('show.bs.modal', function(e) {
-        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-    });
-
-    $('#refundWarning').on('show.bs.modal', function(e) {
-	    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-	});
-
+    // $('#redeemWarning').on('show.bs.modal', function(e) {
+    //     $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    // });
+    //
+    // $('#deleteWarning').on('show.bs.modal', function(e) {
+    //     $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    // });
+    //
+    // $('#refundWarning').on('show.bs.modal', function(e) {
+	//     $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+	// });
+    //
 	$('.calc-item').on("keyup", function () {
 	    calculateSum(this);
 	});

@@ -116,7 +116,7 @@ class AvailabilityController extends AbstractController
         }
         $form = $this->createForm(new PilotAvailabilityType($flightTimes, $allDay), $availability);
         $form->add('save', 'submit', array('label' => 'Save'));
-        $form->add('cancel', 'submit', array('attr' => array('formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )));
+        $form->add('cancel', 'submit', array('attr' => array('formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#modalWarning', 'data-modal-title' => 'Are you want to cancel this Availability?')));
         $form->handleRequest($request);
 
         if($form->isValid())
@@ -131,7 +131,7 @@ class AvailabilityController extends AbstractController
             $dateForm = $this->createForm(new DateSelectorType(), $defaultData);
             $dateForm->handleRequest($request);
         
-            $this->get('session')->getFlashBag()->add('message', 'Flight Availability updated!');
+            $this->addFlash('sonata_flash_message', 'Flight Availability updated!');
         
             $session->set('current_date', $currentDate->format("Y-m-d"));
             return $this->redirect($this->generateUrl('pilot_availability'));
@@ -244,7 +244,7 @@ class AvailabilityController extends AbstractController
 //             $dateForm = $this->createForm(new DateSelectorType(), $defaultData);
 //             $dateForm->handleRequest($request);
 
-//             $this->get('session')->getFlashBag()->add('message', 'Flight Availability updated!');
+//             $this->addFlash('sonata_flash_message', 'Flight Availability updated!');
             
 //             $session->set('current_date', $currentDate->format("Y-m-d"));
 //             return $this->redirect($this->generateUrl('pilot_availability'));

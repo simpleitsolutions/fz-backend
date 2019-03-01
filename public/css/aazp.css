@@ -76,3 +76,16 @@ h4 {
     margin-right: 30px;
     margin-left: 5px;
 }
+
+
+@media only screen and (min-width: 768px) {
+    .notes-field {
+        width: 450px;
+    }
+    .sumup-field {
+        width: 60px;
+    }
+    .payment-amount-field {
+        width: 120px;
+    }
+}

@@ -86,7 +86,7 @@
             </div>
             <div class="col-xs-12 col-md-12" style="min-height:110px;">
                 <label>Passengers</label>
-                <div class="passengers" data-prototype="{% filter escape %}{% include 'booking/new/prototypes/new.passenger.protoype.html.twig' with {'form': form.passengers.vars.prototype, 'disabled':true, 'passengerFlight':form.passengers[0].flight} %}{% endfilter %}">
+                <div class="passengers" data-prototype="{% filter escape %}{% include 'booking/prototypes/new/new.passenger.protoype.html.twig' with {'form': form.passengers.vars.prototype, 'disabled':true, 'passengerFlight':form.passengers[0].flight} %}{% endfilter %}">
                     {#{ form_row(form.passengers) }#}
                 {% for passenger in form.passengers %}
                     {% if loop.index > 1 %}

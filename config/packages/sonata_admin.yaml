@@ -104,8 +104,11 @@ sonata_admin:
         extra_stylesheets:
             - '//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker.css'
             - '//fonts.googleapis.com/css?family=Assistant'
+            - '//fonts.googleapis.com/css?family=Roboto+Condensed'
+            - '//fonts.googleapis.com/css?family=Play'
             - 'css/aazp.css'
             - 'css/aazp-legacy.css'
+            - 'css/aazp-print.css'
 #        javascripts:
 #            extra_javascripts: 'js/aazp.js'
 
