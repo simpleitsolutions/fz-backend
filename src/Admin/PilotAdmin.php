@@ -30,10 +30,10 @@ class PilotAdmin extends AbstractAdmin
         '_page' => 1,
 
         // reverse order (default = 'ASC')
-        '_sort_order' => 'DESC',
+        '_sort_order' => 'ASC',
 
         // name of the ordered field (default = the model's id field, if any)
-        // 			'_sort_by' => 'updatedAt',
+        '_sort_by' => 'id',
     );
 
     protected function configureFormFields(FormMapper $formMapper)
@@ -63,8 +63,8 @@ class PilotAdmin extends AbstractAdmin
             ->add('sortOrder')
             ->add('_action', null, array(
                 'actions' => array(
-                    'edit' => [],
-                    'delete' => [],
+                    'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
+                    'delete' => ['template' => '/sonataadmin/CRUD/list__action_delete.html.twig'],
                 )
             ))
         ;

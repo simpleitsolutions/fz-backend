@@ -268,4 +268,9 @@ class Payment extends BaseEntity
     {
         return $this->purchases;
     }
+
+    public function __toString()
+    {
+        return $this->transactionNo."";
+    }
 }

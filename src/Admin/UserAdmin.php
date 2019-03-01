@@ -8,6 +8,9 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\Form\Type\CollectionType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class UserAdmin extends AbstractAdmin
 {
@@ -58,15 +61,14 @@ class UserAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
             ->addIdentifier('username')
             ->add('email')
             ->add('pilot')
 //            ->add('roles')
             ->add('_action', null, array(
                 'actions' => array(
-                    'edit' => [],
-                    'delete' => [],
+                    'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
+                    'delete' => ['template' => '/sonataadmin/CRUD/list__action_delete.html.twig'],
                 )
             ))
         ;
@@ -77,6 +79,7 @@ class UserAdmin extends AbstractAdmin
         $showMapper
             ->add('username')
             ->add('email')
+            ->add('pilot')
         ;
     }
 

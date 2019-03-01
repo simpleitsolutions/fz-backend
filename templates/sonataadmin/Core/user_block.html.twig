@@ -1,5 +1,8 @@
 {% block user_block %}
     <li role="presentation">
-        <a role="menuitem" tabindex="-1" href="{{ path("security_logout") }}">Logout</a>
+        <a role="menuitem" tabindex="-1" href="{{ path("availability_list") }}"><i class="fa fa-calendar"></i>My Availability</a>
+    </li>
+    <li role="presentation">
+        <a role="menuitem" tabindex="-1" href="{{ path("security_logout") }}"><i class="fa fa-sign-out "></i>Logout</a>
     </li>
 {% endblock %}

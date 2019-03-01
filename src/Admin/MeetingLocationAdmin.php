@@ -33,7 +33,7 @@ class MeetingLocationAdmin extends AbstractAdmin
         '_sort_order' => 'ASC',
 
         // name of the ordered field (default = the model's id field, if any)
-        '_sort_by' => 'name',
+        '_sort_by' => 'sortOrder',
     );
 
     protected function configureFormFields(FormMapper $formMapper)

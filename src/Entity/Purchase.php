@@ -309,4 +309,9 @@ class Purchase extends BaseEntity
 		return false;
 	}
 
+    public function __toString()
+    {
+        return $this->id."";
+    }
+
 }

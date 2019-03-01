@@ -120,11 +120,22 @@ $(document).ready(function(){
 	// return false; // no please http://fuelyourcoding.com/jquery-events-stop-misusing-return-false/
 	});
 
-	$('#deleteWarning').on('show.bs.modal', function(e) {
-	    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-	});
+    // $('#booking_cancel').attr('type', 'button');  //This is so the Edit Booking form does not submit when we click on the 'Cancel' button which is type SubmitType::class (defined in the BookingType class).
 
-	$('#refundWarning').on('show.bs.modal', function(e) {
+    $('#modalWarning').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        $(this).find('.modal-title').text($(e.relatedTarget).data('modal-title'));
+    });
+
+    $('#redeemWarning').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    });
+
+    $('#deleteWarning').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    });
+
+    $('#refundWarning').on('show.bs.modal', function(e) {
 	    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
 	});
 

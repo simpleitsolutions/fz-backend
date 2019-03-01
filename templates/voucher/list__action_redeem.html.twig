@@ -1,0 +1,4 @@
+{% if object %}
+    <a class="btn btn-sm btn-default" {{ (object.flightdate)?'disabled' }} data-modal-title="Are you sure you want to redeem voucher #{{ object.id }}?" href="#" data-href="{{ admin.generateObjectUrl('redeem', object) }}" title="{{ 'action_redeem'|trans({}, 'application') }}" data-toggle="modal" data-target="#modalWarning"><i class="fa fa-repeat" aria-hidden="true"></i></a>
+{% endif %}
+

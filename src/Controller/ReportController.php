@@ -51,6 +51,11 @@ class ReportController extends AbstractController
                 $photoPurchaseItem = null;
                 $creditCardFeePurchaseItem = null;
                 $pilotFlightCommission = null;
+                $cardPayment = false;
+                $invoicePayment = false;
+                $voucherPayment = false;
+                $sumUpPayment = false;
+
                 if($passenger->getPurchase() != null)
                 {
                     foreach ($passenger->getPurchase()->getPurchaseItems() as $purchaseItem)
@@ -68,10 +73,6 @@ class ReportController extends AbstractController
                             $creditCardFeePurchaseItem = $purchaseItem;
                         }
                     }
-                    $cardPayment = false;
-                    $invoicePayment = false;
-                    $voucherPayment = false;
-                    $sumUpPayment = false;
                     foreach ($passenger->getPurchase()->getPayments() as $payment)
                     {
                         if(!$payment->getRefunded())

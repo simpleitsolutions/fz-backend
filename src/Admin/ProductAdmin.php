@@ -30,12 +30,19 @@ class ProductAdmin extends AbstractAdmin
         '_page' => 1,
 
         // reverse order (default = 'ASC')
-        '_sort_order' => 'ASC',
+        '_sort_order' => 'DESC',
 
         // name of the ordered field (default = the model's id field, if any)
-        '_sort_by' => 'description',
+//        '_sort_by' => 'advertised'
     );
 
+    public function createQuery($context = 'list')
+    {
+        $proxyQuery = parent::createQuery('list');
+        $proxyQuery->addOrderBy($proxyQuery->getRootAlias() . '.advertised', 'DESC');
+        $proxyQuery->addOrderBy($proxyQuery->getRootAlias() . '.sortOrder', 'ASC');
+        return $proxyQuery;
+    }
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -56,6 +63,7 @@ class ProductAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('description')
+            ->add('productCategory')
         ;
     }
 

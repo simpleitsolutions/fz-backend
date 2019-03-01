@@ -1,25 +1,31 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
 
+{% block sonata_page_content_header %}
+	<div class="sticky-wrapper"><nav class="navbar navbar-default" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">Pilot Payment Report</a>
+				</div>
+			</div>
+		</nav>
+	</div>
+{% endblock %}
+
 {% block sonata_admin_content %}
-
 	<div class="">
-
-<h3>PILOT PAYMENT REPORT</h3>
 
 {% for pilot in endOfDayReport.pilots %}
 {% if pilot.pilotBookings|length > 0 %}
-<div class="panel panel-default pdf-page">
-	<div class="panel-heading">
-        <div class="row">
-            <div class="col-md-6">
-            	<h4>{{ pilot.getPilotName }}</h4>
-            </div>
-            <div class="col-md-6 text-right">
-                <h4>{{ endOfDayReport.reportDate|date('l, F jS Y') }}</h4>
-            </div>
-        </div>
+<div class="box box-primary pdf-page">
+	<div class="box-heading">
+		<div class="col-md-6">
+			<h4>{{ pilot.getPilotName }}</h4>
+		</div>
+		<div class="col-md-6 text-right">
+			<h4>{{ endOfDayReport.reportDate|date('l, F jS Y') }}</h4>
+		</div>
 	</div>
-	<div class="panel-body">
+	<div class="box-body">
 		<table class="table table-condensed">
 		  <thead>
 			<tr>

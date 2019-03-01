@@ -1,30 +1,25 @@
 <?php
+
 namespace App\Admin;
 
-use DateTime;
+
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 
-class WaitingListAdmin extends AbstractAdmin
+class PilotFlightCommissionAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'waitinglist';
+    protected $baseRoutePattern = 'pilot_flight_commission';
 
-    protected $baseRouteName = 'waitinglist';
+    protected $baseRouteName = 'pilot_flight_commission';
 
     protected $searchResultActions = ['show'];
 
     public function getNewInstance()
     {
         $instance = parent::getNewInstance();
-
-        if ($this->hasRequest()) {
-            $targetDate = $this->getRequest()->get('date', null);
-            $instance->setWaitingListItemDate(DateTime::createFromFormat('Y-m-d', $targetDate));
-        }
 
         return $instance;
     }
@@ -38,22 +33,18 @@ class WaitingListAdmin extends AbstractAdmin
         '_sort_order' => 'ASC',
 
         // name of the ordered field (default = the model's id field, if any)
-//        '_sort_by' => 'sortOrder',
+        '_sort_by' => 'pilot.name',
     );
 
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->with('Waiting List', array('class' => 'col-md-4'))
+            ->with('Commission', array('class' => 'col-md-6'))
 //            ->add('id')
-            ->add('waitingListItemDate', DateType::class, [
-                                'widget' => 'single_text',
-//                            'html5' => false,
-                                'attr' => ['class' => 'js-datepicker'],])
-            ->add('name')
-            ->add('contactinfo')
-            ->add('noofpassengers')
-            ->add('notes')
+            ->add('pilot')
+            ->add('flight')
+            ->add('flightCommission')
+            ->add('activeEndDate')
             ->end()
         ;
     }
@@ -61,20 +52,18 @@ class WaitingListAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name')
-            ->add('contactinfo')
+            ->add('pilot')
+            ->add('flight')
         ;
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id')
-            ->add('waitingListItemDate')
-            ->add('name')
-            ->add('contactinfo')
-            ->add('noofpassengers')
-            ->add('notes')
+            ->add('pilot.name')
+            ->add('flight.description')
+            ->add('flightCommission')
+            ->add('activeEndDate')
             ->add('_action', null, array(
                 'actions' => array(
                     'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
@@ -87,11 +76,10 @@ class WaitingListAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('waitingListItemDate')
-            ->add('name')
-            ->add('contactinfo')
-            ->add('noofpassengers')
-            ->add('notes')
+            ->add('pilot')
+            ->add('flight')
+            ->add('flightCommission')
+            ->add('activeEndDate')
         ;
     }
 

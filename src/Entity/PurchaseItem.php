@@ -123,4 +123,9 @@ class PurchaseItem extends BaseEntity
     {
         return $this->product;
     }
+
+    public function __toString()
+    {
+        return $this->description."";
+    }
 }

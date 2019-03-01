@@ -56,12 +56,12 @@ class PassengerAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('name')
             ->addIdentifier('booking')
-            ->add('_action', null, array(
-                'actions' => array(
-                    'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
-                    'delete' => ['template' => '/sonataadmin/CRUD/list__action_delete.html.twig'],
-                )
-            ))
+//            ->add('_action', null, array(
+//                'actions' => array(
+//                    'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
+//                    'delete' => ['template' => '/sonataadmin/CRUD/list__action_delete.html.twig'],
+//                )
+//            ))
         ;
     }
 

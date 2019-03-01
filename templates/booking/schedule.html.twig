@@ -7,20 +7,6 @@
         {% set bookingsUnallocated = bookingDailySchedule.bookingsUnallocated %}
         {% set pilots = bookingDailySchedule.pilots %}
 <div class="row content">
-        <div class="modal fade" id="deleteWarning" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content col-md-6 text-center">
-                    <div class="modal-body">
-                        <h4 class="modal-title">Delete Booking?</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <a class="clickable btn btn-danger btn-ok">Yes</a>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="hidden-print">
             <ul class="nav nav-pills nav-justified visible-xs visible-sm">
                 <li class="active"><a href="{#{ path('booking_quick') }#}">Quick Booking <span class="glyphicon glyphicon-plane"></span></a></li>

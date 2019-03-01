@@ -109,5 +109,10 @@ class FlightSchedule
     {
         return $this->flightScheduleTimes;
     }    
+
+    public function __toString()
+    {
+        return "Flight Schedule";
+    }
 }
 

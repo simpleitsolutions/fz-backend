@@ -325,4 +325,8 @@ class PaymentType
         return $this->sumUpPayment;
     }
 
+    public function __toString()
+    {
+        return $this->name."";
+    }
 }

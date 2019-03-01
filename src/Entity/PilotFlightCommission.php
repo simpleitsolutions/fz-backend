@@ -123,6 +123,22 @@ class PilotFlightCommission
     }
 
     /**
+     * @return mixed
+     */
+    public function getFlight()
+    {
+        return $this->flight;
+    }
+
+    /**
+     * @param mixed $flight
+     */
+    public function setFlight($flight): void
+    {
+        $this->flight = $flight;
+    }
+
+    /**
      * Set created
      *
      * @param \DateTime $created

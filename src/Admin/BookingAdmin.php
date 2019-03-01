@@ -160,7 +160,7 @@ class BookingAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('id')
-            ->add('status')
+            ->add('status', OrderStatusType::class)
             ->add('contactinfo', null, ['label' => 'Contact Info'])
             ->add('flightdate', null, ['label' => 'Flight Date', 'format' => 'd.M.Y'])
             ->add('flight')

@@ -39,7 +39,7 @@ services:
             - App\Entity\BookingRequest
             -
         tags:
-            - { name: sonata.admin, manager_type: orm, group: Admin, label: Booking Request, pager_type: 'simple' }
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Booking Requests, pager_type: 'simple' }
         public: true
 
     admin.waitinglist:
@@ -59,7 +59,7 @@ services:
             - App\Entity\Voucher
             - App\Controller\VoucherCRUDController
         tags:
-            - { name: sonata.admin, manager_type: orm, group: Admin, label: Voucher, pager_type: 'simple' }
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Vouchers, pager_type: 'simple' }
         public: true
 
     admin.passenger:
@@ -69,7 +69,7 @@ services:
             - App\Entity\Passenger
             -
         tags:
-            - { name: sonata.admin, manager_type: orm, group: Admin, label: Passenger }
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Passengers }
         public: true
 
     admin.booking:
@@ -77,9 +77,9 @@ services:
         arguments:
             -
             - App\Entity\Booking
-            - App\Controller\BookingCRUDController
+            -
         tags:
-            - { name: sonata.admin, manager_type: orm, group: Admin, label: Booking, pager_type: 'simple' }
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Bookings, pager_type: 'simple' }
         public: true
 
     admin.product:
@@ -89,7 +89,37 @@ services:
             - App\Entity\Product
             -
         tags:
-            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Product }
+            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Products }
+        public: true
+
+    admin.product.category:
+        class: App\Admin\ProductCategoryAdmin
+        arguments:
+            -
+            - App\Entity\ProductCategory
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Product Categorys }
+        public: true
+
+    admin.purchase:
+        class: App\Admin\PurchaseAdmin
+        arguments:
+            -
+            - App\Entity\Purchase
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Purchases, pager_type: 'simple'  }
+        public: true
+
+    admin.payment:
+        class: App\Admin\PaymentAdmin
+        arguments:
+            -
+            - App\Entity\Payment
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Payments, pager_type: 'simple'  }
         public: true
 
     admin.meeting.location:
@@ -99,7 +129,27 @@ services:
             - App\Entity\MeetingLocation
             -
         tags:
-            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Meeting Location }
+            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Meeting Location's }
+        public: true
+
+    admin.booking.request.group.condition:
+        class: App\Admin\BookingRequestGroupConditionAdmin
+        arguments:
+            -
+            - App\Entity\BookingRequestGroupCondition
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Booking Request Group Condition's }
+        public: true
+
+    admin.flight.schedule:
+        class: App\Admin\FlightScheduleAdmin
+        arguments:
+            -
+            - App\Entity\FlightSchedule
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Flight Schedules }
         public: true
 
     admin.pilot:
@@ -109,7 +159,17 @@ services:
             - App\Entity\Pilot
             -
         tags:
-            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Pilot }
+            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Pilot's }
+        public: true
+
+    admin.pilot.flight.commission:
+        class: App\Admin\PilotFlightCommissionAdmin
+        arguments:
+            -
+            - App\Entity\PilotFlightCommission
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Pilot Commission }
         public: true
 
     admin.availability:
@@ -129,6 +189,6 @@ services:
             - App\Entity\User
             -
         tags:
-            - { name: sonata.admin, manager_type: orm, group: Admin,  label: User }
+            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Users }
         public: true
 

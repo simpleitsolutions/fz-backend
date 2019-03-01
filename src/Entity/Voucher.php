@@ -273,4 +273,9 @@ class Voucher extends BaseEntity
     {
         return $this->purchase;
     }
+
+    public function __toString()
+    {
+        return $this->name."";
+    }
 }

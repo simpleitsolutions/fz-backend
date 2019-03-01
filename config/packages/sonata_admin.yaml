@@ -5,7 +5,7 @@ sonata_admin:
     security:
         handler: sonata.admin.security.handler.role
 
-        role_admin: ROLE_ADMIN
+        role_admin: ROLE_USER
         role_super_admin: ROLE_SUPER_ADMIN
 
     options:
@@ -23,13 +23,6 @@ sonata_admin:
                 items:
                     - route:        booking_custom_schedule
                       label:        BookingSchedule
-            My Availability:
-                on_top:               true
-                roles: [ROLE_USER]
-                icon:                 '<i class="fa fa-calendar-o"></i>'
-                items:
-                    - route:        availability_list
-                      label:        Availability
             Create Voucher:
                 on_top:               true
                 roles: [ROLE_USER]
@@ -58,7 +51,15 @@ sonata_admin:
                 items:
                     - route:        payment_type
                       label:        Payment Type Report
+                      roles:        [ROLE_ADMIN]
 
+#            My Availability:
+#              on_top:               true
+#              roles: [ROLE_USER]
+#              icon:                 '<i class="fa fa-calendar-o"></i>'
+#              items:
+#                - route:        availability_list
+#                  label:        Availability
             Application:
                 icon:                 '<i class="fa fa-globe"></i>'
                 roles: [ROLE_ADMIN]
@@ -67,16 +68,27 @@ sonata_admin:
                     - admin.bookingrequest
                     - admin.voucher
                     - admin.availability
-                    - admin.passenger
 
             Administration:
                 icon:                 '<i class="fa fa-cogs"></i>'
                 roles: [ROLE_ADMIN]
                 items:
-                    - admin.pilot
-                    - admin.user
                     - admin.product
+                    - admin.passenger
+                    - admin.pilot
+                    - admin.pilot.flight.commission
+                    - admin.user
+
+            System:
+                icon:                 '<i class="fa fa-cogs"></i>'
+                roles: [ROLE_SUPER_ADMIN]
+                items:
+                    - admin.payment
+                    - admin.purchase
+                    - admin.flight.schedule
+                    - admin.product.category
                     - admin.meeting.location
+                    - admin.booking.request.group.condition
 
     global_search:
         empty_boxes: fade

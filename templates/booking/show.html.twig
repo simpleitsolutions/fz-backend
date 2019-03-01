@@ -1,5 +1,39 @@
 {% extends 'base/standard_layout.html.twig' %}
 
+{% block sonata_page_content_header %}
+	<div class="sticky-wrapper">
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">Booking</a>
+				</div>
+				<div class="visible-xs pull-right">
+					<a href="{{ path('booking_custom_schedule') }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-list"></span></a>
+					<a href="{{ path('booking_custom_edit', { 'id': entity.id }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
+				</div>
+				<div class="pull-right hidden-print">&nbsp;</div>
+				<div class="hidden-xs pull-right">
+					{% if (constant('App\\Entity\\Booking::STATUS_CONFIRMED') == entity.status) %}
+						<a href="javascript:print();" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span> Print</a>
+					{% endif %}
+				</div>
+				<div class="pull-right hidden-print">&nbsp;</div>
+				<div class="hidden-xs pull-right">
+					<a href="#" data-href="{{ path('booking_custom_delete', { 'id': entity.id }) }}" class="btn btn-default btn-sm" data-toggle="modal" data-target="#deleteWarning"><span class="glyphicon glyphicon-trash"></span> Trash</a>
+				</div>
+				<div class="pull-right hidden-print">&nbsp;</div>
+				<div class="hidden-xs pull-right">
+					<a href="{{ path('booking_custom_edit', { 'id': entity.id }) }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+				</div>
+				<div class="pull-right hidden-print">&nbsp;</div>
+				<div class="hidden-xs pull-right">
+					<a href="{{ path('booking_custom_schedule') }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-list"></span> List</a>
+				</div>
+			</div>
+		</nav>
+	</div>
+{% endblock %}
+
 {% block sonata_admin_content %}
 
 	<style>
@@ -34,18 +68,18 @@
 
 <div class="visible-print pdf-page-top-margin-a4">&nbsp;</div>
 
-  <div class="visible-print panel panel-default pdf-page-half-a4" >
-    <div class="panel-heading hidden-print"></div>
-    <div class="panel-body">
+  <div class="visible-print box box-primary pdf-page-half-a4" >
+    <div class="box-heading hidden-print"></div>
+    <div class="box-body">
         {{ include('booking/show/show-terms-conditions.html.twig') }}
     </div>
   </div>
 
   <div class="visible-print pdf-page-half-spacer-a4">&nbsp;</div>
 
-  <div class="panel panel-default visible-print pdf-page-half-a4">
-    <div class="panel-heading hidden-print"></div>
-    <div class="panel-body">
+  <div class="box box-primary visible-print pdf-page-half-a4">
+    <div class="box-heading hidden-print"></div>
+    <div class="box-body">
 		<div class="col-md-12 text-center">
 			<img src="{{ app.request.scheme ~ '://' ~ app.request.host}}{{app.request.port == 80?'': ':'~app.request.port}}/img/fly-zermatt-logo.png">
 		</div>
@@ -59,33 +93,13 @@
   <div class="visible-print pdf-page-bottom-margin-a4">&nbsp;</div>
   <div class="visible-print pdf-page-top-margin-a4">&nbsp;</div>
 
-  <div class="panel panel-default pdf-page-half-a4">
-    <div class="panel-heading hidden-print">
-	  	BOOKING #{{entity.id}} {{ (constant('App\\Entity\\Booking::STATUS_CONFIRMED') == entity.status) ? '- CONFIRMED':'' }} {{entity.owner and entity.owner.name != 'FlyZermatt'?'('~entity.owner.name~')':'' }}
-	    <div class="visible-xs pull-right">
-	        <a href="{{ path('booking_custom_schedule') }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-list"></span></a>
-	        <a href="{{ path('booking_custom_edit', { 'id': entity.id }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
+  <div class="box box-primary pdf-page-half-a4">
+    <div class="box-header hidden-print">
+		<div class="box-title">
+	  	#{{entity.id}} {{ (constant('App\\Entity\\Booking::STATUS_CONFIRMED') == entity.status) ? '- CONFIRMED':'' }}
 		</div>
-	    <div class="pull-right hidden-print">&nbsp;</div>
-	    <div class="hidden-xs pull-right">
-	        {% if (constant('App\\Entity\\Booking::STATUS_CONFIRMED') == entity.status) %}
-	        <a href="javascript:print();" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span> Print</a>
-	        {% endif %}
-	    </div>
-	    <div class="pull-right hidden-print">&nbsp;</div>
-	    <div class="hidden-xs pull-right">
-	        <a href="#" data-href="{{ path('booking_custom_delete', { 'id': entity.id }) }}" class="btn btn-default btn-sm" data-toggle="modal" data-target="#deleteWarning"><span class="glyphicon glyphicon-trash"></span> Trash</a>
-        </div>
-	    <div class="pull-right hidden-print">&nbsp;</div>
-	    <div class="hidden-xs pull-right">
-	        <a href="{{ path('booking_custom_edit', { 'id': entity.id }) }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-        </div>
-	    <div class="pull-right hidden-print">&nbsp;</div>
-	    <div class="hidden-xs pull-right">
-	        <a href="{{ path('booking_custom_schedule') }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-list"></span> List</a>
-        </div>
     </div>
-    <div class="panel-body">
+    <div class="box-body">
       <div class="col-xs-6 visible-print">
 		{{ include('booking/show/show-details.html.twig') }}
       </div>
@@ -112,9 +126,9 @@
 
   <div class="visible-print pdf-page-half-spacer-a4">&nbsp;</div>
 
-  <div class="panel panel-default visible-print pdf-page-half-a4">
-  	<div class="panel-heading hidden-print"></div>
-    <div class="panel-body">
+  <div class="box box-primary visible-print pdf-page-half-a4">
+  	<div class="box-heading hidden-print"></div>
+    <div class="box-body">
 	  <div class="col-xs-12 col-md-12">
 	  <h5>What to bring</h5>
 	  <ul>

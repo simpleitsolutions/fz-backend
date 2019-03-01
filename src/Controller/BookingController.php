@@ -21,6 +21,7 @@ use App\Helper\BookingPaymentHelper;
 use App\Helper\PaymentViewHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 //use Sonata\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -315,17 +316,17 @@ class BookingController extends AbstractController
         );
 
 		$form->remove('flightScheduleTime');
-		$form->add('save', SubmitType::class, ['attr' => ['class' => 'form-control btn-success']]);
-		$form->add('saveAndExit', SubmitType::class, ['label' => 'Save', 'attr' => ['class' => 'form-control btn-success']]);
-		$form->add('saveAndConfirm', SubmitType::class, ['label' => 'Confirm', 'attr' => ['class' => 'form-control btn-success']]);
- 		$form->add('cancel', SubmitType::class, ['attr' => ['class' => 'form-control btn-danger', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning',]]);
+		$form->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-success']]);
+		$form->add('saveAndExit', SubmitType::class, ['label' => 'Save', 'attr' => ['class' => 'btn btn-success']]);
+		$form->add('saveAndConfirm', SubmitType::class, ['label' => 'Save & Confirm', 'attr' => ['class' => 'btn btn-success']]);
+ 		$form->add('cancel', ButtonType::class, ['attr' => ['class' => 'btn btn-danger', 'formnovalidate' => true,]]);
 
 		$form->handleRequest($request);
 
-		if($form->get('cancel')->isClicked())
-		{
-			return $this->redirect($this->generateUrl('booking_custom_schedule'));
-		}
+//		if($form->get('cancel')->isClicked())
+//		{
+//			return $this->redirect($this->generateUrl('booking_custom_schedule'));
+//		}
 
 	    if ($form->isSubmitted() && $form->isValid())
 	    {
@@ -477,9 +478,9 @@ class BookingController extends AbstractController
                 'preferredMeetingLocations' => $preferredMeetingLocations)
         );
 
-        $form->add('saveAndExit', SubmitType::class, ['label' => 'Save', 'attr' => ['class' => 'form-control btn-success']]);
-        $form->add('saveAndConfirm', SubmitType::class, ['label' => 'Confirm', 'attr' => ['class' => 'form-control btn-success']]);
-        $form->add('cancel', SubmitType::class, ['attr' => ['class' => 'form-control btn-danger', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning',]]);
+        $form->add('saveAndExit', SubmitType::class, ['label' => 'Save', 'attr' => ['class' => 'btn btn-success']]);
+        $form->add('saveAndConfirm', SubmitType::class, ['label' => 'Confirm', 'attr' => ['class' => 'btn btn-success']]);
+        $form->add('cancel', ButtonType::class, ['attr' => ['class' => 'btn btn-danger', 'formnovalidate' => true]]);
 
 //		$form->add('saveAndExit', 'submit', array('label' => 'Save'));
 //		$form->add('saveAndConfirm', 'submit', array('label' => 'Confirm'));
@@ -487,10 +488,10 @@ class BookingController extends AbstractController
 //
 		$form->handleRequest($request);
 
-		if($form->get('cancel')->isClicked())
-		{
-			return $this->redirect($this->generateUrl('booking_custom_schedule', array('date' => $booking->getFlightdate()->format('Y-m-d'))));
-		}
+//		if($form->get('cancel')->isClicked())
+//		{
+//			return $this->redirect($this->generateUrl('booking_custom_schedule', array('date' => $booking->getFlightdate()->format('Y-m-d'))));
+//		}
 
         if ($form->isSubmitted() && $form->isValid()) {
 	        // remove the relationship between the Passenger and the Booking
