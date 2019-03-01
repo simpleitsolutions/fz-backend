@@ -315,7 +315,8 @@ class BookingController extends AbstractController
                 'preferredMeetingLocations' => $preferredMeetingLocations)
         );
 
-		$form->remove('flightScheduleTime');
+        $form->remove('flightScheduleTime');
+        $form->remove('passengers.flight');
 		$form->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-success']]);
 		$form->add('saveAndExit', SubmitType::class, ['label' => 'Save', 'attr' => ['class' => 'btn btn-success']]);
 		$form->add('saveAndConfirm', SubmitType::class, ['label' => 'Save & Confirm', 'attr' => ['class' => 'btn btn-success']]);
@@ -650,7 +651,14 @@ class BookingController extends AbstractController
             ->add('sumupRef', TextType::class, array('mapped' => false, 'required' => false))
             ->add('description', TextType::class, array('mapped' => false, 'required' => false))
             ->add('pay', SubmitType::class, ['attr' => ['class' => 'btn btn-success']])
-            ->add('cancel', SubmitType::class, array('attr' => array('class' => 'btn', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )))
+//            ->add('cancel', SubmitType::class, array('attr' => array('class' => 'btn', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#modalWarning', 'data-modal-title' => 'Are you want to cancel this payment?' )))
+            ->add('cancel', ButtonType::class,
+                ['attr' => ['class' => 'btn',
+                    'formnovalidate' => true,
+                    'data-toggle' => 'modal',
+                    'data-target' => '#modalWarning',
+                    'data-href' => $this->generateUrl('booking_custom_show', array ('id'=> $passenger->getBooking()->getId())),
+                    'data-modal-title' => 'Are you want to cancel this payment?']])
             ->getForm();
 
         $form->handleRequest($request);
@@ -737,7 +745,14 @@ class BookingController extends AbstractController
                 ->add('sumupRef', TextType::class, array('mapped' => false, 'required' => false))
                 ->add('description', TextType::class, array('mapped' => false, 'required' => false))
                 ->add('pay', SubmitType::class, ['attr' => ['class' => 'btn btn-success']])
-                ->add('cancel', SubmitType::class, array('attr' => array('class' => 'btn', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )))
+//            ->add('cancel', SubmitType::class, array('attr' => array('class' => 'btn', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#modalWarning', 'data-modal-title' => 'Are you want to cancel this payment?' )))
+                ->add('cancel', ButtonType::class,
+                    ['attr' => ['class' => 'btn',
+                        'formnovalidate' => true,
+                        'data-toggle' => 'modal',
+                        'data-target' => '#modalWarning',
+                        'data-href' => $this->generateUrl('booking_custom_show', array ('id'=> $passenger->getBooking()->getId())),
+                        'data-modal-title' => 'Are you want to cancel this payment?']])
                 ->getForm();
 
             $template = $this->renderView('booking/payment/booking.payment.summary.form.html.twig', array(
@@ -1241,6 +1256,14 @@ class BookingController extends AbstractController
 		$purchase->setPaymentAmount($passenger->calculateOwing());
 
 		$form = $this->createForm(PurchaseType::class, $purchase);
+        $form->add('pay', SubmitType::class, ['attr' => ['class' => 'btn btn-success']]);
+        $form->add('cancel', ButtonType::class,
+                                    ['attr' => ['class' => 'btn',
+                                                'formnovalidate' => true,
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#modalWarning',
+                                                'data-href' => $this->generateUrl('booking_custom_show', array ('id'=> $passenger->getBooking()->getId())),
+                                                'data-modal-title' => 'Are you want to cancel this payment?']]);
 
 		$form->handleRequest($request);
 
@@ -1307,6 +1330,17 @@ class BookingController extends AbstractController
 				$passenger->setPurchase($purchase);
 
 				$form = $this->createForm(PurchaseType::class, $purchase);
+                $form->add('pay', SubmitType::class, ['attr' => ['class' => 'btn btn-success']]);
+//		        $form->add('cancel', ButtonType::class, array('attr' => array('class' => 'btn', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#modalWarning', 'data-modal-title' => 'Are you want to cancel this payment?')));
+                $form->add('cancel', ButtonType::class,
+                    ['attr' => ['class' => 'btn',
+                        'formnovalidate' => true,
+                        'data-toggle' => 'modal',
+                        'data-target' => '#modalWarning',
+                        'data-href' => $this->generateUrl('booking_custom_show', array ('id'=> $passenger->getBooking()->getId())),
+                        'data-modal-title' => 'Are you want to cancel this payment?']]);
+
+
 //                 if($paymentType->isCardPayment())
 //                 {
 //                     $form->remove('cardDigits');

@@ -1,17 +1,4 @@
 {% if payments|length > 0 %}
-<div class="modal fade" id="refundWarning" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content col-md-6 text-center">
-      <div class="modal-body">
-        <h4 class="modal-title">Confirm refund?</h4>
-      </div>
-      <div class="modal-footer">
-        <a class="clickable btn btn-danger btn-ok">Yes</a>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <div class="row">
 	<div class="header nopadding col-sm-12 col-md-12">
@@ -65,7 +52,7 @@
 				<a href="#" data-toggle="tooltip" title="{{ paymentView.refundedDate|date("d.m.y H:i") }}">DATE</a>
 			
 			{% else %}
-				<button href="#" data-href="{{ path('booking_custom_payment_refund', {'id': booking.id, 'transactionNo': paymentView.transactionNo?paymentView.transactionNo}) }}" class="btn btn-default btn-xs form-control hidden-print" data-toggle="modal" data-target="#refundWarning">
+				<button href="#" data-href="{{ path('booking_custom_payment_refund', {'id': booking.id, 'transactionNo': paymentView.transactionNo?paymentView.transactionNo}) }}" class="btn btn-default btn-xs form-control hidden-print" data-toggle="modal" data-target="#modalWarning" data-modal-title="Are you sure you want to refund payment {{ paymentView.paymentAmount }}CHF?">
 					 REFUND
 				</button>
 			{% endif %}

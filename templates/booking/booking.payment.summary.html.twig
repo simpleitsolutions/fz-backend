@@ -1,39 +1,13 @@
 {% extends 'base/standard_layout.html.twig' %}
 
-{% form_theme form _self %}
 
-{% block _form_purchaseItems_entry_description_row %}
-    <div class="name_row">
-        {{ form_label(form) }}
-        {{ form_errors(form) }}
-        {{ form_widget(form) }}
-    </div>
-{% endblock %}
+{% block sonata_admin_content %}
 
-
-{% block content %}
-
-	<div class="modal fade" id="cancelWarning" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-	  <div class="modal-dialog modal-sm">
-	    <div class="modal-content col-md-6 text-center">
-	      <div class="modal-body">
-	        <h4 class="modal-title">Cancel without saving?</h4>
-	      </div>
-	      <div class="modal-footer">
-	        <a href="{{ path('booking_custom_schedule') }}" class="btn btn-primary">Yes</a>
-	        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-
-  <div id="ajaxreplace" class="panel panel-default pdf-page-half">
+<div id="ajaxreplace" class="panel panel-default pdf-page-half">
 
 	{% include ('booking/payment/booking.payment.summary.form.html.twig') %}
 
-  </div>
-
-
+</div>
 
 	<script>
 

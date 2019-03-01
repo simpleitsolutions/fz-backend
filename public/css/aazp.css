@@ -27,6 +27,15 @@ h4 {
     background-color: #f5f5f5;
 }
 
+.aazp-custom .navbar-header {
+    width: 100%;
+}
+
+.aazp-custom .container-fluid .nav-bar {
+    margin-top: 11px;
+    text-align: center;
+}
+
 .label-status {
     color: #ffffff;
     display: block;
@@ -45,6 +54,12 @@ h4 {
 
 .passengers div div {
     margin-bottom: 3px;
+}
+
+@media screen and (max-width: 992px) {
+    .passengers .row {
+        margin-bottom: 5%;
+    }
 }
 
 #booking_owner {

@@ -5,6 +5,7 @@ use App\Entity\PaymentType;
 use App\Entity\Purchase;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -21,9 +22,6 @@ class PurchaseType extends AbstractType
         $builder->add('paymentAmount', NumberType::class, array('scale' => 2));
 		$builder->add('sumupRef', TextType::class, array('mapped' => false, 'required' => false));
 		$builder->add('description', TextType::class, array('mapped' => false, 'required' => false));
-		$builder->add('pay', SubmitType::class, ['attr' => ['class' => 'btn btn-success']]);
-		$builder->add('cancel', SubmitType::class, array('attr' => array('class' => 'btn', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )));
-
 	}
 
 //	public function setDefaultOptions(OptionsResolverInterface $resolver)
