@@ -1,0 +1,7 @@
+<td class="sonata-ba-list-field">
+    {% if object.confirmed == constant('\\App\\Entity\\BookingRequest::STATUS_CONFIRMED') %}
+        <span class="label label-success">YES</span>
+    {% elseif object.confirmed == constant('\\App\\Entity\\BookingRequest::STATUS_UNCONFIRMED') %}
+        <span class="label label-danger">NO</span>
+    {% endif %}
+</td>

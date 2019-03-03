@@ -160,7 +160,7 @@ class BookingAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('id')
-            ->add('status', OrderStatusType::class)
+            ->add('status', null, ['template' => '/booking/list/list__col_status.html.twig'])
             ->add('contactinfo', null, ['label' => 'Contact Info'])
             ->add('flightdate', null, ['label' => 'Flight Date', 'format' => 'd.M.Y'])
             ->add('flight')

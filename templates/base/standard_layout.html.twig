@@ -207,7 +207,7 @@ file that was distributed with this source code.
                                         {% block sonata_top_nav_menu_user_block %}
                                             <li class="dropdown user-menu">
                                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                                    <i class="fa fa-user fa-fw" aria-hidden="true"></i> <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                                    Welcome {{ app.user }}<i class="fa fa-user fa-fw" aria-hidden="true"></i> <i class="fa fa-caret-down" aria-hidden="true"></i>
                                                 </a>
                                                 <ul class="dropdown-menu dropdown-user">
                                                     {% include get_global_template('user_block') %}
@@ -362,7 +362,7 @@ file that was distributed with this source code.
             </div>
         {% endblock sonata_wrapper %}
     </div>
-    <div class="text-center"> Version 3.0.1 - {{ env|upper }}{#{ - database }#}</div>
+    <div class="hidden-print text-center"> Version 3.0.1 - {{ env|upper }}{#{ - database }#}</div>
 
     {% if sonata_admin.adminPool.getOption('use_bootlint') %}
         {% block bootlint %}

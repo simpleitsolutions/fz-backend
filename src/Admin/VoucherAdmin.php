@@ -90,15 +90,15 @@ class VoucherAdmin extends AbstractAdmin
             ->add('name')
             ->add('flight')
             ->add('withPhotos', null, ['label' => 'Photos'])
-            ->add('language', null, ['template' => 'voucher/list__language.html.twig'])
+            ->add('language', null, ['template' => '/voucher/list/list__language.html.twig'])
             ->add('created', null, ['format' => 'd.m.Y H:i'])
             ->add('flightdate', null, ['label' => 'Flight Date', 'format' => 'd.m.Y H:i'])
             ->add('_action', null, array(
                 'actions' => array(
-                    'show' => ['template' => 'voucher/list__action_show.html.twig'],
+                    'show' => ['template' => '/voucher/list/list__action_show.html.twig'],
                     'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
                     'delete' => ['template' => '/sonataadmin/CRUD/list__action_delete.html.twig'],
-                    'redeem' => ['template' => 'voucher/list__action_redeem.html.twig']
+                    'redeem' => ['template' => '/voucher/list/list__action_redeem.html.twig']
                 )
             ))
         ;

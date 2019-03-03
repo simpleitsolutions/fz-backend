@@ -16,8 +16,8 @@ use Symfony\Component\Console\Logger\ConsoleLogger;
 class Pilot
 {
     public function __construct() {
-        $this->passengers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pilotFlightCommissions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->passengers = new ArrayCollection();
+        $this->pilotFlightCommissions = new ArrayCollection();
     }
 
 	/**

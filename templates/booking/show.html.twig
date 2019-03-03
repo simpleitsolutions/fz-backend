@@ -1,19 +1,20 @@
 {% extends 'base/standard_layout.html.twig' %}
 
 {% block sonata_page_content_header %}
+	{{ parent() }}
 	<div class="sticky-wrapper">
 		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
 				<div class="navbar-header">
 					<a class="navbar-brand" href="#">Booking</a>
 
-					<div class="nav-bar btn-xs col-xs-1 col-sm-1 col-md-3 pull-right">
+					<div class="nav-bar btn-xs col-xs-8 col-sm-4 col-md-4 pull-right">
 						<ul class="pagination">
 							<li><a href="{{path('booking_custom_schedule', {'date':"now"|date("Y-m-d")} ) }}"><i class="glyphicon glyphicon-list"></i> List</a></li>
 							<li><a href="{{path('booking_custom_edit', { 'id': entity.id } ) }}"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
 							<li><a href="#" data-href="{{path('booking_custom_delete', { 'id': entity.id } ) }}" data-toggle="modal" data-target="#modalWarning" data-modal-title="Are you sure you want to delete this Booking?"><i class="glyphicon glyphicon-trash"></i> Delete</a></li>
 							{% if (constant('App\\Entity\\Booking::STATUS_CONFIRMED') == entity.status) %}
-								<li><a href="javascript:print();" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span> Print</a></li>
+								<li><a href="javascript:print();"><span class="glyphicon glyphicon-print"></span> Print</a></li>
 							{% endif %}
 
 						</ul>
@@ -25,84 +26,83 @@
 {% endblock %}
 
 {% block sonata_admin_content %}
+	{{ parent() }}
 
-{{ include('base/modal.delete.warning.html.twig', {'entity':'Booking'}) }}
+	<div class="visible-print pdf-page-top-margin-a4">&nbsp;</div>
 
-<div class="visible-print pdf-page-top-margin-a4">&nbsp;</div>
-
-  <div class="visible-print box box-primary pdf-page-half-a4" >
-    <div class="box-heading hidden-print"></div>
-    <div class="box-body">
-        {{ include('booking/show/show-terms-conditions.html.twig') }}
-    </div>
-  </div>
-
-  <div class="visible-print pdf-page-half-spacer-a4">&nbsp;</div>
-
-  <div class="box box-primary visible-print pdf-page-half-a4">
-    <div class="box-heading hidden-print"></div>
-    <div class="box-body">
-		<div class="col-md-12 text-center">
-			<img src="{{ app.request.scheme ~ '://' ~ app.request.host}}{{app.request.port == 80?'': ':'~app.request.port}}/img/fly-zermatt-logo.png">
+	  <div class="visible-print box box-primary pdf-page-half-a4" >
+		<div class="box-heading hidden-print"></div>
+		<div class="box-body">
+			{{ include('booking/show/show-terms-conditions.html.twig') }}
 		</div>
-		<div class="col-md-12 text-center" style="margin-top:60px;">
-			<h3>Bookings +41 79 643 6808</h3>
-			<h3>www.flyzermatt.com</h3>
+	  </div>
+
+	  <div class="visible-print pdf-page-half-spacer-a4">&nbsp;</div>
+
+	  <div class="box box-primary visible-print pdf-page-half-a4">
+		<div class="box-heading hidden-print"></div>
+		<div class="box-body">
+			<div class="col-md-12 text-center">
+				<img src="{{ app.request.scheme ~ '://' ~ app.request.host}}{{app.request.port == 80?'': ':'~app.request.port}}/img/fly-zermatt-logo.png">
+			</div>
+			<div class="col-md-12 text-center" style="margin-top:60px;">
+				<h3>Bookings +41 79 643 6808</h3>
+				<h3>www.flyzermatt.com</h3>
+			</div>
 		</div>
-    </div>
-  </div>
+	  </div>
 
-  <div class="visible-print pdf-page-bottom-margin-a4">&nbsp;</div>
-  <div class="visible-print pdf-page-top-margin-a4">&nbsp;</div>
+	  <div class="visible-print pdf-page-bottom-margin-a4">&nbsp;</div>
+	  <div class="visible-print pdf-page-top-margin-a4">&nbsp;</div>
 
-  <div class="box box-primary pdf-page-half-a4">
-    <div class="box-header hidden-print">
-		<div class="box-title">
-	  	#{{entity.id}} {{ (constant('App\\Entity\\Booking::STATUS_CONFIRMED') == entity.status) ? '- CONFIRMED':'' }}
+	  <div class="box box-primary pdf-page-half-a4">
+		<div class="box-header hidden-print">
+			<div class="box-title">
+			#{{entity.id}} {{ (constant('App\\Entity\\Booking::STATUS_CONFIRMED') == entity.status) ? '- CONFIRMED':'' }}
+			</div>
 		</div>
-    </div>
-    <div class="box-body">
-      <div class="col-xs-6 visible-print">
-		{{ include('booking/show/show-details.html.twig') }}
-      </div>
-      <div class="col-xs-6 visible-print">
-		{{ include('booking/show/show-passengers.html.twig') }}
-      </div>
-	  <div class="col-xs-12 col-sm-12 col-md-5 hidden-print">
-		{{ include('booking/show/show-details.html.twig') }}
+		<div class="box-body">
+		  <div class="col-xs-6 visible-print">
+			{{ include('booking/show/show-details.html.twig') }}
+		  </div>
+		  <div class="col-xs-6 visible-print">
+			{{ include('booking/show/show-passengers.html.twig') }}
+		  </div>
+		  <div class="col-xs-12 col-sm-12 col-md-5 hidden-print">
+			{{ include('booking/show/show-details.html.twig') }}
+		  </div>
+		  <div class="col-xs-12 col-sm-12 col-md-7 hidden-print">
+			{{ include('booking/show/show-passengers.html.twig') }}
+		  </div>
+		  <div class="col-xs-12 col-md-12">
+			<h5 class="hidden-print">NOTES</h5>
+			<table class="booking-notes table table-condensed hidden-print" style="height:25px">
+				<tr><td>{{entity.notes}}</td></tr>
+			</table>
+
+			{{ include('common/payment-summary.html.twig', {'payments':payments, 'booking':entity}) }}
+
+		  </div>
+		</div>
 	  </div>
-	  <div class="col-xs-12 col-sm-12 col-md-7 hidden-print">
-        {{ include('booking/show/show-passengers.html.twig') }}
+
+	  <div class="visible-print pdf-page-half-spacer-a4">&nbsp;</div>
+
+	  <div class="box box-primary visible-print pdf-page-half-a4">
+		<div class="box-heading hidden-print"></div>
+		<div class="box-body">
+		  <div class="col-xs-12 col-md-12">
+		  <h5>What to bring</h5>
+		  <ul>
+			<li>Warm clothing;</li>
+			<li>Boots or sturdy footware (runners are ok but may get wet if snow is present);</li>
+			<li>Sunglasses;</li>
+			<li>Camera or Video Camera (Optional) Brought at own risk;</li>
+			<li>If you have one of the following.. Swiss Pass, Half Tax Rail Card. Provides discount for lift tickets.</li>
+		  </ul>
+		  </div>
+		</div>
 	  </div>
-  	  <div class="col-xs-12 col-md-12">
-		<h5 class="hidden-print">NOTES</h5>
-		<table class="booking-notes table table-condensed hidden-print" style="height:25px">
-			<tr><td>{{entity.notes}}</td></tr>
-		</table>
-
-		{{ include('common/payment-summary.html.twig', {'payments':payments, 'booking':entity}) }}
-
-      </div>
-    </div>
-  </div>
-
-  <div class="visible-print pdf-page-half-spacer-a4">&nbsp;</div>
-
-  <div class="box box-primary visible-print pdf-page-half-a4">
-  	<div class="box-heading hidden-print"></div>
-    <div class="box-body">
-	  <div class="col-xs-12 col-md-12">
-	  <h5>What to bring</h5>
-	  <ul>
-	  	<li>Warm clothing;</li>
-	  	<li>Boots or sturdy footware (runners are ok but may get wet if snow is present);</li>
-	  	<li>Sunglasses;</li>
-	  	<li>Camera or Video Camera (Optional) Brought at own risk;</li>
-	  	<li>If you have one of the following.. Swiss Pass, Half Tax Rail Card. Provides discount for lift tickets.</li>
-	  </ul>
-	  </div>
-    </div>
-  </div>
 
 {% endblock %}
 

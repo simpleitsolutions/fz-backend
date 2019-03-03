@@ -1,6 +1,7 @@
 {% extends 'base/standard_layout.html.twig' %}
 
 {% block sonata_page_content_header %}
+    {{ parent() }}
     <div class="sticky-wrapper">
         <nav class="navbar navbar-default" role="navigation">
             <div class="container-fluid">
@@ -14,6 +15,7 @@
 
 
 {% block sonata_admin_content %}
+    {{ parent() }}
         {% set waitingList = bookingDailySchedule.waitingList %}
         {% set bookingRequests = bookingDailySchedule.bookingRequests %}
         {% set timeSchedules = bookingDailySchedule.timeSchedules %}

@@ -1,10 +1,19 @@
 {% extends 'base/standard_layout.html.twig' %}
 
 {% block sonata_page_content_header %}
-	<div class="sticky-wrapper"><nav class="navbar navbar-default" role="navigation">
+	{{ parent() }}
+	<div class="sticky-wrapper">
+		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
 				<div class="navbar-header">
 					<a class="navbar-brand" href="#">Payment Type Report</a>
+					{% if paymentViewList %}
+					<div class="nav-bar btn-xs col-xs-1 col-sm-1 col-md-3 pull-right">
+						<ul class="pagination">
+							<li><a href="javascript:print();"><i class="fa fa-print"></i> Print</a></li>
+						</ul>
+					</div>
+					{% endif %}
 				</div>
 			</div>
 		</nav>

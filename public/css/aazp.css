@@ -36,6 +36,11 @@ h4 {
     text-align: center;
 }
 
+.owner .radio {
+    margin:20px 10px;
+    float:left;
+}
+
 .label-status {
     color: #ffffff;
     display: block;
@@ -56,12 +61,6 @@ h4 {
     margin-bottom: 3px;
 }
 
-@media screen and (max-width: 992px) {
-    .passengers .row {
-        margin-bottom: 5%;
-    }
-}
-
 #booking_owner {
     margin: 20px 0px;
 }
@@ -77,6 +76,12 @@ h4 {
     margin-left: 5px;
 }
 
+
+@media screen and (max-width: 992px) {
+    .passengers .row {
+        margin-bottom: 5%;
+    }
+}
 
 @media only screen and (min-width: 768px) {
     .notes-field {

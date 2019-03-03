@@ -1,5 +1,8 @@
 {% block user_block %}
     <li role="presentation">
+        <a role="menuitem" tabindex="-1" href="{{ path("security_user_profile_edit") }}"><i class="fa fa-calendar"></i>My Profile</a>
+    </li>
+    <li role="presentation">
         <a role="menuitem" tabindex="-1" href="{{ path("availability_list") }}"><i class="fa fa-calendar"></i>My Availability</a>
     </li>
     <li role="presentation">

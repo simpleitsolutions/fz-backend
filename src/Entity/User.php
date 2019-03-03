@@ -41,6 +41,8 @@ class User implements UserInterface, \Serializable
      */
     private $password;
 
+    private $plainTextPassword;
+
     /**
      * @ORM\Column(type="string")
      */
@@ -103,6 +105,22 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * @return mixed
+     */
+    public function getPlainTextPassword()
+    {
+        return $this->plainTextPassword;
+    }
+
+    /**
+     * @param mixed $plainTextPassword
+     */
+    public function setPlainTextPassword($plainTextPassword): void
+    {
+        $this->plainTextPassword = $plainTextPassword;
+    }
+
+    /**
      * Set pilot
      *
      * @param \App\Entity\Pilot $pilot
@@ -129,6 +147,15 @@ class User implements UserInterface, \Serializable
     {
         return null;
     }
+
+    /**
+     * @param mixed $roles
+     */
+    public function setRoles($roles): void
+    {
+        $this->roles = serialize($roles);
+    }
+
 
     public function getRoles()
     {

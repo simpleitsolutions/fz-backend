@@ -131,7 +131,7 @@ class AvailabilityController extends AbstractController
             $dateForm = $this->createForm(new DateSelectorType(), $defaultData);
             $dateForm->handleRequest($request);
         
-            $this->addFlash('sonata_flash_message', 'Flight Availability updated!');
+            $this->addFlash('sonata_flash_success', 'Flight Availability updated!');
         
             $session->set('current_date', $currentDate->format("Y-m-d"));
             return $this->redirect($this->generateUrl('pilot_availability'));
@@ -244,7 +244,7 @@ class AvailabilityController extends AbstractController
 //             $dateForm = $this->createForm(new DateSelectorType(), $defaultData);
 //             $dateForm->handleRequest($request);
 
-//             $this->addFlash('sonata_flash_message', 'Flight Availability updated!');
+//             $this->addFlash('sonata_flash_success', 'Flight Availability updated!');
             
 //             $session->set('current_date', $currentDate->format("Y-m-d"));
 //             return $this->redirect($this->generateUrl('pilot_availability'));

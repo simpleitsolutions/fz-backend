@@ -61,13 +61,13 @@ class UserAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('username')
+            ->add('username')
             ->add('email')
             ->add('pilot')
 //            ->add('roles')
             ->add('_action', null, array(
                 'actions' => array(
-                    'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
+                    'edit' => ['template' => '/user/list/list__action_edit.html.twig'],
                     'delete' => ['template' => '/sonataadmin/CRUD/list__action_delete.html.twig'],
                 )
             ))

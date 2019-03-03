@@ -813,7 +813,7 @@ class BookingController extends AbstractController
                     }
                 }
                 $paymentMessage = 'Payment '.number_format($paymentAmount,2).' CHF successful!';
-                $messageType = 'success';
+                $messageType = 'sonata_flash_success';
             }
             else
             {
@@ -876,7 +876,7 @@ class BookingController extends AbstractController
                    }
                 }
                 $paymentMessage = 'Payment '.number_format($paymentAmount,2).' CHF successful!';
-                $messageType = 'success';
+                $messageType = 'sonata_flash_success';
             }
 
             if($booking->paidInFull())
@@ -890,7 +890,9 @@ class BookingController extends AbstractController
 
             $em->persist($booking);
             $em->flush();
-            $this->get('session')->getFlashBag()->add($messageType, $paymentMessage);
+//            $this->get('session')->getFlashBag()->add($messageType, $paymentMessage);
+            $this->addFlash($messageType, $paymentMessage);
+
             return $this->redirect($this->generateUrl('booking_custom_show', array ('id'=> $booking->getId())));
         }
         return $this->render('payment/booking.payment.summary.html.twig', array(

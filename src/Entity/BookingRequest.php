@@ -20,6 +20,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class BookingRequest
 {
+    const STATUS_UNCONFIRMED = 0;
+    const STATUS_CONFIRMED = 1;
+
     public function __construct()
     {
         $this->confirmed = 0;

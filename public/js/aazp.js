@@ -165,7 +165,7 @@ $(document).ready(function(){
     $('#datepicker').datepicker({
         format: 'dd-mm-yyyy',
         autoclose: true,
-        todayBtn: true,
+        // todayBtn: true,
     }).on("change", function (e) {
         $('#targetDateForm').submit();
     });

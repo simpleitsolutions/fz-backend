@@ -1,4 +1,3 @@
-
 {% set deleteable = false %}
 {% if (booking.status == constant('App\\Entity\\Booking::STATUS_PAYMENT_PART') or (booking.calculateBalance > 0 and booking.hasPayments)) %}
 	{% set cssClass = 'warning' %}
@@ -117,7 +116,7 @@
 		  </button>
 		  <ul class="dropdown-menu dropdown-menu-left text-left" role="menu" aria-labelledby="">
 		    <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('booking_custom_show', { 'id': booking.id }) }}">View</a></li>
-		    <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('booking_edit', { 'id': booking.id }) }}">Edit</a></li>
+		    <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('booking_custom_edit', { 'id': booking.id }) }}">Edit</a></li>
 		    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-href="{{ path('booking_custom_delete', { 'id': booking.id }) }}" data-toggle="modal" data-target="#modalWarning" data-modal-title="Are you sure you want to delete this Booking #{{ booking.id }}?" >Delete</a></li>
 		  </ul>
 		</div>		

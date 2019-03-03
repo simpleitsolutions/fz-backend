@@ -24,7 +24,7 @@ class VoucherCRUDController extends CRUDController
         $em->persist($voucher);
         $em->flush();
 
-        $this->addFlash('sonata_flash_message','Voucher has been successfully redeemed!');
+        $this->addFlash('sonata_flash_success','Voucher has been successfully redeemed!');
 
 
 //        $form = $this->createFormBuilder($voucher)
@@ -44,7 +44,7 @@ class VoucherCRUDController extends CRUDController
 //            $em->persist($voucher);
 //            $em->flush();
 //
-//            $this->addFlash('sonata_flash_message','Voucher has been successfully redeemed!');
+//            $this->addFlash('sonata_flash_success','Voucher has been successfully redeemed!');
 //            return $this->redirect($this->generateUrl('voucher_index'));
 //        }
         return new RedirectResponse($this->admin->generateUrl('list'));
