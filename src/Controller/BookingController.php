@@ -172,20 +172,23 @@ class BookingController extends AbstractController
         $bookings = $reposBooking->getBookingsForDate($indexdate);
         $waitingList = $reposWaitingList->getWaitingListForDate($indexdate);
         $bookingRequests = $reposBookingRequest->getBookingRequestsForDate($indexdate);
-//        throw new \Exception("HERE".sizeof($bookings));
+//        throw new \Exception("HERE1: ".sizeof($bookings));
 
         if($flightSchedule === null)
         {
             $this->get('session')->getFlashBag()->add('danger', 'No Flight Schedule active on this date');
-            $bookingDailySchedule = new BookingDailySchedule($pilots);
+//            $bookingDailySchedule = new BookingDailySchedule($pilots);
+//            $bookingDailySchedule->generateSchedule($indexdate, $bookings, $flightSchedule);
+//            throw new \Exception("HERE2: ".sizeof($bookingDailySchedule->getBookingsUnallocated()));
         }
-        else
-        {
-            $bookingDailySchedule = new BookingDailySchedule($pilots);
-            $bookingDailySchedule->generateSchedule($indexdate, $bookings, $flightSchedule);
-            $bookingDailySchedule->setWaitingList($waitingList);
-            $bookingDailySchedule->setBookingRequests($bookingRequests);
-        }
+//        else
+//        {
+//
+//        }
+        $bookingDailySchedule = new BookingDailySchedule($pilots);
+        $bookingDailySchedule->generateSchedule($indexdate, $bookings, $flightSchedule);
+        $bookingDailySchedule->setWaitingList($waitingList);
+        $bookingDailySchedule->setBookingRequests($bookingRequests);
 
 //        return $this->render('AazpBookingBundle:Booking:index.schedule.html.twig', array(
 //            'bookingDailySchedule' => $bookingDailySchedule,

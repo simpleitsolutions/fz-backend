@@ -123,56 +123,66 @@ class BookingDailySchedule
         
         return $this;
     }
- 
+
+
     public function generateSchedule($indexdate, $bookings, $flightSchedule)
     {
         
         //create Time Schedule items
-        foreach ($flightSchedule->getFlightScheduleTimes() as $flightScheduleTime)
+        if($flightSchedule != null)
         {
-            $bookingTimeSchedule = new BookingTimeSchedule($flightScheduleTime, sizeof($this->pilots));
-            $this->timeSchedules->add($bookingTimeSchedule);
+            foreach ($flightSchedule->getFlightScheduleTimes() as $flightScheduleTime)
+            {
+                $bookingTimeSchedule = new BookingTimeSchedule($flightScheduleTime, sizeof($this->pilots));
+                $this->timeSchedules->add($bookingTimeSchedule);
+            }
         }
 
         foreach($bookings as $booking)
         {
             $unallocated = true;
-            foreach ($flightSchedule->getFlightScheduleTimes() as $flightScheduleTime)
+            if($flightSchedule != null)
             {
-                $flightTime = null;
-                if($booking->getMeetingTime() == null)
+
+                foreach ($flightSchedule->getFlightScheduleTimes() as $flightScheduleTime)
                 {
-                    
-                }
-                else if($booking->getMeetingTime()->format('H:i:s') == '00:00:00' )
-                {
-                    $flightTime = $booking->getFlightdate()->format("H:i");
-                }
-                else
-                {
-                    $flightTime = $booking->getMeetingTime()->format('H:i');
-                }
-                
-                if($flightScheduleTime == $booking->getFlightScheduleTime() 
-                    || ($booking->getFlightScheduleTime() == null
-                    && ($flightTime >= $flightScheduleTime->getScheduleStartTime()->format("H:i")
-                    && $flightTime <= $flightScheduleTime->getScheduleEndTime()->format("H:i"))))
-                {
-                    foreach($this->timeSchedules as $timeSchedule)
+                    $flightTime = null;
+                    if($booking->getMeetingTime() == null)
                     {
-                        if($timeSchedule->getFlightScheduleTime() == $flightScheduleTime)
+
+                    }
+                    else if($booking->getMeetingTime()->format('H:i:s') == '00:00:00' )
+                    {
+                        $flightTime = $booking->getFlightdate()->format("H:i");
+                    }
+                    else
+                    {
+                        $flightTime = $booking->getMeetingTime()->format('H:i');
+                    }
+
+                    if($flightScheduleTime == $booking->getFlightScheduleTime()
+                        || ($booking->getFlightScheduleTime() == null
+                        && ($flightTime >= $flightScheduleTime->getScheduleStartTime()->format("H:i")
+                        && $flightTime <= $flightScheduleTime->getScheduleEndTime()->format("H:i"))))
+                    {
+                        foreach($this->timeSchedules as $timeSchedule)
                         {
-                            $timeSchedule->addBooking($booking);
-                            $unallocated = false;
+                            if($timeSchedule->getFlightScheduleTime() == $flightScheduleTime)
+                            {
+                                $timeSchedule->addBooking($booking);
+                                $unallocated = false;
+                            }
                         }
                     }
                 }
             }
+
             if($unallocated)
             {
                 $this->bookingsUnallocated->add($booking);
             }
         }
+
         foreach($this->timeSchedules as $timeSchedule)
         {
             foreach($this->pilots as $pilot)
@@ -187,6 +197,7 @@ class BookingDailySchedule
                 }
             }
         }
+
         return $this->bookingsUnallocated;
     }
 }
