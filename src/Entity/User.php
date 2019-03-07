@@ -67,6 +67,11 @@ class User implements UserInterface, \Serializable
     private $plainTextPassword;
 
     /**
+     * @ORM\Column(type="datetime")
+     * 	 */
+    private $lastLogin;
+
+    /**
      * @ORM\Column(type="array")
      */
     private $roles;
@@ -199,6 +204,23 @@ class User implements UserInterface, \Serializable
     {
         $this->plainTextPassword = $plainTextPassword;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLastLogin()
+    {
+        return $this->lastLogin;
+    }
+
+    /**
+     * @param mixed $lastLogin
+     */
+    public function setLastLogin($lastLogin): void
+    {
+        $this->lastLogin = $lastLogin;
+    }
+
 
     /**
      * Set pilot
