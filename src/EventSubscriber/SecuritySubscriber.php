@@ -7,10 +7,30 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\User;
+use Psr\Log\LoggerInterface;
 
 class SecuritySubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
+     * @var TokenStorageInterface
+     */
+    private $tokenStorage;
+
+    /**
+     * @var AuthenticationUtils
+     */
+    private $authenticationUtils;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     /**
      * @var \Swift_Mailer
      */
@@ -24,11 +44,12 @@ class SecuritySubscriber implements EventSubscriberInterface
     /**
      * SecuritySubscriber constructor.
      */
-    public function __construct(EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage, AuthenticationUtils $authenticationUtils, \Swift_Mailer $mailer, \Twig_Environment $twig)
+    public function __construct(EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage, AuthenticationUtils $authenticationUtils, LoggerInterface $logger, \Swift_Mailer $mailer, \Twig_Environment $twig)
     {
         $this->entityManager = $entityManager;
         $this->tokenStorage = $tokenStorage;
         $this->authenticationUtils = $authenticationUtils;
+        $this->logger = $logger;
         $this->mailer = $mailer;
         $this->twig = $twig;
     }
@@ -46,8 +67,9 @@ class SecuritySubscriber implements EventSubscriberInterface
 
         $now = new \DateTime();
         $user->setLastLogin($now);
-        $userRepository = $this->entityManager->getRepository(User::class);
+        $this->logger->info("USER LOGIN: ".$user->getUsername() , ["security"]);
 
+//        $userRepository = $this->entityManager->getRepository(User::class);
         $this->entityManager->flush();
     }
 }
