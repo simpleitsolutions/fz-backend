@@ -69,7 +69,7 @@ services:
             - App\Entity\Passenger
             -
         tags:
-            - { name: sonata.admin, manager_type: orm, group: Admin, label: Passengers }
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Passengers, pager_type: 'simple' }
         public: true
 
     admin.booking:

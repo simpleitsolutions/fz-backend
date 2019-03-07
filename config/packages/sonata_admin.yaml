@@ -62,7 +62,7 @@ sonata_admin:
 #                  label:        Availability
             Application:
                 icon:                 '<i class="fa fa-globe"></i>'
-                roles: [ROLE_ADMIN]
+                roles: [ROLE_USER]
                 items:
                     - admin.booking
                     - admin.bookingrequest
@@ -76,7 +76,6 @@ sonata_admin:
                     - admin.product
                     - admin.pilot
                     - admin.pilot.flight.commission
-                    - admin.passenger
 
             System:
                 icon:                 '<i class="fa fa-cogs"></i>'
@@ -87,6 +86,7 @@ sonata_admin:
                     - admin.product.category
                     - admin.meeting.location
                     - admin.booking.request.group.condition
+                    - admin.passenger
 
             Purchases & Payments:
                 icon:                 '<i class="fa fa-money"></i>'

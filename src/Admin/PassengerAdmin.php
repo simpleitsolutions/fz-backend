@@ -56,7 +56,8 @@ class PassengerAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('name')
-            ->addIdentifier('booking')
+            ->add('booking.flightdate', null, ['label' => 'Flight Date', 'format' => 'd M Y H:i'])
+            ->add('booking')
 //            ->add('_action', null, array(
 //                'actions' => array(
 //                    'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
@@ -70,6 +71,7 @@ class PassengerAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('name')
+            ->add('booking.flightdate')
             ->add('booking')
         ;
     }
