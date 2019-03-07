@@ -19,12 +19,11 @@
             My Profile
         </div>
         <div class="box-body">
-
             {{ form_start(form) }}
                 <div>
                     <div class="form-group">
                         {{ form_label(form.username, null, {'label_attr': {'class': 'form-control-label'}}) }}
-                        {{ form_widget(form.username, {'attr': {'class': 'form-control', 'readonly':true }}) }}
+                        {{ form_widget(form.username, {'attr': {'class': 'form-control', 'readonly':(form.vars.data.id?true:false) }}) }}
                     </div>
                     <div class="form-group">
                         {{ form_label(form.email, null, {'label_attr': {'class': 'form-control-label'}}) }}
@@ -36,7 +35,6 @@
                         {{ form_label(form.plainTextPassword.second, 'Confirm Password') }}
                         {{ form_widget(form.plainTextPassword.second, {'attr': {'class': 'form-control'}}) }}
                     </div>
-{#TODO Remove Role field from Profile form. Don't allows users to modify there Role ;) #}
                     {% if form.roles is defined %}
                     <div class="form-group">
                         {{ form_label(form.roles, null, {'label_attr': {'class': 'form-control-label'}}) }}

@@ -39,7 +39,8 @@ class PilotFlightCommission
     protected $pilot;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Product", inversedBy="pilotFlightCommissions")
+     * @ ORM\ManyToOne(targetEntity="Product", inversedBy="pilotFlightCommissions")
+     * @ORM\ManyToOne(targetEntity="Product")
      * @ORM\JoinColumn(name="product_flight_id", referencedColumnName="id")
      */
     protected $flight;

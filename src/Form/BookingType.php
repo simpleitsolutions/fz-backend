@@ -43,7 +43,7 @@ class BookingType extends AbstractType
 		    'label' => 'Date',
 //		    'translation_domain' => 'AazpBookingBundle',
 		    'attr' => array(
-		        'class' => 'form-control input-inline js-datepicker',
+//		        'class' => 'form-control input-inline',
 //		        'data-provide' => 'datepicker',
 // 		        'data-format' => 'dd-MM-yyyy HH:mm',
 		        'data-format' => 'dd-MM-yyyy',
@@ -64,7 +64,7 @@ class BookingType extends AbstractType
 		                                        'class' => Product::class,
                                                 'attr' => ['class' => 'form-control', 'data-sonata-select2' => 'false'],
 //		                                        'property' => 'name',
-//		                                        'empty_value' => 'Please Select',
+		                                        'placeholder' => 'Please Select',
 		                                        'preferred_choices' => $options['preferredFlights'],
 												'query_builder' => function(ProductRepository $er) {
 		                                              return $er->createQueryBuilder('p')

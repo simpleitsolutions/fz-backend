@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 
+use App\Entity\Payment;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -97,4 +98,8 @@ class PaymentAdmin extends AbstractAdmin
         ;
     }
 
+    public function toString($object)
+    {
+        return $object->getTransactionNo();
+    }
 }

@@ -5,20 +5,16 @@
 	<div class="sticky-wrapper">
 		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
-				<div class="navbar-header">
+				<div class="navbar-header col-xs-12 col-sm-12 col-md-12">
 					<a class="navbar-brand" href="#">Booking</a>
-
-					<div class="nav-bar btn-xs col-xs-8 col-sm-4 col-md-4 pull-right">
-						<ul class="pagination">
-							<li><a href="{{path('booking_custom_schedule', {'date':"now"|date("Y-m-d")} ) }}"><i class="glyphicon glyphicon-list"></i> List</a></li>
-							<li><a href="{{path('booking_custom_edit', { 'id': entity.id } ) }}"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
-							<li><a href="#" data-href="{{path('booking_custom_delete', { 'id': entity.id } ) }}" data-toggle="modal" data-target="#modalWarning" data-modal-title="Are you sure you want to delete this Booking?"><i class="glyphicon glyphicon-trash"></i> Delete</a></li>
-							{% if (constant('App\\Entity\\Booking::STATUS_CONFIRMED') == entity.status) %}
-								<li><a href="javascript:print();"><span class="glyphicon glyphicon-print"></span> Print</a></li>
-							{% endif %}
-
-						</ul>
-					</div>
+					<ul class="navbar-actions pagination">
+						<li><a class="btn btn-xs" href="{{path('booking_custom_edit', { 'id': entity.id } ) }}"><i class="glyphicon glyphicon-edit"></i> Edit</a></li>
+						<li><a class="btn btn-xs" href="#" data-href="{{path('booking_custom_delete', { 'id': entity.id } ) }}" data-toggle="modal" data-target="#modalWarning" data-modal-title="Are you sure you want to delete this Booking?"><i class="glyphicon glyphicon-trash"></i> Delete</a></li>
+						{% if (constant('App\\Entity\\Booking::STATUS_CONFIRMED') == entity.status) %}
+							<li><a class="btn btn-xs" href="javascript:print();"><span class="glyphicon glyphicon-print"></span> Print</a></li>
+						{% endif %}
+						<li><a class="btn btn-xs" href="{{path('booking_custom_schedule', {'date':"now"|date("Y-m-d")} ) }}"><i class="fa fa-close"></i> Close</a></li>
+					</ul>
 				</div>
 			</div>
 		</nav>

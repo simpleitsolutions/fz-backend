@@ -14,7 +14,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class MeetingLocation
 {
 	/**
-     * @ORM\OneToMany(targetEntity="Booking", mappedBy="meetinglocation")
+     * @ORM\OneToMany(targetEntity="Booking", mappedBy="meetingLocation")
      */
     protected $bookings;
 

@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 
+use App\Entity\PilotFlightCommission;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -83,4 +84,17 @@ class PilotFlightCommissionAdmin extends AbstractAdmin
         ;
     }
 
+    public function configureBatchActions($actions)
+    {
+        if (isset($actions['delete'])) {
+            unset($actions['delete']);
+        }
+
+        return $actions;
+    }
+
+    public function toString($object)
+    {
+        return $object->getPilot()->getName();
+    }
 }

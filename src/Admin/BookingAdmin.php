@@ -148,11 +148,9 @@ class BookingAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('id', null, array('global_search' => true))
-            ->add('contactinfo')
-//            ->add('flightdate', null, array('global_search' => true))
-//            ->add('flight')
-//            ->add('passengers')
-//            ->add('meetingTime')
+            ->add('status')
+            ->add('flightdate')
+            ->add('created')
         ;
     }
 

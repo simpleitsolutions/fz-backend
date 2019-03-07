@@ -9,7 +9,7 @@
 		<div class="hidden-xs hidden-sm col-md-3">PAYMENT FOR</div>
 		<div class="visible-xs visible-sm col-xs-4 col-sm-4">FOR</div>
 		<div class="hidden-xs hidden-sm col-md-3">NOTES</div>
-		<div class="text-center col-xs-2 col-sm-2 col-md-2">TYPE</div>
+		<div class="hidden-xs hidden-sm text-center col-md-2">TYPE</div>
 		<div class="text-right col-xs-2 col-sm-2 col-md-1">AMOUNT</div>
 		<div class="text-right hidden-xs hidden-sm col-md-1">REFUNDED</div>
 		<div class="text-right visible-xs visible-sm">&nbsp;</div>
@@ -42,7 +42,7 @@
 	    {% endfor %}
 		</div>
 		<div class="hidden-xs hidden-sm col-md-3 {{refundedCss}}">{{ paymentView.notes }}</div>
-		<div class="text-center col-xs-2 col-sm-2 col-md-2 hidden-print {{refundedCss}}">{{ paymentView.paymentType.shortName }}{{ paymentView.sumUpRef?' - '~paymentView.sumUpRef:'' }}</div>
+		<div class="hidden-xs hidden-sm text-center col-md-2 hidden-print {{refundedCss}}">{{ paymentView.paymentType.shortName }}{{ paymentView.sumUpRef?' - '~paymentView.sumUpRef:'' }}</div>
 		<div class="text-center col-xs-2 visible-print {{refundedCss}}">{{ paymentView.paymentType.printName }}{{ paymentView.sumUpRef?' - '~paymentView.sumUpRef:'' }}</div>
 		<div class="text-right col-xs-2 col-sm-2 col-md-1 {{refundedCss}} {{ calcItemCss }}" style="text-align:right;" payment-total="{{ paymentView.subPaymentAmounts|length>0?paymentView.subPaymentAmounts|first:paymentView.paymentAmount }}"> {{ paymentView.subPaymentAmounts|length>0?paymentView.subPaymentAmounts|first~'/' }}{{ paymentView.paymentAmount }}</div>
 		<div class="text-center col-xs-2 col-sm-2 col-md-1 hidden-print">
@@ -52,7 +52,7 @@
 				<a href="#" data-toggle="tooltip" title="{{ paymentView.refundedDate|date("d.m.y H:i") }}">DATE</a>
 			
 			{% else %}
-				<button href="#" data-href="{{ path('booking_custom_payment_refund', {'id': booking.id, 'transactionNo': paymentView.transactionNo?paymentView.transactionNo}) }}" class="btn btn-default btn-xs form-control hidden-print" data-toggle="modal" data-target="#modalWarning" data-modal-title="Are you sure you want to refund payment {{ paymentView.paymentAmount }}CHF?">
+				<button href="#" data-href="{{ path('booking_custom_payment_refund', {'id': booking.id, 'transactionNo': paymentView.transactionNo?paymentView.transactionNo}) }}" class="btn btn-primary btn-xs hidden-print" data-toggle="modal" data-target="#modalWarning" data-modal-title="Are you sure you want to refund payment {{ paymentView.paymentAmount }}CHF?">
 					 REFUND
 				</button>
 			{% endif %}

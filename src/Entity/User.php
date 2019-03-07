@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 
 class User implements UserInterface, \Serializable
 {
+    const ROLE_DEFAULT = 'ROLE_USER';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+
+    public function __construct()
+    {
+        $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -30,9 +39,23 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
+     * @ORM\Column(type="string", length=50, unique=true)
+     */
+    private $usernameCanonical;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=254, unique=true)
      */
     private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=254, unique=true)
+     */
+    private $emailCanonical;
 
     /**
      * @var string
@@ -44,15 +67,40 @@ class User implements UserInterface, \Serializable
     private $plainTextPassword;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="array")
      */
     private $roles;
 
     /**
      * @ORM\OneToOne(targetEntity="Pilot")
-     * @ORM\JoinColumn(name="pilot_id", referencedColumnName="id", unique=true)
+     * @ORM\JoinColumn(name="pilot_id", referencedColumnName="id", unique=true, nullable=true)
      */
     protected $pilot;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enabled = true;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $salt;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $locked = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $expired = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $credentialsExpired = false;
 
     /**
      * @return mixed
@@ -78,6 +126,22 @@ class User implements UserInterface, \Serializable
     /**
      * @return string
      */
+    public function getUsernameCanonical(): string
+    {
+        return $this->usernameCanonical;
+    }
+
+    /**
+     * @param string $usernameCanonical
+     */
+    public function setUsernameCanonical(string $usernameCanonical): void
+    {
+        $this->usernameCanonical = $usernameCanonical;
+    }
+
+    /**
+     * @return string
+     */
     public function getEmail(): ?string
     {
         return $this->email;
@@ -89,6 +153,22 @@ class User implements UserInterface, \Serializable
     public function setEmail(string $email): void
     {
         $this->email = $email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmailCanonical(): string
+    {
+        return $this->emailCanonical;
+    }
+
+    /**
+     * @param string $emailCanonical
+     */
+    public function setEmailCanonical(string $emailCanonical): void
+    {
+        $this->emailCanonical = $emailCanonical;
     }
 
     public function getPassword()
@@ -143,28 +223,100 @@ class User implements UserInterface, \Serializable
         return $this->pilot;
     }
 
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @param bool $enabled
+     */
+    public function setEnabled(bool $enabled): void
+    {
+        $this->enabled = $enabled;
+    }
+
     public function getSalt()
     {
         return null;
     }
 
-    /**
-     * @param mixed $roles
-     */
-    public function setRoles($roles): void
+    public function addRole($role)
     {
-        $this->roles = serialize($roles);
+        $role = strtoupper($role);
+        if ($role === static::ROLE_DEFAULT) {
+            return $this;
+        }
+
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
     }
 
-
+    /**
+     * Returns the user roles
+     *
+     * @return array The roles
+     */
     public function getRoles()
     {
-//        return $serializer->deserialize($this->roles, , 'json');
-        return unserialize($this->roles);
-//        return [
-//            'ROLE_ADMIN'
-//        ];
+        $roles = $this->roles;
+
+//        foreach ($this->getGroups() as $group) {
+//            $roles = array_merge($roles, $group->getRoles());
+//        }
+
+        // we need to make sure to have at least one role
+        $roles[] = static::ROLE_DEFAULT;
+
+        return array_unique($roles);
     }
+
+    /**
+     * Never use this to check if this user has access to anything!
+     *
+     * Use the SecurityContext, or an implementation of AccessDecisionManager
+     * instead, e.g.
+     *
+     *         $securityContext->isGranted('ROLE_USER');
+     *
+     * @param string $role
+     *
+     * @return boolean
+     */
+    public function hasRole($role)
+    {
+        return in_array(strtoupper($role), $this->getRoles(), true);
+    }
+
+    public function removeRole($role)
+    {
+        if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
+            unset($this->roles[$key]);
+            $this->roles = array_values($this->roles);
+        }
+
+        return $this;
+    }
+
+//    /**
+//     * @param mixed $roles
+//     */
+//    public function setRoles($roles): void
+//    {
+//        $this->roles = serialize($roles);
+//    }
+//
+//
+//    public function getRoles()
+//    {
+//        return unserialize($this->roles);
+//    }
 
     public function eraseCredentials()
     {

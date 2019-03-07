@@ -115,12 +115,14 @@ class VoucherAdmin extends AbstractAdmin
         ;
     }
 
-//    protected function configureBatchActions($actions)
-//    {
-//        $actions['voucher_custom_redeem'] = ['ask_confirmation' => true];
-//
-//        return $actions;
-//    }
+    public function configureBatchActions($actions)
+    {
+        if (isset($actions['delete'])) {
+            unset($actions['delete']);
+        }
+
+        return $actions;
+    }
 
     protected function configureRoutes(RouteCollection $collection)
     {

@@ -83,4 +83,8 @@ class PurchaseAdmin extends AbstractAdmin
         ;
     }
 
+    public function toString($object)
+    {
+        return $object->getId();
+    }
 }

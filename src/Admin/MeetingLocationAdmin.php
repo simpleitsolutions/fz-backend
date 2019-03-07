@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 
+use App\Entity\MeetingLocation;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -82,6 +83,20 @@ class MeetingLocationAdmin extends AbstractAdmin
             ->add('description')
             ->add('sortOrder')
         ;
+    }
+
+    public function configureBatchActions($actions)
+    {
+        if (isset($actions['delete'])) {
+            unset($actions['delete']);
+        }
+
+        return $actions;
+    }
+
+    public function toString($object)
+    {
+        return $object->getName();
     }
 
 }

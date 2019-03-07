@@ -207,7 +207,7 @@ file that was distributed with this source code.
                                         {% block sonata_top_nav_menu_user_block %}
                                             <li class="dropdown user-menu">
                                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                                    Welcome {{ app.user }}<i class="fa fa-user fa-fw" aria-hidden="true"></i> <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                                    Welcome {{ app.user|capitalize }}<i class="fa fa-user fa-fw" aria-hidden="true"></i> <i class="fa fa-caret-down" aria-hidden="true"></i>
                                                 </a>
                                                 <ul class="dropdown-menu dropdown-user">
                                                     {% include get_global_template('user_block') %}
@@ -287,6 +287,7 @@ file that was distributed with this source code.
                                                 {% endif %}
 
                                                 {% if admin is defined and action is defined and action == 'list' and admin.listModes|length > 1 %}
+                                                    TOM1
                                                     <div class="nav navbar-right btn-group">
                                                         {% for mode, settings in admin.listModes %}
                                                             <a href="{{ admin.generateUrl('list', app.request.query.all|merge({_list_mode: mode})) }}" class="btn btn-default navbar-btn btn-sm{% if admin.getListMode() == mode %} active{% endif %}"><i class="{{ settings.class }}"></i></a>

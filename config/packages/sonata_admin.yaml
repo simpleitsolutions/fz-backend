@@ -74,21 +74,26 @@ sonata_admin:
                 roles: [ROLE_ADMIN]
                 items:
                     - admin.product
-                    - admin.passenger
                     - admin.pilot
                     - admin.pilot.flight.commission
-                    - admin.user
+                    - admin.passenger
 
             System:
                 icon:                 '<i class="fa fa-cogs"></i>'
                 roles: [ROLE_SUPER_ADMIN]
                 items:
-                    - admin.payment
-                    - admin.purchase
+                    - admin.user
                     - admin.flight.schedule
                     - admin.product.category
                     - admin.meeting.location
                     - admin.booking.request.group.condition
+
+            Purchases & Payments:
+                icon:                 '<i class="fa fa-money"></i>'
+                roles: [ROLE_SUPER_ADMIN]
+                items:
+                    - admin.payment
+                    - admin.purchase
 
     global_search:
         empty_boxes: fade
@@ -98,6 +103,7 @@ sonata_admin:
         #        show:   '@App/Admin/display_client.html.twig'
         layout: '/base/standard_layout.html.twig'
         user_block: '/sonataadmin/Core/user_block.html.twig'
+        button_create: '/sonataadmin/Button/create_button.html.twig'
 #        edit: '/bundles/SonataAdminBundle/CRUD/edit.html.twig'
 
     assets:

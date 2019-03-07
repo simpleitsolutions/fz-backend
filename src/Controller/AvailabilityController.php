@@ -2,7 +2,9 @@
 namespace App\Controller;
 
 use App\Entity\Availability;
+use App\Entity\FlightSchedule;
 use App\Entity\Pilot;
+use DateTime;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +15,31 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class AvailabilityController extends AbstractController
 {
+
+
+    /**
+     * @Route("/availability/create", name="availability_custom_create")
+     */
+    public function createAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $pilotRepos = $this->getDoctrine()->getRepository(Pilot::class);
+
+        $targetDate = $request->get('targetDate', null);
+        $pilotId = $request->get('pilotId', null);
+
+        $unavailableFlightDate = DateTime::createFromFormat('Y-m-d', $targetDate);
+        $pilot = $pilotRepos->find($pilotId);
+
+        $availability = new Availability();
+        $availability->setPilot($pilot);
+        $availability->setUnavailableFlightDate($unavailableFlightDate);
+
+        $em->persist($availability);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('availability_edit', ['id' => $availability->getId()]));
+    }
 
     public function pilotAvailabilityDateSelectAction()
     {
@@ -43,9 +70,11 @@ class AvailabilityController extends AbstractController
     {
         $availabilityRepos = $this->getDoctrine()->getRepository(Availability::class);
         $reposPilot = $this->getDoctrine()->getRepository(Pilot::class);
+        $flightScheduleRepos = $this->getDoctrine()->getRepository(FlightSchedule::class);
 
         $pilot = $reposPilot->find($pilotId);
         $targetDate = \DateTime::createFromFormat('Y-m-d', $targetDateStr);
+        $flightSchdule = $flightScheduleRepos->getFlightScheduleForDate($targetDate);
 
 //        throw new \Exception("HERE ".$pilot->getId());
         $availability = $availabilityRepos->getAvailabilityForPilotOnDate($pilot, $targetDate);
@@ -54,7 +83,8 @@ class AvailabilityController extends AbstractController
             'availability/manage.html.twig',
             ['availability' => $availability,
                 'pilot'=> $pilot,
-                'targetDate' => $targetDate]
+                'targetDate' => $targetDate,
+                'flightSchedule' => $flightSchdule]
         );
     }
 

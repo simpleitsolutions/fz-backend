@@ -187,7 +187,7 @@ services:
         arguments:
             -
             - App\Entity\User
-            -
+            - App\Controller\UserCRUDController
         tags:
             - { name: sonata.admin, manager_type: orm, group: Admin,  label: Users }
         public: true

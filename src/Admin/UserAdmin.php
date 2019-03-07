@@ -3,14 +3,18 @@
 namespace App\Admin;
 
 
+use App\Entity\User;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\Form\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+
 
 class UserAdmin extends AbstractAdmin
 {
@@ -46,6 +50,10 @@ class UserAdmin extends AbstractAdmin
 //            ->add('id')
             ->add('username')
             ->add('email')
+            ->add('password')
+            ->add('roles', CollectionType::class, ['entry_type' => ChoiceType::class, 'entry_options' => ['label' => false, 'choices' => ['ROLE_USER'=>'ROLE_USER', 'ROLE_ADMIN'=>'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'=>'ROLE_SUPER_ADMIN']]])
+            ->add('pilot')
+//            ->add('plainTextPassword', RepeatedType::class)
             ->end()
         ;
     }
@@ -83,4 +91,17 @@ class UserAdmin extends AbstractAdmin
         ;
     }
 
+    public function configureBatchActions($actions)
+    {
+        if (isset($actions['delete'])) {
+            unset($actions['delete']);
+        }
+
+        return $actions;
+    }
+
+    public function toString($object)
+    {
+        return $object->getUsername();
+    }
 }

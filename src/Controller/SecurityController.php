@@ -92,6 +92,41 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("/user/create", name="security_user_create")
+     */
+    public function useCreateAction(UserPasswordEncoderInterface $passwordEncoder, Request $request)
+    {
+        $user = new User();
+
+        $form = $this->createForm(UserType::class, $user);
+        $form->add('save', SubmitType::class);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $passwrodPlainText = $user->getPlainTextPassword();
+            if(!empty($passwrodPlainText))
+            {
+                $password = $passwordEncoder->encodePassword($user, $passwrodPlainText);
+                $user->setPassword($password);
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $user->setUsernameCanonical($user->getUsername());
+            $user->setEmailCanonical($user->getEmail());
+            $entityManager->persist($user);
+
+            $entityManager->flush();
+
+            $this->addFlash('sonata_flash_success','User '.$user->getUsernameCanonical().' has been successfully created!');
+            return $this->redirectToRoute('user_list');
+        }
+        return $this->render('user/profile.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/user/profile/edit", name="security_user_profile_edit")
      */
     public function userProfileEditAction(UserPasswordEncoderInterface $passwordEncoder, Request $request)

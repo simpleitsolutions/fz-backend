@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 
+use App\Entity\FlightSchedule;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -80,4 +81,17 @@ class FlightScheduleAdmin extends AbstractAdmin
         ;
     }
 
+    public function configureBatchActions($actions)
+    {
+        if (isset($actions['delete'])) {
+            unset($actions['delete']);
+        }
+
+        return $actions;
+    }
+
+    public function toString($object)
+    {
+        return "[".$object->getAffectiveStartDate()->format('d.m.Y')."-".$object->getAffectiveEndDate()->format('d.m.Y')."]";
+    }
 }

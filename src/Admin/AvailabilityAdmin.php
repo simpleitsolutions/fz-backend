@@ -29,6 +29,7 @@ class AvailabilityAdmin extends AbstractAdmin
         if ($this->hasRequest())
         {
             $targetDate = $this->getRequest()->get('targetDate', null);
+//            throw new \Exception("HERE2".$instance->getUnavailableFlightDate()->format('d.m.y'));
             if ($targetDate)
             {
                 $instance->setUnavailableFlightDate(DateTime::createFromFormat('Y-m-d', $targetDate));
@@ -47,25 +48,28 @@ class AvailabilityAdmin extends AbstractAdmin
         '_sort_order' => 'DESC',
 
         // name of the ordered field (default = the model's id field, if any)
-        // 			'_sort_by' => 'updatedAt',
+        '_sort_by' => 'unavailableFlightDate',
     );
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->with('User', array('class' => 'col-md-6'));
+        $formMapper->with('Availability', array('class' => 'col-md-6'));
 
-
-
-
-        if ($this->isCurrentRoute('edit')) {
-            $formMapper->add('unavailableFlightDate', null, ['disabled'=> true]);
-            $formMapper->add('pilot', null, ['disabled'=> true]);
+        if ($this->isCurrentRoute('edit'))
+        {
+            $formMapper->add('unavailableFlightDate', null, ['label' => 'Flight Date', 'attr' => ['readonly' => true]]);
         }
         else
         {
-            $formMapper->add('unavailableFlightDate');
-            $formMapper->add('pilot');
+            $formMapper->add('unavailableFlightDate', null, ['label' => 'Flight Date']);
+//            $formMapper->add('pilot');
         }
+
+        //TODO Need to get disable/readonly the Flight and UnavailableFlightDate fields but the attributes don't work for Select2 type.
+        //So try hidden fields with the actual value and place disabled fields for visual (form)
+
+
+        $formMapper->add('pilot', null, ['attr' => ['readonly' => true, 'data-sonata-select2'=>'false']]);
         $formMapper->add('flightScheduleTimes', null, [
             'expanded' => true,
             'class' => FlightScheduleTime::class,

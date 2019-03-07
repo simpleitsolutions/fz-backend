@@ -27,8 +27,13 @@ h4 {
     background-color: #f5f5f5;
 }
 
-.aazp-custom .navbar-header {
+.aazp-custom .navbar.schedule .navbar-header {
     width: 100%;
+}
+
+.aazp-custom .navbar-actions {
+    padding: 10px;
+    float: right;
 }
 
 .aazp-custom .container-fluid .nav-bar {
@@ -94,3 +99,4 @@ h4 {
         width: 120px;
     }
 }
+
