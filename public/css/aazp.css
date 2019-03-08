@@ -82,6 +82,15 @@ h4 {
 }
 
 
+.refunded {
+    background-color: #e8daef;
+}
+
+.label-refunded {
+    background-color: #ca7ca8;
+}
+
+
 @media screen and (max-width: 992px) {
     .passengers .row {
         margin-bottom: 5%;

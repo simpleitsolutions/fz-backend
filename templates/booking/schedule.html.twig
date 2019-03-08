@@ -200,6 +200,8 @@
                     $('{{'.booking-'~booking.id}}').children().css('background-color', '#ebcccc');
                 } else if ($(this).hasClass('warning')) {
                     $('{{'.booking-'~booking.id}}').children().css('background-color', '#faf2cc');
+                } else if ($(this).hasClass('refunded')) {
+                    $('{{'.booking-'~booking.id}}').children().css('background-color', '#d2b4de');
                 } else {
                 }
             },
@@ -212,6 +214,8 @@
                     $('{{'.booking-'~booking.id}}').children().css('background-color', '#f2dede');
                 } else if ($(this).hasClass('warning')) {
                     $('{{'.booking-'~booking.id}}').children().css('background-color', '#fcf8e3');
+                } else if ($(this).hasClass('refunded')) {
+                    $('{{'.booking-'~booking.id}}').children().css('background-color', '#e8daef');
                 } else {
                 }
             });

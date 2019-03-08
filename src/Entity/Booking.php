@@ -10,14 +10,16 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="booking")
  * @Gedmo\SoftDeleteable(fieldName="deleted")
  */
-class Booking
+class Booking extends BaseEntity
 {
 	const STATUS_NEW = 1;
 	const STATUS_CONFIRMED = 2;
 	const STATUS_PAYMENT_PART = 3;
-	const STATUS_PAYMENT_FULL = 4;
+    const STATUS_PAYMENT_FULL = 4;
+    const STATUS_FULLY_REFUNDED = 5;
 
-    const STATUS_LABELS = ['', 'NEW', 'CONFIRMED', 'PAYMENT PART', 'PAYMENT FULL'];
+    const STATUS_LABELS = ['', 'NEW', 'CONFIRMED', 'PAYMENT PART', 'PAYMENT FULL', 'FULLY REFUNDED'];
+    const STATUS_SM_LABELS = ['', 'NEW', 'CONFIRMED', 'PART', 'FULL', 'REFUNDED'];
 
     public function __construct()
     {
@@ -41,30 +43,29 @@ class Booking
      private $status;
 
 	/**
-	 * @ORM\Column(type="string", length=300)
-	 * @Assert\NotBlank(message="Contact Information is required.", groups={"quick"})
-	 *
-	 */
-     private $contactinfo;
-
-	/** 
 	 * @ORM\Column(type="datetime")
 	 * @Assert\DateTime(message="Flight Date is not a valid date.", groups={"quick"})
 	 * @Assert\NotBlank(message="Flight Date is required.", groups={"quick"})
 	 * 	 */
      private $flightdate;
 
-	/**
-	 * @ORM\Column(type="string", length=600, nullable=true)
-	 */
-     private $notes;
-
     /**
      * @ORM\ManyToOne(targetEntity="Product")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
-	 * @Assert\NotNull(message="No Flight selected.")
+     * @Assert\NotNull(message="No Flight selected.")
      **/
-     private $flight;
+    private $flight;
+
+    /**
+     * @ORM\Column(type="string", length=300)
+     * @Assert\NotBlank(message="Contact Information is required.", groups={"quick"})
+     */
+    private $contactinfo;
+
+    /**
+	 * @ORM\Column(type="string", length=600, nullable=true)
+	 */
+     private $notes;
 
 	/**
      * @ORM\OneToMany(targetEntity="Passenger", mappedBy="booking", cascade={"all"})
@@ -108,104 +109,6 @@ class Booking
      **/
      private $lastUpdatedBy;
 
-	/**
-     * @var \Datetime $created
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
-     */
-     private $created;
-	
-	/**
-     * @var \Datetime $updated
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
-     private $updated;
-	
-	    /**
-     * @var \DateTime $deleted
-     *
-     * @ORM\Column(name="deleted", type="datetime", nullable=true)
-     */
-     private $deleted;
-
-	public function hasPayments()
-	{
-		foreach ($this->passengers as $passenger)
-		{
-			if ($passenger->getPurchase() != null)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public function calculateBalance()
-	{
-		$balanceTotal = 0;
-		foreach($this->passengers as $passenger)
-		{
-			$balanceTotal += $passenger->calculateOwing();
-		}
-		return $balanceTotal;
-	}
-
-	public function paidInFull()
-	{
-		foreach($this->passengers as $passenger)
-		{
-			// throw new \Exception("Error Processing Request--".$passenger->calculateOwing(), 1);
-			if ($passenger->getPurchase() == null || $passenger->calculateOwing() <> 0.0 )
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public function hasPassengerPayment()
-	{
-		foreach($this->passengers as $passenger)
-		{
-			$passengerPurchase = $passenger->getPurchase();
-			// throw new \Exception("Error Processing Request--".get_class($passengerPayments), 1);
-			if($passengerPurchase != null)
-			{
-				foreach ($passengerPurchase->getPayments() as $passengerPayment)
-				{
-					if ( sizeof($passengerPayment->getPurchases()) == 1 && !$passengerPayment->getRefunded() )
-					{
-					    return true;
-					}
-				}
-			}
-		}
-		
-		return false;
-	}
-
-	public function getSumUpPayments()
-	{
-	    $sumupPayments = new \Doctrine\Common\Collections\ArrayCollection();
-	    $uniqueTransactions = array();
-	    foreach($this->getPassengers() as $passenger)
-	    {
-	        $passengerSumupPayments = $passenger->getSumupPayments();
-	        foreach ($passengerSumupPayments as $passengerSumupPayment)
-	        {
-	            $transactionNo = $passengerSumupPayment->getTransactionNo();
-	            if(!in_array($transactionNo, $uniqueTransactions))
-	            {	                 
-	               $sumupPayments->add($passengerSumupPayment);
-	               $uniqueTransactions[] = $transactionNo;
-	            }
-	        }
-	    }
-        return $sumupPayments;
-	}
 
 	/**
      * Get id
@@ -221,7 +124,7 @@ class Booking
      * Set status
      *
      * @param integer $status
-     * @return CustomerOrder
+     * @return Booking
      */
     public function setStatus($status)
     {
@@ -238,29 +141,6 @@ class Booking
     public function getStatus()
     {
         return $this->status;
-    }
-
-    /**
-     * Set contactinfo
-     *
-     * @param string $contactinfo
-     * @return Booking
-     */
-    public function setContactinfo($contactinfo)
-    {
-        $this->contactinfo = $contactinfo;
-
-        return $this;
-    }
-
-    /**
-     * Get contactinfo
-     *
-     * @return string 
-     */
-    public function getContactinfo()
-    {
-        return $this->contactinfo;
     }
 
     /**
@@ -287,6 +167,52 @@ class Booking
     }
 
     /**
+     * Set flight
+     *
+     * @param \App\Entity\Product $flight
+     * @return Booking
+     */
+    public function setFlight(Product $flight = null)
+    {
+        $this->flight = $flight;
+
+        return $this;
+    }
+
+    /**
+     * Get flight
+     *
+     * @return \App\Entity\Product
+     */
+    public function getFlight()
+    {
+        return $this->flight;
+    }
+
+    /**
+     * Set contactinfo
+     *
+     * @param string $contactinfo
+     * @return Booking
+     */
+    public function setContactinfo($contactinfo)
+    {
+        $this->contactinfo = $contactinfo;
+
+        return $this;
+    }
+
+    /**
+     * Get contactinfo
+     *
+     * @return string
+     */
+    public function getContactinfo()
+    {
+        return $this->contactinfo;
+    }
+
+    /**
      * Set notes
      *
      * @param string $notes
@@ -309,75 +235,6 @@ class Booking
         return $this->notes;
     }
 
-    /**
-     * Set created
-     *
-     * @param \DateTime $created
-     * @return Booking
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime 
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     * @return Booking
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime 
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    /**
-     * Set deleted
-     *
-     * @param \DateTime $deleted
-     * @return Booking
-     */
-    public function setDeleted($deleted)
-    {
-        $this->deleted = $deleted;
-
-        return $this;
-    }
-
-    /**
-     * Get deleted
-     *
-     * @return \DateTime 
-     */
-    public function getDeleted()
-    {
-        return $this->deleted;
-    }
-
 
     /**
      * Add passenger
@@ -393,8 +250,6 @@ class Booking
 		}
 
     	$passenger->addBooking($this);
-
-        // $this->passengers[] = $passenger;
 
         return $this;
     }
@@ -454,52 +309,6 @@ class Booking
     }
     
     /**
-     * Set owner
-     *
-     * @param \App\Entity\BookingOwner $bookingOwner
-     * @return Booking
-     */
-    public function setOwner(BookingOwner $owner = null)
-    {
-        $this->owner = $owner;
-
-        return $this;
-    }
-
-    /**
-     * Get owner
-     *
-     * @return \App\Entity\BookingOwner 
-     */
-    public function getOwner()
-    {
-        return $this->owner;
-    }
-
-/**
-     * Set flight
-     *
-     * @param \App\Entity\Product $flight
-     * @return Booking
-     */
-    public function setFlight(Product $flight = null)
-    {
-        $this->flight = $flight;
-    
-        return $this;
-    }
-    
-    /**
-     * Get flight
-     *
-     * @return \App\Entity\Product
-     */
-    public function getFlight()
-    {
-        return $this->flight;
-    }
-    
-        /**
      * Set Flight Schedule Time
      *
      * @param \App\Entity\FlightScheduleTime $flightScheduleTime
@@ -522,7 +331,30 @@ class Booking
         return $this->flightScheduleTime;
     }
 
-/**
+    /**
+     * Set owner
+     *
+     * @param \App\Entity\BookingOwner $bookingOwner
+     * @return Booking
+     */
+    public function setOwner(BookingOwner $owner = null)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return \App\Entity\BookingOwner
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
      * Set createdBy
      *
      * @param \App\Entity\User $user
@@ -568,8 +400,106 @@ class Booking
         return $this->lastUpdatedBy;
     }
 
+
+    public function hasPayments()
+    {
+        foreach ($this->passengers as $passenger)
+        {
+            if ($passenger->getPurchase() != null)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasPassengerPayment()
+    {
+        foreach($this->passengers as $passenger)
+        {
+            $passengerPurchase = $passenger->getPurchase();
+            // throw new \Exception("Error Processing Request--".get_class($passengerPayments), 1);
+            if($passengerPurchase != null)
+            {
+                foreach ($passengerPurchase->getPayments() as $passengerPayment)
+                {
+                    if ( sizeof($passengerPayment->getPurchases()) == 1 && !$passengerPayment->getRefunded() )
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public function calculateBalance()
+    {
+        $balanceTotal = 0;
+        foreach($this->passengers as $passenger)
+        {
+            $balanceTotal += $passenger->calculateOwing();
+        }
+        return $balanceTotal;
+    }
+
+    public function calculatePurchaseAmount()
+    {
+        $purchaseAmount = 0;
+        foreach($this->passengers as $passenger)
+        {
+            $purchaseAmount += $passenger->calculatePurchaseTotal();
+        }
+        return $purchaseAmount;
+    }
+
+    public function isFullyRefunded()
+    {
+        $fullyRefunded = false;
+        if($this->calculateBalance() == $this->calculatePurchaseAmount())
+        {
+            $fullyRefunded = true;
+        }
+        return $fullyRefunded;
+    }
+
+    public function paidInFull()
+    {
+        foreach($this->passengers as $passenger)
+        {
+            // throw new \Exception("Error Processing Request--".$passenger->calculateOwing(), 1);
+            if ($passenger->getPurchase() == null || $passenger->calculateOwing() <> 0.0 )
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function getSumUpPayments()
+    {
+        $sumupPayments = new \Doctrine\Common\Collections\ArrayCollection();
+        $uniqueTransactions = array();
+        foreach($this->getPassengers() as $passenger)
+        {
+            $passengerSumupPayments = $passenger->getSumupPayments();
+            foreach ($passengerSumupPayments as $passengerSumupPayment)
+            {
+                $transactionNo = $passengerSumupPayment->getTransactionNo();
+                if(!in_array($transactionNo, $uniqueTransactions))
+                {
+                    $sumupPayments->add($passengerSumupPayment);
+                    $uniqueTransactions[] = $transactionNo;
+                }
+            }
+        }
+        return $sumupPayments;
+    }
+
+
     public function __toString()
     {
         return $this->id."";
     }
+
 }

@@ -1,9 +1,11 @@
 {% set deleteable = false %}
-{% if (booking.status == constant('App\\Entity\\Booking::STATUS_PAYMENT_PART') or (booking.calculateBalance > 0 and booking.hasPayments)) %}
+{#% if (booking.status == constant('App\\Entity\\Booking::STATUS_PAYMENT_PART') or (booking.calculateBalance > 0 and booking.hasPayments)) %#}
+{% if (booking.status == constant('App\\Entity\\Booking::STATUS_PAYMENT_PART')) %}
 	{% set cssClass = 'warning' %}
 	{% set status = 'OPEN ' ~  booking.calculateBalance|number_format(2) %}
 	{% set status_sm = booking.calculateBalance|number_format(2) %}
-{% elseif (booking.status == constant('App\\Entity\\Booking::STATUS_PAYMENT_FULL') or booking.paidInFull) %}
+{#% elseif (booking.status == constant('App\\Entity\\Booking::STATUS_PAYMENT_FULL') or booking.paidInFull) %#}
+{% elseif (booking.status == constant('App\\Entity\\Booking::STATUS_PAYMENT_FULL')) %}
 	{% set cssClass = 'success' %}
 	{% set status = 'PAID IN FULL' %}
 	{% set status_sm = 'PAID' %}
@@ -16,6 +18,11 @@
 	{% set cssClass = 'info' %}
 	{% set status = 'CONFIRMED' %}
 	{% set status_sm = 'CONFIRM' %}
+{% elseif (booking.status == constant('App\\Entity\\Booking::STATUS_FULLY_REFUNDED')) %}
+	{% set cssClass = 'refunded' %}
+	{% set status = constant('App\\Entity\\Booking::STATUS_LABELS')[constant('App\\Entity\\Booking::STATUS_FULLY_REFUNDED')] %}
+	{% set status_sm = constant('App\\Entity\\Booking::STATUS_SM_LABELS')[constant('App\\Entity\\Booking::STATUS_FULLY_REFUNDED')] %}
+	{#% set status_sm = 'CONFIRM' %#}
 {% else %}
 	{% set cssClass = 'danger' %}
 	{% set status = 'NO DEPOSIT' %}

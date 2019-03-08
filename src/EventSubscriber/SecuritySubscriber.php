@@ -67,9 +67,8 @@ class SecuritySubscriber implements EventSubscriberInterface
 
         $now = new \DateTime();
         $user->setLastLogin($now);
-        $this->logger->info("USER LOGIN: ".$user->getUsername() , ["security"]);
+        $this->logger->info("USER LOGIN: ", [$user->getUsername(), $now->format('d.m.Y H:i:s')]);
 
-//        $userRepository = $this->entityManager->getRepository(User::class);
         $this->entityManager->flush();
     }
 }

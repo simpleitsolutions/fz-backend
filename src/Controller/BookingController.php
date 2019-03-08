@@ -267,7 +267,7 @@ class BookingController extends AbstractController
 		$booking->setCreatedBy($this->getUser());
 		$booking->setLastUpdatedBy($this->getUser());
 		$date = new \DateTime();
-		$dateStr = $request->query->get('date', $date->format('Y-m-d'));
+		$dateStr = $request->query->get('date', $date->format('Y-m-d 00:00:00'));
 		$date = new \DateTime($dateStr);
 
 		$flightScheduleTimeId = $request->query->get('flightScheduleTimeId', null);
@@ -333,6 +333,8 @@ class BookingController extends AbstractController
 				$booking->setStatus(Booking::STATUS_CONFIRMED);
 			}
 
+            $booking->setFlightdate($booking->getFlightdate()->setTime(0,0,0));
+//            throw new \Exception("FLIGHT DATE2: ".$booking->getFlightdate()->format('Y-m-d H:i:s'));
 		    $em->flush();
 
 			$this->get('session')->getFlashBag()->add('success', 'New Booking has been successfully created!');
@@ -1484,26 +1486,32 @@ class BookingController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $paymentsRepos = $em->getRepository(Payment::class);
-        $paymentsRefund = $em->getRepository(Payment::class)->findByTransactionNo($transactionNo);
-        if (!$paymentsRefund) {
+        $paymentsToRefund = $em->getRepository(Payment::class)->findByTransactionNo($transactionNo);
+        if (!$paymentsToRefund)
+        {
             throw $this->createNotFoundException('Unable to find Payment entities.');
         }
 
         $paymentAmount = 0.0;
-        foreach ($paymentsRefund as $paymentRefund)
+        foreach ($paymentsToRefund as $paymentToRefund)
         {
-            $paymentRefund->setRefunded(true);
-            $paymentAmount = $paymentRefund->getAmount();
+            $paymentToRefund->setRefunded(true);
+            $paymentAmount = $paymentToRefund->getAmount();
         }
-        $em->flush();
-
-        $this->addFlash('sonata_flash_success','Payment '.$paymentAmount.' CHF has been refunded!');
 
         $booking = $em->getRepository(Booking::class)->find($id);
         if (!$booking)
         {
             throw $this->createNotFoundException('Unable to find Booking entity.');
         }
+
+        if($booking->isFullyRefunded())
+        {
+            $booking->setStatus(Booking::STATUS_FULLY_REFUNDED);
+        }
+        $em->flush();
+
+        $this->addFlash('sonata_flash_success','Payment '.$paymentAmount.' CHF has been refunded!');
 
         $deleteForm = $this->createFormBuilder($booking)
             ->setAction($this->generateUrl('booking_delete', array ('id' => $id)))
