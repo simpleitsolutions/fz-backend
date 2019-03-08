@@ -8,7 +8,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PaymentRepository")
  * @ORM\Table(name="payment")
- * @Gedmo\SoftDeleteable(fieldName="deleted")
  */
 class Payment extends BaseEntity
 {

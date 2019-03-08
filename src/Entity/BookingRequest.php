@@ -18,7 +18,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *     collectionOperations={"post"}
  * )
  */
-class BookingRequest
+class BookingRequest extends BaseEntityLegacy
 {
     const STATUS_UNCONFIRMED = 0;
     const STATUS_CONFIRMED = 1;
@@ -95,30 +95,6 @@ class BookingRequest
      * @ORM\Column(type="integer", name="confirmed")
      */
     private $confirmed;
-
-    /**
-     * @var \Datetime $created
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime", name="created_at")
-     */
-    private $created;
-
-    /**
-     * @var \Datetime $updated
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime", name="updated_at"))
-     */
-    private $updated;
-
-    /**
-     * @var \DateTime $deleted
-     *
-     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
-     */
-    private $deleted;
-
 
     public function getId(): ?int
     {
@@ -288,74 +264,5 @@ class BookingRequest
     {
         $this->confirmed = $confirmed;
         return $this;
-    }
-
-    /**
-     * Set created
-     *
-     * @param \DateTime $created
-     * @return BookingRequest
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     * @return BookingRequest
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    /**
-     * Set deleted
-     *
-     * @param \DateTime $deleted
-     * @return BookingRequest
-     */
-    public function setDeleted($deleted)
-    {
-        $this->deleted = $deleted;
-
-        return $this;
-    }
-
-    /**
-     * Get deleted
-     *
-     * @return \DateTime
-     */
-    public function getDeleted()
-    {
-        return $this->deleted;
     }
 }
