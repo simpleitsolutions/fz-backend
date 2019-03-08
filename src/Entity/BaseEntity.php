@@ -4,7 +4,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/** @ORM\MappedSuperclass */
+/** @ORM\MappedSuperclass
+ *  @Gedmo\SoftDeleteable(fieldName="deleted")
+ */
 class BaseEntity
 {
     /**

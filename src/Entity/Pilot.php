@@ -3,17 +3,12 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Console\Logger\ConsoleLogger;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PilotRepository")
  * @ORM\Table(name="pilot")
- * @Gedmo\SoftDeleteable(fieldName="deleted")
  */
-
-
-class Pilot
+class Pilot extends BaseEntity
 {
     public function __construct() {
         $this->passengers = new ArrayCollection();
@@ -65,31 +60,6 @@ class Pilot
      * @ORM\Column(name="sort_order", type="integer")
      */
     protected $sortOrder;
-	  
-	/**
-     * @var \Datetime $created
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
-     */
-    private $created;
-	
-	/**
-     * @var \Datetime $updated
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
-    private $updated;
-	
-	/**
-     * @var \DateTime $deleted
-     *
-     * @ORM\Column(name="deleted", type="datetime", nullable=true)
-     */
-    private $deleted;
-
-
 
     /**
      * Get id
@@ -185,75 +155,6 @@ class Pilot
     public function getSortOrder()
     {
         return $this->sortOrder;
-    }
-
-    /**
-     * Set created
-     *
-     * @param \DateTime $created
-     * @return Pilot
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime 
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     * @return Pilot
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime 
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    /**
-     * Set deleted
-     *
-     * @param \DateTime $deleted
-     * @return Pilot
-     */
-    public function setDeleted($deleted)
-    {
-        $this->deleted = $deleted;
-
-        return $this;
-    }
-
-    /**
-     * Get deleted
-     *
-     * @return \DateTime 
-     */
-    public function getDeleted()
-    {
-        return $this->deleted;
     }
 
     /**

@@ -82,6 +82,16 @@ services:
             - { name: sonata.admin, manager_type: orm, group: Admin, label: Bookings, pager_type: 'simple' }
         public: true
 
+    admin.booking.owner:
+        class: App\Admin\BookingOwnerAdmin
+        arguments:
+            -
+            - App\Entity\BookingOwner
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Booking Owner }
+        public: true
+
     admin.product:
         class: App\Admin\ProductAdmin
         arguments:
@@ -120,6 +130,16 @@ services:
             -
         tags:
             - { name: sonata.admin, manager_type: orm, group: Admin,  label: Payments, pager_type: 'simple'  }
+        public: true
+
+    admin.payment.type:
+        class: App\Admin\PaymentTypeAdmin
+        arguments:
+            -
+            - App\Entity\PaymentType
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Admin,  label: Payment Type  }
         public: true
 
     admin.meeting.location:

@@ -3,15 +3,13 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BookingOwnerRepository")
  * @ORM\Table(name="booking_owner")
- * @Gedmo\SoftDeleteable(fieldName="deleted")
  */
 
-class BookingOwner
+class BookingOwner extends BaseEntity
 {
 	/**
      * @ORM\OneToMany(targetEntity="Booking", mappedBy="owner")
@@ -52,30 +50,6 @@ class BookingOwner
      * @ORM\Column(name="sort_order", type="integer")
      */
     protected $sortOrder;
-
-	/**
-     * @var \Datetime $created
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
-     */
-    private $created;
-	
-	/**
-     * @var \Datetime $updated
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
-    private $updated;
-	
-	    /**
-     * @var \DateTime $deleted
-     *
-     * @ORM\Column(name="deleted", type="datetime", nullable=true)
-     */
-    private $deleted;
-
 
     /**
      * Get id
@@ -167,37 +141,6 @@ class BookingOwner
     }
 
     /**
-     * Get deleted
-     *
-     * @return \DateTime 
-     */
-    public function getDeleted()
-    {
-        return $this->deleted;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime 
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime 
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-
-    /**
      * Set shortName
      *
      * @param string $shortName
@@ -220,47 +163,9 @@ class BookingOwner
         return $this->shortName;
     }
 
-    /**
-     * Set created
-     *
-     * @param \DateTime $created
-     * @return MeetingLocation
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     * @return MeetingLocation
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Set deleted
-     *
-     * @param \DateTime $deleted
-     * @return MeetingLocation
-     */
-    public function setDeleted($deleted)
-    {
-        $this->deleted = $deleted;
-
-        return $this;
-    }
 
     public function __toString()
     {
-        return $this->getName();
+        return $this->getName()."";
     }
 }

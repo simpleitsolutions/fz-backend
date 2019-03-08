@@ -2,15 +2,13 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\WaitingListItemRepository")
  * @ORM\Table(name="waiting_list_item")
- * @Gedmo\SoftDeleteable(fieldName="deleted")
  */
-class WaitingListItem
+class WaitingListItem extends BaseEntity
 {
     public function __construct() {
     }
@@ -63,29 +61,6 @@ class WaitingListItem
      * @ORM\JoinColumn(name="last_updated_by", referencedColumnName="id")
      **/
 	protected $lastUpdatedBy;
-
-	/**
-     * @var \Datetime $created
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
-     */
-    private $created;
-	
-	/**
-     * @var \Datetime $updated
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
-    private $updated;
-	
-	    /**
-     * @var \DateTime $deleted
-     *
-     * @ORM\Column(name="deleted", type="datetime", nullable=true)
-     */
-    private $deleted;
 
 
     /**
@@ -257,74 +232,5 @@ class WaitingListItem
     public function getLastUpdatedBy()
     {
         return $this->lastUpdatedBy;
-    }
-
-    /**
-     * Set created
-     *
-     * @param \DateTime $created
-     * @return WaitingListItem
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime 
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     * @return WaitingListItem
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime 
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    /**
-     * Set deleted
-     *
-     * @param \DateTime $deleted
-     * @return WaitingListItem
-     */
-    public function setDeleted($deleted)
-    {
-        $this->deleted = $deleted;
-
-        return $this;
-    }
-
-    /**
-     * Get deleted
-     *
-     * @return \DateTime 
-     */
-    public function getDeleted()
-    {
-        return $this->deleted;
     }
 }

@@ -2,14 +2,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
-
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoucherRepository")
  * @ORM\Table(name="voucher")
- * @Gedmo\SoftDeleteable(fieldName="deleted")
  */
 class Voucher extends BaseEntity
 {
@@ -71,7 +68,7 @@ class Voucher extends BaseEntity
 	/**
 	 * @ORM\Column(type="string", length=300, nullable=true)
 	 */
-	protected $notes;
+	 protected $notes;
 
 	// protected $payment;
 	

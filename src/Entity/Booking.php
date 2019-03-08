@@ -2,13 +2,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BookingRepository")
  * @ORM\Table(name="booking")
- * @Gedmo\SoftDeleteable(fieldName="deleted")
  */
 class Booking extends BaseEntity
 {

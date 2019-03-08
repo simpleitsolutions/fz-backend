@@ -86,6 +86,7 @@ sonata_admin:
                     - admin.product.category
                     - admin.meeting.location
                     - admin.booking.request.group.condition
+                    - admin.booking.owner
                     - admin.passenger
 
             Purchases & Payments:
@@ -94,6 +95,7 @@ sonata_admin:
                 items:
                     - admin.payment
                     - admin.purchase
+                    - admin.payment.type
 
     global_search:
         empty_boxes: fade
