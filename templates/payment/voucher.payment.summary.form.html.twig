@@ -1,0 +1,141 @@
+	<div class="box-header hidden-print">PAYMENT SUMMARY - #{{ voucher.id }}</div>
+    <div class="box-body">
+		<div class="box box-default">
+			<div class="box-header">
+				<h5>{{voucher.name}}</h5>
+			</div>
+			<div class="box-body">
+				{{ form_start(form, {'attr': {'class':'payment form-inline'} }) }}
+					<div class="header nopadding col-md-12 col-sm-12 col-xs-12">
+						<div class="col-md-1 hidden-sm hidden-xs">ITEM</div>
+						<div class="text-left col-md-6 col-sm-6 col-xs-6">DESCRIPTION</div>
+						<div class="text-right visible-xs col-xs-2">ACTUAL</div>
+						<div class="hidden-xs text-right col-md-2 col-sm-2">ACTUAL PRICE</div>
+						<div class="text-right col-md-2 col-sm-3 col-xs-3">PRICE</div>
+						<div class="text-center col-md-1 col-sm-1 col-xs-1">&nbsp;</div>
+					</div>
+
+				<div style="min-height:170px;" class=" purchaseItems" data-prototype="{% filter escape %}{% include 'payment/purchaseItem.new.html.twig' with {'form': form.purchaseItems.vars.prototype} %}{% endfilter %}">
+				{% for key,purchaseItem in form.purchaseItems %}
+					{% if loop.index > 1 %}   {# THINK ABOUT PUTTING A CONDITION-- IF PRODUCT IS A FLIGHT THEN DO NOT ALLOW THE DELETE ITEM BUTTON #}
+					<div class="row1 nopadding purchaseItem col-md-12">
+					{% else %}
+					<div class="row1 nopadding col-md-12">
+					{% endif %}
+						<div class="col-md-1 hidden-sm hidden-xs">#{{ loop.index }}</div>
+						<div class="text-left col-md-5 col-sm-6 col-xs-6">{{ form_row(purchaseItem.product, {'label':false, 'attr':{'onchange':'updatePurchase(this)'}}) }}</div>
+						<div id="product_price_{{ loop.index-1 }}" class="text-right col-md-3 col-sm-2 col-xs-2" style="margin:7px 0px;">{{ voucher.purchase.purchaseItems[key].product.price }}</div>
+						<div class="text-left col-md-2 col-sm-3 col-xs-3">{{ form_row(purchaseItem.amount, {'label':false, 'attr': {'class':'text-right calc-item form-control'}}) }}</div>
+					</div>
+					{% endfor %}
+				</div>
+				<div class="lined nopadding col-xs-12 col-sm-12 col-md-12">
+					<div class="field-label text-right col-xs-9 col-sm-9 col-md-9">AMOUNT OWING</div>
+					<div class="text-right col-xs-2 col-sm-2 col-md-2" style="padding-right:27px;"><strong><span id="form_balanceAmount">BALANCE{#{ voucher.calculateOwing|number_format(2) }#}</span></strong></div>
+					<div class="col-md-1">&nbsp;</div>
+				</div>
+
+				<div class="row purchase-payment-type-section">
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						{% for paymentType in form.paymentType %}
+							{% set index = paymentType.vars.value %}{# get array index #}
+							{% set entity = form.paymentType.vars.choices[index].data %}{# get entity object #}
+							<div class="row col-xs-2 col-sm-1 col-md-1">
+								<div class=" col-xs-12 col-sm-12 col-md-12" style="min-height:54px;">
+									{% if entity.iconPath %}
+										<img alt="{{ entity.name }}" title="{{ entity.name }}" src="{{ entity.iconPath }}" />
+									{% else %}
+										<span style="min-height:54px;">{{ entity.name }}</span>
+									{% endif %}
+								</div>
+								<div class="col-sm-12 col-md-12">{{ form_widget(paymentType) }}</div>{# render checkbox #}
+							</div>
+						{% endfor %}
+						{#{ form_widget(form.paymentType, {'attr' : {'class' : 'paymentType'}}) }#}
+					</div>
+				</div>
+				<div class="row1 box-body1 purchase-payment-section">
+					<div class="nopadding col-xs-12 col-md-12 col-sm-12">
+						<div class="text-center col-xs-7 col-sm-7 col-md-6">NOTES</div>
+						<div class="text-center col-xs-3 col-sm-3 col-md-3">LAST 4 DIGITS</div>
+						<div class="text-center visible-xs visible-sm col-xs-2 col-sm-2">PAID</div>
+						<div class="text-center hidden-xs hidden-sm col-md-2">AMOUNT PAID</div>
+						<div class="text-center visible-md visible-lg col-md-1" >&nbsp;</div>
+					</div>
+					<div class="nopadding col-xs-12 col-sm-12 col-md-12">
+						<div class="text-center col-xs-7 col-sm-7 col-md-6">{{ form_row(form.description, {'label':false, 'attr': {'class':'notes-field form-control full-width'}}) }}</div>
+						<div class="text-center col-xs-3 col-sm-3 col-md-3">{{ form_row(form.sumupRef, {'label':false, 'attr': {'class':'text-right sumup-field form-control'}}) }}</div>
+						<div class="text-center col-xs-2 col-sm-2 col-md-2" >{{ form_row(form.paymentAmount, {'label':false, 'attr': {'class':'text-right payment-amount-field form-control'}}) }}</div>
+						<div class="text-center visible-md visible-lg col-md-1" >&nbsp;</div>
+					</div>
+				</div>
+				<div class="row1 buttons">
+					<div class="nopadding col-md-11">
+						<div class="text-right col-md-12">
+							{{form_widget(form.pay)}}
+							{{form_widget(form.cancel)}}
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12">
+					{% if payments|length > 0 %}
+
+						<div class="row">
+							<div class="header nopadding col-sm-12 col-md-12">
+								<div class="col-sm-12 col-md-12">PAYMENT SUMMARY</div>
+							</div>
+							<div class="header nopadding col-sm-12 col-md-12 hidden-print">
+								<div class="col-xs-2 col-sm-2 col-md-2">DATE</div>
+								<div class="hidden-xs hidden-sm col-md-6">NOTES</div>
+								<div class="hidden-xs hidden-sm text-center col-md-2">TYPE</div>
+								<div class="text-right col-xs-2 col-sm-2 col-md-1">AMOUNT</div>
+								<div class="text-right hidden-xs hidden-sm col-md-1">REFUNDED</div>
+								<div class="text-right visible-xs visible-sm">&nbsp;</div>
+							</div>
+
+							{% set currentTransactionId = '' %}
+							{% for paymentView in paymentViewList %}
+								{#% if not payment.getRefunded %#}
+
+								{% if paymentView.refunded %}
+									{% set refundedCss = 'payment-refunded' %}
+									{% set calcItemCss = '' %}
+								{% else %}
+									{% set refundedCss = '' %}
+									{% set calcItemCss = 'calc-item-payment' %}
+								{% endif %}
+
+								{% if paymentView.paymentAmount != 0.0 %}
+									<div class="line nopadding col-xs-12 col-sm-12 col-md-12 {{ (paymentView.paymentAmount==0 or paymentView.refunded)?'hidden-print' }}">
+										<div class="col-xs-2 col-sm-2 col-md-2 hidden-print {{refundedCss}}">{{ paymentView.transactionNo==currentTransactionId?'':paymentView.paymentDateTime|date("d.m.y H:i") }}</div>
+										<div class="col-xs-3 col-sm-3 visible-print {{refundedCss}}">{{ paymentView.transactionNo==currentTransactionId?'':paymentView.paymentDateTime|date("d.m.y H:i") }}</div>
+										<div class="hidden-xs hidden-sm col-md-6 {{refundedCss}}">{{ paymentView.notes }}</div>
+										<div class="hidden-xs hidden-sm text-center col-md-2 hidden-print {{refundedCss}}">{{ paymentView.paymentType.shortName }}{{ paymentView.sumUpRef?' - '~paymentView.sumUpRef:'' }}</div>
+										<div class="text-center col-xs-2 visible-print {{refundedCss}}">{{ paymentView.paymentType.printName }}{{ paymentView.sumUpRef?' - '~paymentView.sumUpRef:'' }}</div>
+										<div class="text-right col-xs-2 col-sm-2 col-md-1 {{refundedCss}} {{ calcItemCss }}" style="text-align:right;" payment-total="{{ paymentView.paymentAmount }}"> {{ paymentView.paymentAmount }}</div>
+										<div class="text-center col-xs-2 col-sm-2 col-md-1 hidden-print">
+											{% if paymentView.transactionNo!=currentTransactionId %}
+												{% if(paymentView.refunded) %}
+
+													<a href="#" data-toggle="tooltip" title="{{ paymentView.refundedDate|date("d.m.y H:i") }}">DATE</a>
+
+												{% else %}
+													<button href="#" data-href="{#{ path('booking_custom_payment_refund', {'id': booking.id, 'transactionNo': paymentView.transactionNo?paymentView.transactionNo}) }#}" class="btn btn-primary btn-xs hidden-print" data-toggle="modal" data-target="#modalWarning" data-modal-title="Are you sure you want to refund payment {{ paymentView.paymentAmount }}CHF?">
+														REFUND
+													</button>
+												{% endif %}
+											{% endif %}
+										</div>
+									</div>
+								{% endif %}
+								{% set currentTransactionId = paymentView.transactionNo %}
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
+
+			{{ form_end(form) }}
+			</div>
+		</div>
+		</div>
+	</div>

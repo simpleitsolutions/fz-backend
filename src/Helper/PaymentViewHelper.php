@@ -1,6 +1,7 @@
 <?php
 namespace App\Helper;
 
+use App\Helper\PaymentViewHelper\BookingPaymentView;
 use App\Helper\PaymentViewHelper\PaymentView;
 
 class PaymentViewHelper
@@ -12,7 +13,7 @@ class PaymentViewHelper
         $this->paymentViewList = array();
     }
 
-    public function processPayments($payments)
+    public function processBookingPayments($payments)
     {
         foreach ($payments as $payment)
         {
@@ -22,7 +23,7 @@ class PaymentViewHelper
             $booking = $passenger->getBooking();
             if(!array_key_exists ( $transactionNo, $this->paymentViewList ))
             {
-                $paymentView = new PaymentView();
+                $paymentView = new BookingPaymentView();
                 $paymentView->setPaymentDateTime($payment->getCreated());
                 $paymentView->setTransactionNo($transactionNo);
                 $paymentView->setPaymentAmount($payment->getAmount());
@@ -65,7 +66,7 @@ class PaymentViewHelper
             $booking = $passenger->getBooking();
             if(!array_key_exists ( $transactionNo, $this->paymentViewList ))
             {
-                $paymentView = new PaymentView();
+                $paymentView = new BookingPaymentView();
                 $paymentView->setPaymentDateTime($payment->getCreated());
                 $paymentView->setTransactionNo($transactionNo);
                 if($payment->getSubAmount() <> 0.0) //Sub Payment value is set to 0.0 if the Payment applies to only one passenger.
@@ -101,5 +102,27 @@ class PaymentViewHelper
         }
         return $this->paymentViewList;
     }
-    
+
+    public function processVoucherPayments($payments)
+    {
+        foreach ($payments as $payment)
+        {
+            $transactionNo = $payment->getTransactionNo();
+            if(!array_key_exists ( $transactionNo, $this->paymentViewList ))
+            {
+                $paymentView = new PaymentView();
+                $paymentView->setPaymentDateTime($payment->getCreated());
+                $paymentView->setTransactionNo($transactionNo);
+                $paymentView->setPaymentAmount($payment->getAmount());
+                $paymentView->setNotes($payment->getDescription());
+                $paymentView->setSumUpRef($payment->getSumupRef());
+                $paymentView->setRefunded($payment->getRefunded());
+                $paymentView->setRefundedDate($payment->getUpdated());
+                $paymentView->setPaymentType($payment->getPaymentType());
+
+                $this->paymentViewList[$transactionNo] = $paymentView;
+            }
+        }
+        return $this->paymentViewList;
+    }
 }

@@ -5,14 +5,13 @@
 	<div class="sticky-wrapper">
 		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
-				<div class="navbar-header">
+				<div class="navbar-header col-xs-12 col-sm-12 col-md-12">
 					<a class="navbar-brand" href="#">Voucher</a>
-
-					<div class="nav-bar btn-xs col-xs-1 col-sm-1 col-md-3 pull-right">
-						<ul class="pagination">
-							<li><a href="javascript:print();"><i class="fa fa-print"></i> Print</a></li>
-						</ul>
-					</div>
+					<ul class="navbar-actions pagination">
+						<li><a class="btn btn-xs" href="{{ path('voucher_custom_payment', { 'id': voucher.id } ) }}"><i class="fa fa-money"></i> Payment</a></li>
+						<li><a class="btn btn-xs" href="javascript:print();"><i class="fa fa-print"></i> Print</a></li>
+						<li><a class="btn btn-xs" href="{{path('voucher_list') }}"><i class="fa fa-remove"></i> Close</a></li>
+					</ul>
 				</div>
 			</div>
 		</nav>

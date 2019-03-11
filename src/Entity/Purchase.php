@@ -8,7 +8,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PurchaseRepository")
  * @ORM\Table(name="purchase")
- * @Gedmo\SoftDeleteable(fieldName="deleted")
  */
 class Purchase extends BaseEntity
 {
@@ -50,11 +49,6 @@ class Purchase extends BaseEntity
      * @ORM\OneToOne(targetEntity="Passenger", mappedBy="purchase")
      **/
 	protected $passenger;
-
-    /**
-     * @ORM\OneToOne(targetEntity="Voucher", mappedBy="purchase")
-     **/
-	protected $voucher;
 
 	protected $paymentAmount;
 

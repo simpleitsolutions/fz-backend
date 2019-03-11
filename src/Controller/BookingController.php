@@ -228,7 +228,7 @@ class BookingController extends AbstractController
 
 		$payments = $paymentsRepos->getPaymentsForBooking($booking);
 		$paymentViewHelper = new PaymentViewHelper();
-		$paymentViewList = $paymentViewHelper->processPayments($payments);
+		$paymentViewList = $paymentViewHelper->processBookingPayments($payments);
 
 // 		$payments = new ArrayCollection();
 // 		foreach($booking->getPassengers() as $passenger)
@@ -621,7 +621,7 @@ class BookingController extends AbstractController
         //LOAD PAYMENT LIST
         $payments = $paymentsRepos->getPaymentsForBooking($booking);
         $paymentViewHelper = new PaymentViewHelper();
-        $paymentViewList = $paymentViewHelper->processPayments($payments);
+        $paymentViewList = $paymentViewHelper->processBookingPayments($payments);
 
         $form = $this->createFormBuilder($booking)
 //            ->add('passengers', CollectionType::class, array('type' => new BPPassengerType(), 'allow_add' => false, 'allow_delete' => false, 'by_reference' => false))
@@ -1520,7 +1520,7 @@ class BookingController extends AbstractController
 
         $payments = $paymentsRepos->getPaymentsForBooking($booking);
         $paymentViewHelper = new PaymentViewHelper();
-        $paymentViewList = $paymentViewHelper->processPayments($payments);
+        $paymentViewList = $paymentViewHelper->processBookingPayments($payments);
 
         return $this->render('booking/show.html.twig', array(
             'entity'      => $booking,

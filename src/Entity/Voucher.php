@@ -13,6 +13,14 @@ class Voucher extends BaseEntity
     const ENGLISH = 0;
     const GERMAN = 1;
 
+    const STATUS_NEW = 1;
+    const STATUS_PAYMENT_PART = 2;
+    const STATUS_PAYMENT_FULL = 3;
+    const STATUS_FULLY_REFUNDED = 4;
+
+    const STATUS_LABELS = ['', 'NEW', 'PAYMENT PART', 'PAYMENT FULL', 'FULLY REFUNDED'];
+    const STATUS_SM_LABELS = ['', 'NEW', 'PART', 'FULL', 'REFUNDED'];
+
     public function __construct() {
     }
 
@@ -22,6 +30,13 @@ class Voucher extends BaseEntity
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
 	protected $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer", nullable=false)
+     */
+    private $status;
 
 	/**
 	 * @ORM\Column(type="string", length=80)
@@ -60,12 +75,12 @@ class Voucher extends BaseEntity
 	protected $message;
 
     /**
-     * @ORM\OneToOne(targetEntity="Purchase",inversedBy="voucher", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="Purchase", cascade={"all"})
      * @ORM\JoinColumn(name="purchase_id", referencedColumnName="id")
      **/
 	 protected $purchase;
 
-	/**
+    /**
 	 * @ORM\Column(type="string", length=300, nullable=true)
 	 */
 	 protected $notes;
@@ -82,6 +97,29 @@ class Voucher extends BaseEntity
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return Voucher
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
@@ -269,6 +307,28 @@ class Voucher extends BaseEntity
     public function getPurchase()
     {
         return $this->purchase;
+    }
+
+    public function calculateOwing()
+    {
+        if($this->purchase != null)
+        {
+            return $this->purchase->calculateOwing();
+        }
+        else
+        {
+            return $this->flight->getPrice();
+        }
+    }
+
+    public function paidInFull()
+    {
+        $paidInFull = false;
+        if($this->calculateOwing() == 0)
+        {
+            $paidInFull = true;
+        }
+        return $paidInFull;
     }
 
     public function __toString()

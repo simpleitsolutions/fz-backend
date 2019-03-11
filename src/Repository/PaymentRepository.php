@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr;
+use App\Entity\Voucher;
 
 /**
  * PaymentRepository
@@ -31,18 +33,33 @@ class PaymentRepository extends EntityRepository
     public function getPaymentsForBooking($booking)
     {
         return $this->createQueryBuilder('pay')
-        ->leftJoin('pay.purchases', 'pur')
-        ->leftJoin('pur.passenger', 'pass')
-        ->leftJoin('pass.booking', 'b')
-        ->where('b.id = :booking')
-        ->setParameter('booking', $booking)
-        ->addOrderBy('pay.created', 'ASC')
-        ->addOrderBy('pay.id', 'ASC')
-        ->getQuery()
-        ->execute();
-    
+            ->leftJoin('pay.purchases', 'pur')
+            ->leftJoin('pur.passenger', 'pass')
+            ->leftJoin('pass.booking', 'b')
+            ->where('b.id = :booking')
+            ->setParameter('booking', $booking)
+            ->addOrderBy('pay.created', 'ASC')
+            ->addOrderBy('pay.id', 'ASC')
+            ->getQuery()
+            ->execute();
+
     }
-    
+
+    public function getPaymentsForVoucher($voucher)
+    {
+        return $this->createQueryBuilder('pay')
+            ->leftJoin('pay.purchases', 'pur')
+            ->leftJoin(Voucher::class, 'v', Expr\Join::WITH, 'pur.id = :purchase')
+            ->where('v.id = :voucher')
+            ->setParameter('voucher', $voucher)
+            ->setParameter('purchase', $voucher->getPurchase())
+            ->addOrderBy('pay.created', 'ASC')
+            ->addOrderBy('pay.id', 'ASC')
+            ->getQuery()
+            ->execute();
+
+    }
+
     public function getPaymentsForPassenger($passenger)
     {
         return $this->createQueryBuilder('pay')

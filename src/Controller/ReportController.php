@@ -158,7 +158,7 @@ class ReportController extends AbstractController
             $endMonth->modify('+ 1 months');
             $payments = $reposPayment->getSumUpPaymentsForDateRange($paymentTypes, $startMonth, $endMonth);
             $paymentViewHelper = new PaymentViewHelper();
-            $paymentViewList = $paymentViewHelper->processPayments($payments);
+            $paymentViewList = $paymentViewHelper->processBookingPayments($payments);
         }
 
         return $this->render('report/payment.type.html.twig', array(

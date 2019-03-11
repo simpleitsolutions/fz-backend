@@ -1,8 +1,17 @@
 <?php
 namespace App\Controller;
- 
+
 use App\Entity\Voucher;
+use App\Entity\Payment;
+use App\Entity\Product;
+use App\Entity\Purchase;
+use App\Entity\ProductCategory;
+use App\Form\PurchaseType;
+use App\Entity\PurchaseItem;
+use App\Helper\PaymentViewHelper;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -103,46 +112,46 @@ class VoucherController extends AbstractController
 //		));
 //	}
 
-    /**
-     * @Route("/redeem/{id}", name="voucher_custom_redeem")
-     */
-    public function redeemAction($id)
-	{
-        $request = Request::createFromGlobals();
-//		$request = $this->get('request');
-
-        $em = $this->getDoctrine()->getManager();
-        $voucher = $em->getRepository(Voucher::class)->find($id);
-
-        if (!$voucher)
-        {
-            throw $this->createNotFoundException('Unable to find Voucher entity.');
-        }
-
-		$form = $this->createFormBuilder($voucher)
-			->add('redeem', SubmitType::class, array('label' => 'Redeem'))
-			->add('cancel', SubmitType::class, array('label' => 'Cancel'))
-        	->getForm();
-
-		$form->handleRequest($request);
-		
-		if($form->get('cancel')->isClicked())
-		{
-			return $this->redirect($this->generateUrl('voucher_index'));
-		}
-		else if($form->get('redeem')->isClicked())
-		{
-			$voucher->setFlightdate(new \DateTime);
-            $em->persist($voucher);
-            $em->flush();
-
-			$this->addFlash('sonata_flash_success','Voucher has been successfully redeemed!');
-			return $this->redirect($this->generateUrl('voucher_index'));
-		}
-        return $this->redirect($this->generateUrl('app_voucher_list'));
-//		return $this->forward($this->ge'));
-//		return $this->render('AazpVoucherBundle:Voucher:redeem.html.twig', array('form' => $form->createView()));
-	}
+//    /**
+//     * @Route("/redeem/{id}", name="voucher_custom_redeem")
+//     */
+//    public function redeemAction($id)
+//	{
+//        $request = Request::createFromGlobals();
+////		$request = $this->get('request');
+//
+//        $em = $this->getDoctrine()->getManager();
+//        $voucher = $em->getRepository(Voucher::class)->find($id);
+//
+//        if (!$voucher)
+//        {
+//            throw $this->createNotFoundException('Unable to find Voucher entity.');
+//        }
+//
+//		$form = $this->createFormBuilder($voucher)
+//			->add('redeem', SubmitType::class, array('label' => 'Redeem'))
+//			->add('cancel', SubmitType::class, array('label' => 'Cancel'))
+//        	->getForm();
+//
+//		$form->handleRequest($request);
+//
+//		if($form->get('cancel')->isClicked())
+//		{
+//			return $this->redirect($this->generateUrl('voucher_index'));
+//		}
+//		else if($form->get('redeem')->isClicked())
+//		{
+//			$voucher->setFlightdate(new \DateTime);
+//            $em->persist($voucher);
+//            $em->flush();
+//
+//			$this->addFlash('sonata_flash_success','Voucher has been successfully redeemed!');
+//			return $this->redirect($this->generateUrl('voucher_index'));
+//		}
+//        return $this->redirect($this->generateUrl('app_voucher_list'));
+////		return $this->forward($this->ge'));
+////		return $this->render('AazpVoucherBundle:Voucher:redeem.html.twig', array('form' => $form->createView()));
+//	}
 
     /**
      * @Route("/show/{id}", name="voucher_custom_show")
@@ -191,5 +200,128 @@ class VoucherController extends AbstractController
             )
         );  
 	}
+
+    /**
+     * @Route("/payment/{id}", name="voucher_custom_payment")
+     */
+    public function paymentAction($id)
+    {
+        $request = Request::createFromGlobals();
+        $em = $this->getDoctrine()->getManager();
+        $paymentsRepos = $em->getRepository(Payment::class);
+
+        $voucher = $em->getRepository(Voucher::class)->find($id);
+        if (!$voucher)
+        {
+            throw $this->createNotFoundException('Unable to find Voucher entity.');
+        }
+
+        $purchase = $voucher->getPurchase();
+        $payments = [];
+        if($purchase === NULL)
+        {
+            $purchase = new Purchase();
+
+            $purchaseItemFlight = new PurchaseItem($voucher->getFlight());
+            $purchase->addPurchaseItem($purchaseItemFlight);
+//            throw new \Exception("HERE  ".$voucher->getWithPhotos());
+
+            if($voucher->getWithPhotos())
+            {
+                $productCategoryRepos = $em->getRepository(ProductCategory::class);
+                $productRepos = $em->getRepository(Product::class);
+                $productCategoryPhoto = $productCategoryRepos->findOneByName('FLIGHT-PHOTO');
+                $productPhotoOption = $productRepos->findOneByProductCategory($productCategoryPhoto);
+                if (!$productPhotoOption)
+                {
+                    throw $this->createNotFoundException('Unable to find Flight Photo Product entity.');
+                }
+                $purchaseItemPhoto = new PurchaseItem($productPhotoOption);
+                $purchase->addPurchaseItem($purchaseItemPhoto);
+            }
+            $voucher->setPurchase($purchase);
+        } else
+        {
+            //LOAD PAYMENT LIST
+            $payments = $paymentsRepos->getPaymentsForVoucher($voucher);
+        }
+        $paymentViewHelper = new PaymentViewHelper();
+        $paymentViewList = $paymentViewHelper->processVoucherPayments($payments);
+
+        $purchase->setPaymentAmount($voucher->calculateOwing());
+
+        $form = $this->createForm(PurchaseType::class, $purchase);
+        $form->add('pay', SubmitType::class, ['attr' => ['class' => 'btn btn-success']]);
+        $form->add('cancel', ButtonType::class,
+            ['attr' => ['class' => 'btn',
+                'formnovalidate' => true,
+                'data-toggle' => 'modal',
+                'data-target' => '#modalWarning',
+                'data-href' => $this->generateUrl('voucher_custom_show', array ('id'=> $voucher->getId())),
+                'data-modal-title' => 'Are you want to cancel this payment?']]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $paymentAmount = $form->get('paymentAmount')->getData();
+            $paymentType = $form->get('paymentType')->getData();
+            $paymentDescription = $form->get('description')->getData();
+            $paymentSumupRef = $form->get('sumupRef')->getData();
+            $transactionNo = date('YmdHis');
+
+            $payment = new Payment();
+            $payment->setAmount($paymentAmount);
+            $payment->setSubAmount(null);
+            $payment->setPaymentType($paymentType);
+            $payment->setDescription($paymentDescription);
+            $payment->setSumupRef($paymentSumupRef);
+            $payment->setTransactionNo($transactionNo);
+
+            $purchase = $voucher->getPurchase();
+            if($purchase === null)
+            {
+                $purchase = new Purchase();
+            }
+            $payment->addPurchase($purchase);
+            $purchase->addPayment($payment);
+
+//            throw new \Exception("HERE ".$voucher->calculateOwing(). " '");
+            if($voucher->calculateOwing() == 0)
+            {
+                $voucher->setStatus(Voucher::STATUS_PAYMENT_FULL);
+            }
+            else
+            {
+                $voucher->setStatus(Voucher::STATUS_PAYMENT_PART);
+            }
+
+            $paymentMessage = 'Payment '.number_format($paymentAmount,2).' CHF successful!';
+            $messageType = 'sonata_flash_success';
+
+//            if($voucher->paidInFull())
+//            {
+//                $voucher->setStatus(Booking::STATUS_PAYMENT_FULL);
+//            }
+//            else
+//            {
+//                $voucher->setStatus(Booking::STATUS_PAYMENT_PART);
+//            }
+
+            $em->persist($voucher);
+            $em->flush();
+            $this->addFlash($messageType, $paymentMessage);
+
+            return $this->redirect($this->generateUrl('voucher_custom_show', array ('id'=> $voucher->getId())));
+        }
+
+        return $this->render('payment/voucher.payment.summary.html.twig', array(
+            'paymentViewList' => $paymentViewList,
+            'payments' => $payments,
+            'voucher' => $voucher,
+            'form'	=> $form->createView(),
+        ));
+
+    }
 
 }

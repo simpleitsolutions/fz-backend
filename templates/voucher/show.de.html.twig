@@ -10,6 +10,7 @@
 
 					<div class="nav-bar btn-xs col-xs-1 col-sm-1 col-md-3 pull-right">
 						<ul class="pagination">
+							<li><a href="{{ path('voucher_custom_payment', { 'id': voucher.id } ) }}"><i class="fa fa-money"></i> Payment</a></li>
 							<li><a href="javascript:print();"><i class="fa fa-print"></i> Print</a></li>
 						</ul>
 					</div>
@@ -19,7 +20,7 @@
 	</div>
 {% endblock %}
 
-{% block sonata_page_content_header %}
+{% block sonata_admin_content %}
 	{{ parent() }}
 {#TODO remove CSS, put it in a common place #}
 	<style>

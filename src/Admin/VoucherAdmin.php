@@ -77,6 +77,7 @@ class VoucherAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('id', null, array('global_search' => true))
+            ->add('status')
             ->add('name')
             ->add('flight')
             ->add('language')
@@ -87,6 +88,7 @@ class VoucherAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('id')
+            ->add('status', null, ['template' => '/voucher/list/list__col_status.html.twig'])
             ->add('name')
             ->add('flight')
             ->add('withPhotos', null, ['label' => 'Photos'])
@@ -98,7 +100,8 @@ class VoucherAdmin extends AbstractAdmin
                     'show' => ['template' => '/voucher/list/list__action_show.html.twig'],
                     'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
                     'delete' => ['template' => '/sonataadmin/CRUD/list__action_delete.html.twig'],
-                    'redeem' => ['template' => '/voucher/list/list__action_redeem.html.twig']
+                    'redeem' => ['template' => '/voucher/list/list__action_redeem.html.twig'],
+                    'payment' => ['template' => '/voucher/list/list__action_makepayment.html.twig']
                 )
             ))
         ;

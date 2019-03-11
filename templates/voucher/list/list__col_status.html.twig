@@ -1,0 +1,9 @@
+<td class="sonata-ba-list-field">
+    {% if object.status == constant('\\App\\Entity\\Voucher::STATUS_NEW') %}
+            <span class="label label-danger">{{ constant('\\App\\Entity\\Voucher::STATUS_LABELS')[constant('\\App\\Entity\\Voucher::STATUS_NEW')] }}</span>
+    {% elseif object.status == constant('\\App\\Entity\\Voucher::STATUS_PAYMENT_PART') %}
+            <span class="label label-warning">{{ constant('\\App\\Entity\\Voucher::STATUS_LABELS')[constant('\\App\\Entity\\Voucher::STATUS_PAYMENT_PART')] }}</span>
+    {% elseif object.status == constant('\\App\\Entity\\Voucher::STATUS_PAYMENT_FULL') %}
+            <span class="label label-success">{{ constant('\\App\\Entity\\Voucher::STATUS_LABELS')[constant('\\App\\Entity\\Voucher::STATUS_PAYMENT_FULL')] }}</span>
+    {% endif %}
+</td>
