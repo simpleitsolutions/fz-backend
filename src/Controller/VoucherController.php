@@ -169,14 +169,7 @@ class VoucherController extends AbstractController
             throw $this->createNotFoundException('Unable to find Voucher entity.');
         }
 
-		if($voucher->getLanguage() == Voucher::GERMAN)
-		{
-			return $this->render('voucher/show.de.html.twig', array('voucher' => $voucher));
-		} else if($voucher->getLanguage() == Voucher::ENGLISH)
-        {
-			return $this->render('voucher/show.html.twig', array('voucher' => $voucher));
-		}
-		
+        return $this->render('voucher/show.html.twig', array('voucher' => $voucher));
     }
 
 	public function reportGiftVoucherAction($id)
