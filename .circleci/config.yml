@@ -50,7 +50,7 @@ jobs:
           name: Composer Install
           command: composer install -n --prefer-dist
 
-      - run: mysql  -h 127.0.0.1 -u ubuntu circle_test < scripts/db/database_setup.sql
+      - run: mysql  -h 127.0.0.1 -u root fz-backend < scripts/db/database_setup.sql
 
       - run:
           name: Doctrine Migrations
