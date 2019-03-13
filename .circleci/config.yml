@@ -48,7 +48,7 @@ jobs:
           command: composer install -n --prefer-dist
       - run:
           name: Doctrine Migrations
-          command: php bin/console doctrine:migrations:migrate --env=test --no-interation
+          command: php bin/console doctrine:migrations:migrate --env=test --no-interaction
 
       # Download and cache dependencies
 #      - restore_cache:
