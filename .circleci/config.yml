@@ -38,6 +38,9 @@ jobs:
           name: Install PHP MySQL
           command: sudo docker-php-ext-install pdo_mysql
       - run:
+          name: Install MySQL Client
+          command: sudo apt install mysql-client
+      - run:
           name: Wait for MySQl
           command: dockerize -wait tcp://127.0.0.1:3306 -timeout 120s
       - run:
@@ -46,6 +49,9 @@ jobs:
       - run:
           name: Composer Install
           command: composer install -n --prefer-dist
+
+      - run: mysql  -h 127.0.0.1 -u ubuntu circle_test < scripts/db/database_setup.sql
+
       - run:
           name: Doctrine Migrations
           command: php bin/console doctrine:migrations:migrate --env=test --no-interaction
