@@ -117,6 +117,7 @@
       <path value="$PROJECT_DIR$/vendor/sonata-project/doctrine-orm-admin-bundle" />
       <path value="$PROJECT_DIR$/vendor/nikolaposa/version" />
       <path value="$PROJECT_DIR$/vendor/shivas/versioning-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/phpunit-bridge" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
