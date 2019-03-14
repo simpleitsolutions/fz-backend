@@ -248,8 +248,9 @@ file that was distributed with this source code.
                                 {{ knp_menu_render('sonata_admin_sidebar', {template: get_global_template('knp_menu_template')}) }}
                             {% endblock side_bar_nav %}
                             {% block side_bar_after_nav %}
-                                <p class="text-center small" style="border-top: 1px solid #444444; padding-top: 10px">
+                                <p class="text-center small" style="border-top: 1px solid #444444; padding-top: 10px; color:#f2f2f2;">
                                     {% block side_bar_after_nav_content %}
+                                        Version {{ shivas_app_version }} {{ (env|upper)!='PROD'?'-'~env|upper }}{#{ - database }#}
                                     {% endblock %}
                                 </p>
                             {% endblock %}
@@ -363,7 +364,6 @@ file that was distributed with this source code.
             </div>
         {% endblock sonata_wrapper %}
     </div>
-    <div class="hidden-print text-center"> Version {{ shivas_app_version }} {{ (env|upper)!='PROD'?'-'~env|upper }}{#{ - database }#}</div>
 
     {% if sonata_admin.adminPool.getOption('use_bootlint') %}
         {% block bootlint %}
