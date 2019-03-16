@@ -18,7 +18,10 @@ security:
 
             # http_basic: true
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
             form_login:
                 check_path: security_login
                 login_path: security_login
