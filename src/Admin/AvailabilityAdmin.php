@@ -12,6 +12,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\Form\Type\DatePickerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class AvailabilityAdmin extends AbstractAdmin
@@ -57,7 +58,14 @@ class AvailabilityAdmin extends AbstractAdmin
 
         if ($this->isCurrentRoute('edit'))
         {
-            $formMapper->add('unavailableFlightDate', null, ['label' => 'Flight Date', 'attr' => ['readonly' => true]]);
+            $formMapper->add('unavailableFlightDate',
+                                DatePickerType::class,
+                                        ['attr' => ['readonly' => true],
+//                                        'dp_use_current' => false,
+                'datepicker_use_button' => true,
+                    'dp_enabled_dates' => []
+                                        ]);
+//            $formMapper->add('unavailableFlightDate', null, ['label' => 'Flight Date', 'attr' => ['readonly' => true]]);
         }
         else
         {

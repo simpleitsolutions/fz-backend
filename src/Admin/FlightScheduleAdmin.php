@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\Form\Type\DatePickerType;
 
 class FlightScheduleAdmin extends AbstractAdmin
 {
@@ -42,8 +43,8 @@ class FlightScheduleAdmin extends AbstractAdmin
         $formMapper
             ->with('Flight Schedule', array('class' => 'col-md-6'))
 //            ->add('id')
-            ->add('affectiveStartDate')
-            ->add('affectiveEndDate')
+            ->add('affectiveStartDate', DatePickerType::class, [])
+            ->add('affectiveEndDate', DatePickerType::class, [])
             ->add('flightScheduleTimes')
             ->end()
         ;

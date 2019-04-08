@@ -46,8 +46,8 @@
 		{% endif %}
 		
 	</td>
-	<td class="text-center">{{booking.meetinglocation.name}}</td>
-	<td class="text-center">{{booking.flight.description}}</td>
+	<td class="text-center">{{renderAttribute(booking.meetinglocation, "name") }}{#{booking.meetinglocation.name}#}</td>
+	<td class="text-center">{{renderAttribute(booking.flight, "description")}}</td>
 	<td class="text-center">{{booking.passengers|length}}</td>
 	<td class="text-center" style="width:110px;">
 	{% for passenger in booking.passengers %}
@@ -102,8 +102,8 @@
 		{% endif %}
 		</span>
 	</td>
-	<td class="text-center">{{booking.meetinglocation.shortName}}</td>
-	<td class="text-center">{{booking.flight.shortName}}</td>
+	<td class="text-center">{{renderAttribute(booking.meetinglocation, "name") }}{#{booking.meetinglocation is defined?booking.meetinglocation.shortName:''}#}</td>
+	<td class="text-center">{{renderAttribute(booking.flight, "shortName")}}</td>
 	<td class="text-center">{{booking.passengers|length}}</td>
 	<td class="text-center" style="width:40%;">
 	{% for passenger in booking.passengers %}
