@@ -27,6 +27,7 @@ class VoucherAdmin extends AbstractAdmin
     public function getNewInstance()
     {
         $instance = parent::getNewInstance();
+        $instance->setStatus(Voucher::STATUS_NEW);
 
         return $instance;
     }
