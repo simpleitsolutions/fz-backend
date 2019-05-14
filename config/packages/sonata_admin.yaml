@@ -67,7 +67,6 @@ sonata_admin:
                     - admin.booking
                     - admin.bookingrequest
                     - admin.voucher
-                    - admin.availability
 
             Administration:
                 icon:                 '<i class="fa fa-cogs"></i>'
@@ -81,6 +80,7 @@ sonata_admin:
                 icon:                 '<i class="fa fa-cogs"></i>'
                 roles: [ROLE_SUPER_ADMIN]
                 items:
+                    - admin.availability
                     - admin.user
                     - admin.flight.schedule
                     - admin.product.category
