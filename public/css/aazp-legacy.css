@@ -23,7 +23,8 @@
 	}
 
 	.pdf-page-half-a4 {
-		height: 495px;
+		/*height: 495px;*/
+		height: 500px;
 	}
 
 	.pdf-page-spacer-a4 {
@@ -34,7 +35,7 @@
 		height: 7px;
 	}
 
-	pdf-page-half-voucher-spacer-a4 {
+	.pdf-page-half-voucher-spacer-a4 {
 		height: 40px;
 	}
 
@@ -43,12 +44,13 @@
 	}
 	
 	.pdf-page-bottom-margin-a4 {
-		height: 0px;
+		/*height: 0px;*/
+		height: 7px;
 		/* page-break-after: always; */
 	}
 
 	.pdf-page-voucher-bottom-margin-a4 {
-		height: 0px;
+		height: 5px;
 		/* page-break-after: always; */
 	}
 

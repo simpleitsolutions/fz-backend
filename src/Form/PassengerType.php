@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use App\Repository\ProductRepository;
+use App\Repository\PilotRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormEvents;
@@ -40,7 +41,11 @@ class PassengerType extends AbstractType
 //                                'property' => 'name',
 //                                'empty_value' => 'Please Select',
                 'empty_data' => null,
-                'required' => false));
+                'required' => false,
+                'query_builder' => function (PilotRepository $er) {
+                    return $er->createQueryBuilder('pi')
+                        ->orderBy('pi.sortOrder', 'ASC');
+                    }));
 
 //        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
 //

@@ -19,4 +19,8 @@
         font-size:0.9em;
     }
 
+    .alert {
+        display: none;
+    }
+
 }

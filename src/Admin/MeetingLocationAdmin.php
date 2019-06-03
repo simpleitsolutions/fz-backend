@@ -45,6 +45,7 @@ class MeetingLocationAdmin extends AbstractAdmin
             ->add('name')
             ->add('shortName')
             ->add('description')
+            ->add('preferred')
             ->add('sortOrder')
             ->end()
         ;
@@ -56,6 +57,7 @@ class MeetingLocationAdmin extends AbstractAdmin
             ->add('name')
             ->add('shortName')
             ->add('description')
+            ->add('preferred')
         ;
     }
 
@@ -65,6 +67,7 @@ class MeetingLocationAdmin extends AbstractAdmin
             ->addIdentifier('name')
             ->add('shortName')
             ->add('description')
+            ->add('preferred')
             ->add('sortOrder')
             ->add('_action', null, array(
                 'actions' => array(
@@ -81,6 +84,7 @@ class MeetingLocationAdmin extends AbstractAdmin
             ->add('name')
             ->add('shortName')
             ->add('description')
+            ->add('preferred')
             ->add('sortOrder')
         ;
     }

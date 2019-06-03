@@ -61,7 +61,7 @@ class Booking extends BaseEntity
     private $contactinfo;
 
     /**
-	 * @ORM\Column(type="string", length=600, nullable=true)
+	 * @ORM\Column(type="string", length=1000, nullable=true)
 	 */
      private $notes;
 

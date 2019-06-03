@@ -42,7 +42,7 @@
 	<div class="visible-print pdf-page-top-margin-a4">&nbsp;</div>
 
 	  <div class="visible-print box box-primary pdf-page-half-a4" >
-		<div class="box-heading hidden-print"></div>
+		<div class="box-header hidden-print"></div>
 		<div class="box-body">
 			{{ include('booking/show/show-terms-conditions.html.twig') }}
 		</div>
@@ -51,7 +51,7 @@
 	  <div class="visible-print pdf-page-half-spacer-a4">&nbsp;</div>
 
 	  <div class="box box-primary visible-print pdf-page-half-a4">
-		<div class="box-heading hidden-print"></div>
+		<div class="box-header hidden-print"></div>
 		<div class="box-body">
 			<div class="col-md-12 text-center">
 				<img src="{{ app.request.scheme ~ '://' ~ app.request.host}}{{app.request.port == 80?'': ':'~app.request.port}}/img/fly-zermatt-logo.png">
@@ -67,7 +67,7 @@
 	  <div class="visible-print pdf-page-top-margin-a4">&nbsp;</div>
 
 	  <div class="box box-primary pdf-page-half-a4">
-		<div class="box-header hidden-print">
+		<div class="box-header">
 			<div class="box-title">
 			#{{entity.id}} {{ (constant('App\\Entity\\Booking::STATUS_CONFIRMED') == entity.status) ? '- CONFIRMED':'' }}
 			</div>
@@ -100,7 +100,7 @@
 	  <div class="visible-print pdf-page-half-spacer-a4">&nbsp;</div>
 
 	  <div class="box box-primary visible-print pdf-page-half-a4">
-		<div class="box-heading hidden-print"></div>
+		<div class="box-header hidden-print"></div>
 		<div class="box-body">
 		  <div class="col-xs-12 col-md-12">
 		  <h5>What to bring</h5>
