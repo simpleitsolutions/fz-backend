@@ -10,7 +10,7 @@ SSH_PORT_STAGE="22"
 SSH_USER_STAGE="simpleit"
 
 TARGET_NAME_LIVE="METTELHORN"
-REMOTE_DIR_LIVE="/home/aazp/public_html/ch.simpleitsolutions.bookings/"
+REMOTE_DIR_LIVE="/home/simpleit/ch.simpleitsolutions.bookings/"
 SSH_IP_LIVE="simpleitsolutions.ch"
 SSH_PORT_LIVE="22"
 SSH_USER_LIVE="simpleit"
@@ -52,22 +52,22 @@ if [ "$1" == "deploy" ];then
     	fi
 
     if [ "$3" == version-major ]; then
-        php app/console app:version:bump --major="+1" --minor="0" --patch="0" --prerelease="" --build="" 
+        php bin/console app:version:bump --major="+1" --minor="0" --patch="0" --prerelease="" --build="" 
     fi
 
     if [ "$3" == version-minor ]; then
-        php app/console app:version:bump --minor="+1" --patch="0" --prerelease="" --build=""
+        php bin/console app:version:bump --minor="+1" --patch="0" --prerelease="" --build=""
     fi
 
     if [ "$3" == version-patch ]; then
-        php app/console app:version:bump --patch="+1"
+        php bin/console app:version:bump --patch="+1"
     fi
 
 	debug=
-	dryrun=
+	dryrun=y=n
 	if [ "$4" == "debug" ]; then
         	debug=Debug
-        	dryrun=n
+        	dryrun=y
 	fi
 
 	echo
@@ -91,34 +91,36 @@ if [ "$1" == "deploy" ];then
         # -v Verbose
         # -z Compress
         # -r Recursive
-        rsync -${dryrun}rzcave  "ssh -p$SSH_PORT" \
-            --cvs-exclude --progress --delete \
-            --exclude 'app/cache/*' \
-            --exclude 'app/logs/*' \
-            --exclude 'bin-sits/*' \
-            --exclude 'app/config/parameters*.yml' \
-                ${LOCAL_DIR}/* \
-                ${SSH_USER}@${SSH_IP}:${REMOTE_DIR}
 
-        echo "${BLUE}... Uploading ${target} PARAMETERS... ${RESET}"
 
-        rsync -${dryrun}rzcave  "ssh -p$SSH_PORT" \
-            --progress \
-                ${LOCAL_DIR}/app/config/parameters-${target}.yml \
-                ${SSH_USER}@${SSH_IP}:${REMOTE_DIR}app/config/parameters.yml
+        if [ "$2" == "stage" ]; then
+          rsync --exclude '.git' \
+              --exclude=var \
+              --exclude=.env* \
+              -avzh . ${SSH_USER}@${SSH_IP}:${REMOTE_DIR}
+        fi
+        if [ "$2" == "live" ]; then
+          rsync -${dryrun}rzcave  "ssh -p$SSH_PORT" \
+              --exclude '.git' \
+              --exclude=var \
+              --exclude=.env* \
+              --exclude=tests \
+              --exclude=.circleci \
+              -avzh . ${SSH_USER}@${SSH_IP}:${REMOTE_DIR}
+        fi
 
         echo
         echo "  ${BLUE}...Removing /cache & /log files, setting Permissions and running Doctrine Migrations...${RESET}"
         if [ "${debug}" != "Debug" ] ; then
             ssh -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} -t "
                 cd ${REMOTE_DIR}
-                rm -rf app/cache/*
-                rm -rf app/logs/*
+                rm -rf var/cache/*
+                rm -rf var/logs/*
 #                setfacl -R -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs
 #                setfacl -R -m u:`whoami`:rwx app/cache app/logs
 #                setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs
-                php app/console cache:clear --env=prod --no-debug
-                php app/console doctrine:migrations:migrate
+                /opt/cpanel/ea-php71/root/usr/bin/php bin/console cache:clear --env=prod --no-debug
+                /opt/cpanel/ea-php71/root/usr/bin/php bin/console doctrine:migrations:migrate
             "
         fi
 	fi
@@ -147,6 +149,12 @@ elif [ "$1" == "create-entity" ]; then
 	entity_class=$3
 
 	php app/console doctrine:generate:entities ${app}/${bundle}Bundle/Entity/${entity_class}
+
+
+elif [ "$1" == "assetic-dump" ]; then
+        php app/console assetic:dump
+        php app/console cache:clear
+
 
 elif [ "$1" == "cache-clear" ]; then
         php app/console cache:clear

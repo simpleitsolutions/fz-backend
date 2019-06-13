@@ -28,7 +28,7 @@ final class Version20190311123658 extends AbstractMigration
 //        $this->addSql('ALTER TABLE users DROP expires_at, DROP confirmation_token, DROP password_requested_at, DROP credentials_expire_at, CHANGE username username VARCHAR(50) NOT NULL, CHANGE username_canonical username_canonical VARCHAR(50) NOT NULL, CHANGE email email VARCHAR(254) NOT NULL, CHANGE email_canonical email_canonical VARCHAR(254) NOT NULL, CHANGE last_login last_login DATETIME NOT NULL');
 //        $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9F85E0677 ON users (username)');
 //        $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9E7927C74 ON users (email)');
-        $this->addSql('ALTER TABLE voucher ADD status INT NOT NULL');
+//        $this->addSql('ALTER TABLE voucher ADD status INT NOT NULL');
     }
 
     public function down(Schema $schema) : void
@@ -42,6 +42,6 @@ final class Version20190311123658 extends AbstractMigration
 //        $this->addSql('DROP INDEX UNIQ_1483A5E9F85E0677 ON users');
 //        $this->addSql('DROP INDEX UNIQ_1483A5E9E7927C74 ON users');
 //        $this->addSql('ALTER TABLE users ADD expires_at DATETIME DEFAULT NULL, ADD confirmation_token VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, ADD password_requested_at DATETIME DEFAULT NULL, ADD credentials_expire_at DATETIME DEFAULT NULL, CHANGE username username VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, CHANGE username_canonical username_canonical VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, CHANGE email email VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, CHANGE email_canonical email_canonical VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, CHANGE last_login last_login DATETIME DEFAULT NULL');
-        $this->addSql('ALTER TABLE voucher DROP status');
+//        $this->addSql('ALTER TABLE voucher DROP status');
     }
 }

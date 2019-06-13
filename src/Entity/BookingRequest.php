@@ -42,7 +42,7 @@ class BookingRequest extends BaseEntityLegacy
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=16, name="contact_phone")
+     * @ORM\Column(type="string", length=200, name="contact_phone")
      */
     private $phone;
 
