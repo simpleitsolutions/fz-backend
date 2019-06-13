@@ -64,10 +64,10 @@ if [ "$1" == "deploy" ];then
     fi
 
 	debug=
-	dryrun=y=n
+	dryrun=
 	if [ "$4" == "debug" ]; then
         	debug=Debug
-        	dryrun=y
+        	dryrun=--dry-run
 	fi
 
 	echo
@@ -100,13 +100,13 @@ if [ "$1" == "deploy" ];then
               -avzh . ${SSH_USER}@${SSH_IP}:${REMOTE_DIR}
         fi
         if [ "$2" == "live" ]; then
-          rsync -${dryrun}rzcave  "ssh -p$SSH_PORT" \
+          rsync ${dryrun} -avzh \
               --exclude '.git' \
               --exclude=var \
               --exclude=.env* \
               --exclude=tests \
               --exclude=.circleci \
-              -avzh . ${SSH_USER}@${SSH_IP}:${REMOTE_DIR}
+              . ${SSH_USER}@${SSH_IP}:${REMOTE_DIR}
         fi
 
         echo
