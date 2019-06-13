@@ -19,6 +19,10 @@ h4 {
     width: 145px;
 }
 
+.fixed-time .select2-container {
+    width: auto !important;
+}
+
 .pagination .booking-schedule-current-date a,
 .pagination .booking-schedule-current-date a:hover {
     background-color: #f7f1af;
@@ -104,6 +108,9 @@ h4 {
 
 
 @media screen and (max-width: 992px) {
+    .fixed-time .select2-container {
+        width: 48% !important;
+    }
     .passengers .row {
         margin-bottom: 5%;
     }

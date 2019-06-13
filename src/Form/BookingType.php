@@ -52,6 +52,7 @@ class BookingType extends AbstractType
 		$builder->add('meetingTime', TimeType::class, array(
 		    'required' => true,
 		    'label' => 'Meeting Time',
+            'attr' => ['class' => 'fixed-time'],
 //		    'translation_domain' => 'AazpBookingBundle',
 // 		    'required' => false,
 //            'attr' => ['class' => 'form-control', 'data-sonata-select2' => 'false'],
