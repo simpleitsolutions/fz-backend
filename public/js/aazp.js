@@ -169,6 +169,13 @@ $(document).ready(function(){
     }).on("change", function (e) {
         $('#targetDateForm').submit();
     });
+    $('#datepicker-sm').datepicker({
+        format: 'dd-mm-yyyy',
+        autoclose: true,
+        todayBtn: true,
+    }).on("change", function (e) {
+        $('#targetDateForm-sm').submit();
+    });
 
 	$('#waitingListItem_waitingListItemDate').datetimepicker( {
 		format:'d-m-Y',
@@ -179,6 +186,27 @@ $(document).ready(function(){
 		timepicker: false,
 		yearStart: '2014'
 	  });
+
+    $('#schedule-booking-requests').on("click", function (e) {
+        if($('#schedule-booking-requests-carot').hasClass('fa-caret-down')) {
+            $('#schedule-booking-requests-carot').removeClass('fa-caret-down');
+            $('#schedule-booking-requests-carot').addClass('fa-caret-up');
+        }
+        else if($('#schedule-booking-requests-carot').hasClass('fa-caret-up')) {
+            $('#schedule-booking-requests-carot').removeClass('fa-caret-up');
+            $('#schedule-booking-requests-carot').addClass('fa-caret-down');
+        }
+    })
+    $('#schedule-waiting-list').on("click", function (e) {
+        if($('#schedule-waiting-list-carot').hasClass('fa-caret-down')) {
+            $('#schedule-waiting-list-carot').removeClass('fa-caret-down');
+            $('#schedule-waiting-list-carot').addClass('fa-caret-up');
+        }
+        else if($('#schedule-waiting-list-carot').hasClass('fa-caret-up')) {
+            $('#schedule-waiting-list-carot').removeClass('fa-caret-up');
+            $('#schedule-waiting-list-carot').addClass('fa-caret-down');
+        }
+    })
 
     // Get the ul that holds the collection of purchase items
     $purchaseItemsHolder = $('div.purchaseItems');
