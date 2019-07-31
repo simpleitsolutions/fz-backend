@@ -52,6 +52,7 @@ class BookingType extends AbstractType
 		$builder->add('meetingTime', TimeType::class, array(
 		    'required' => true,
 		    'label' => 'Meeting Time',
+            'widget' => 'choice',
             'attr' => ['class' => 'fixed-time'],
 //		    'translation_domain' => 'AazpBookingBundle',
 // 		    'required' => false,
@@ -63,15 +64,17 @@ class BookingType extends AbstractType
 		
 		$builder->add('flight', EntityType::class, array('label' => 'Flight',
 		                                        'class' => Product::class,
-                                                'attr' => ['class' => 'form-control', 'data-sonata-select2' => 'false'],
+                                                'attr' => ['class' => 'form-control1'],
 //		                                        'property' => 'name',
 		                                        'placeholder' => 'Please Select',
 		                                        'preferred_choices' => $options['preferredFlights'],
 												'query_builder' => function(ProductRepository $er) {
 		                                              return $er->createQueryBuilder('p')
 		                                                      ->join('p.productCategory', 'pc')
-		                                                      ->where('pc.name = :category')
-		                                                      ->setParameter('category', 'FLIGHT')
+//                                                              ->where("u.id IN(:followeeIds)")
+                                                              ->where('pc.name IN(:categories)')
+//                                                              ->where('pc.name = :category')
+		                                                      ->setParameter('categories', ['FLIGHT','MISC'])
 		                                                      ->orderBy('p.sortOrder', 'ASC');
 												            } ) );
 
@@ -90,7 +93,7 @@ class BookingType extends AbstractType
 		$builder->add('meetinglocation', EntityType::class, array('label' => 'Meeting Location',
 		                                                 'class' => MeetingLocation::class,
 //		                                                 'property' => 'name',
-                                                         'attr' => ['class' => 'form-control', 'data-sonata-select2' => 'false'],
+                                                         'attr' => ['class' => 'form-control', 'data-sonata-select2' => 'true'],
 		                                                 'placeholder' => 'Please Select',
 		                                                 'preferred_choices' => $options['preferredMeetingLocations'],
             											 'query_builder' => function(MeetingLocationRepository $er) {
