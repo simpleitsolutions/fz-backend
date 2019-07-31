@@ -62,28 +62,9 @@
 
 
 var $PassengerHolder;
-var $purchaseItemsHolder;
-var $purchaseItemsHolder1;
-var $purchaseItemsHolder2;
-var $purchaseItemsHolder3;
 
 var $addPassengerLink = $('<div class="btn-group pull-left"><a href="#" class="add_contact_link btn btn-default btn-md"><span class="glyphicon glyphicon-plus"></span></a></div>');
 var $newPassengerLink = $('<div></div>').append($addPassengerLink);
-
-// setup an "add a purchaseItem" link
-
-var $addPurchaseItemLink = $('<div class="btn-group pull-left"><div class="col-md-12 col-sm-12"><a href="#" class="add_purchase_item_link btn btn-default btn-md"><span class="glyphicon glyphicon-plus"></span></a></div></div>');
-var $newPurchaseItemLink = $('<div></div>').append($addPurchaseItemLink);
-
-var $addPurchaseItemLink1 = $('<div class="btn-group pull-left"><div class="col-md-12 col-sm-12"><a href="#" class="add_purchase_item_link btn btn-default btn-md"><span class="glyphicon glyphicon-plus"></span></a></div></div>');
-var $newPurchaseItemLink1 = $('<div></div>').append($addPurchaseItemLink1);
-
-var $addPurchaseItemLink2 = $('<div class="btn-group pull-left"><div class="col-md-12 col-sm-12"><a href="#" class="add_purchase_item_link btn btn-default btn-md"><span class="glyphicon glyphicon-plus"></span></a></div></div>');
-var $newPurchaseItemLink2 = $('<div></div>').append($addPurchaseItemLink2);
-
-var $addPurchaseItemLink3 = $('<div class="btn-group pull-left"><div class="col-md-12 col-sm-12"><a href="#" class="add_purchase_item_link btn btn-default btn-md"><span class="glyphicon glyphicon-plus"></span></a></div></div>');
-var $newPurchaseItemLink3 = $('<div></div>').append($addPurchaseItemLink3);
-
 
 $(document).ready(function(){
 
@@ -208,29 +189,6 @@ $(document).ready(function(){
         }
     })
 
-    // Get the ul that holds the collection of purchase items
-    $purchaseItemsHolder = $('div.purchaseItems');
-    // $purchaseItemsHolder.css('list-style-type', 'none');
-
-    // add the "add a passenger" anchor and li to the passengers ul
-    $purchaseItemsHolder.append($newPurchaseItemLink);
-
-    // count the current form inputs we have (e.g. 2), use that as the new
-    // index when inserting a new item (e.g. 2)
-    $purchaseItemsHolder.data('index', $purchaseItemsHolder.children().length);
-
-    $addPurchaseItemLink.on('click', function(e) {
-        // prevent the link from creating a "#" on the URL
-        e.preventDefault();
-
-        // add a new purchaseItem form (see next code block)
-        createPurchaseItemAddLink($purchaseItemsHolder, $newPurchaseItemLink);
-	});
-
-    // add a delete link to all of the existing tag form li elements
-    $purchaseItemsHolder.find('div.purchaseItem').each(function() {
-        createPurchaseItemDeleteLink($(this));
-    });
 
 	$passengerHolder = $('div.passengers');
 
