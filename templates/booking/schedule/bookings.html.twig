@@ -14,7 +14,7 @@
         <div class="text-center col-xs-12 col-sm-12 col-md-12">
             <h4>
                 <a href="{{ path('booking_custom_create', {'date':indexdate|date("Y-m-d"), 'flightScheduleTimeId':timeSchedule.flightScheduleTime.id}) }}" class="btn btn-default btn-sm pull-left">
-                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="fa fa-plus"></span>
                 </a>
                 FLIGHT {{ timeSchedule.flightScheduleTime.orderIndex }}
                 <span class="label label-{{ class }}">{{ timeSchedule.noOfPilotsAvailable }}</span>
