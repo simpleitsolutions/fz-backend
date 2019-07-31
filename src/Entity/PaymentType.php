@@ -224,6 +224,11 @@ class PaymentType extends BaseEntity
         return false;
     }
 
+    public function setSumUpPayment($sumUpPayment)
+    {
+        $this->sumUpPayment = $sumUpPayment;
+    }
+
     public function isSumUpPayment()
     {
         return $this->sumUpPayment;
