@@ -19,6 +19,10 @@ h4 {
     width: 145px;
 }
 
+ .form-inline .form-control {
+    width:100%;
+}
+
 .fixed-time .select2-container {
     width: auto !important;
 }
@@ -90,6 +94,21 @@ h4 {
     min-width: 130px;
     margin-right: 30px;
     margin-left: 5px;
+}
+
+.purchase-payment-type-section .payment-type {
+   width:45px;
+}
+
+div[id^='payment-type-button-'] {
+   border: 1px solid #D2DED6;
+   border-radius: 3px;
+   background-color: #f4f4f4;
+   min-height:100px;
+}
+
+div[id^='payment-type-button-'] ins {
+    text-align: center;
 }
 
 #booking_owner label {
