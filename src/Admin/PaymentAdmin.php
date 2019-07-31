@@ -8,7 +8,11 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\Type\Filter\DateType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
+use Sonata\Form\Type\DatePickerType;
+use Sonata\Form\Type\DateRangePickerType;
 
 class PaymentAdmin extends AbstractAdmin
 {
@@ -60,6 +64,9 @@ class PaymentAdmin extends AbstractAdmin
             ->add('transactionNo')
             ->add('paymentType')
             ->add('refunded')
+            ->add('created', DateTimeRangeFilter::class, [
+                'field_type'    => DateRangePickerType::class,
+            ])
         ;
     }
 
@@ -70,6 +77,7 @@ class PaymentAdmin extends AbstractAdmin
             ->add('amount')
             ->add('subAmount')
             ->add('paymentType')
+            ->add('created')
             ->add('purchases')
             ->add('description')
             ->add('sumUpRef')
