@@ -4,7 +4,7 @@
 	</div>
 
     <div class="box-body">
-		<div class="col-md-12">
+		<div class="col-md-12 nopadding">
 
 				{{ form_start(form, {'attr': {'class':'payment form-inline'} }) }}
 			{#<div class="row">#}
@@ -21,12 +21,12 @@
 	    <div class="box-header hidden-print"><h5>{{passenger.name}}</h5></div>
     	<div class="box-body">
 			<div class="row">
-				<div class="header nopadding col-md-12 col-sm-12 col-xs-12">
+				<div class="header nopadding1 col-md-12 col-sm-12 col-xs-12">
 					<div class="col-md-1 hidden-sm hidden-xs">ITEM</div>
-					<div class="text-left col-md-6 col-sm-6 col-xs-7">DESCRIPTION</div>
-					<div class="text-right visible-xs col-xs-2">ACTUAL</div>
-					<div class="hidden-xs text-right col-md-2 col-sm-2">ACTUAL PRICE</div>
-					<div class="text-right col-md-2 col-sm-2 col-xs-2">PRICE</div>
+					<div class="text-left col-md-6 col-sm-6 col-xs-6">DESCRIPTION</div>
+					<div class="text-right visible-xs visible-sm visible-md col-xs-2 col-sm-2 col-md-2">ACTUAL</div>
+					<div class="text-right hidden-xs hidden-sm hidden-md col-lg-2">ACTUAL PRICE</div>
+					<div class="text-right col-md-2 col-sm-3 col-xs-3">PRICE</div>
 					<div class="text-right col-md-1 col-sm-1 col-xs-1">&nbsp;</div>
 				</div>
 			</div>
@@ -45,10 +45,10 @@
 				{% else %}
 				<div class="row nopadding col-md-12">
 				{% endif %}
-					<div class="col-md-1 hidden-sm hidden-xs">#{{ itemNo }}</div>
-					<div class="text-left col-md-6 col-sm-7 col-xs-7">{{ form_row(purchaseItem.product, {'label':false, 'attr':{'class': 'form-control', 'onchange':'bookingPaymentSummaryUpdatePurchaseItem(this)'}}) }}</div>
+					<div class="text-center col-md-1 hidden-sm hidden-xs">#{{ itemNo }}</div>
+					<div class="text-left col-md-6 col-sm-6 col-xs-6">{{ form_widget(purchaseItem.product, {'label':false, 'attr':{'class': 'form-control', 'onchange':'bookingPaymentSummaryUpdatePurchaseItem(this)'}}) }}</div>
 					<div id="product_price_{{passengerIndex}}_{{ loop.index-1 }}" class="text-right col-md-2 col-sm-2 col-xs-2" style="margin:7px 0px;">{{ booking.passengers[passengerIndex].purchase.purchaseItems[key].product.price }}</div>
-					<div class="text-left col-md-2 col-sm-3 col-xs-3">{{ form_row(purchaseItem.amount, {'label':false, 'attr': {'class':'form-control text-right calc-item'}}) }}</div>
+					<div class="text-left col-md-2 col-sm-3 col-xs-3">{{ form_widget(purchaseItem.amount, {'label':false, 'attr': {'class':'form-control text-right calc-item'}}) }}</div>
 				</div>
 				{% set itemNo = itemNo+1 %}
 
@@ -72,15 +72,15 @@
 			    {% set index = paymentType.vars.value %}{# get array index #}
 			    {% set entity = form.paymentType.vars.choices[index].data %}{# get entity object #}
 			        <div class="row col-xs-2 col-sm-2 col-md-1">
-			        <div class="col-xs-12 col-sm-12 col-md-12" style="min-height:54px;">
+			        <div id="payment-type-button-{{ index }}" class="col-xs-12 col-sm-12 col-md-12" style="" >
 			        	{% if entity.iconPath %}
-			        		<img alt="{{ entity.name }}" title="{{ entity.name }}" src="{{ entity.iconPath }}" />
+			        		<img class="payment-type" alt="{{ entity.name }}" title="{{ entity.name }}" src="{{ entity.iconPath }}" />
 			        	{% else %}
 			        	    <span style="min-height:54px;">{{ entity.name }}</span>
 			        	{% endif %}
-			        </div>
-			        
-			        <div class="col-xs-12 col-sm-12 col-md-12">{{ form_widget(paymentType) }}</div>{# render checkbox #}
+
+				        <div class="col-xs-12 col-sm-12 col-md-12">{{ form_widget(paymentType) }}</div>{# render checkbox #}
+					</div>
 			        </div>
 				{% endfor %}
 				{#{ form_widget(form.paymentType, {'attr' : {'class' : 'paymentType'}}) }#}
@@ -111,9 +111,11 @@
 				</div>
 			</div>
 		</div>
-
-		{{ include('common/payment-summary.html.twig', {'payments':payments, 'booking':booking}) }}
-
+		<div class="col-md-12">
+			{{ include('common/payment-summary.html.twig', {'payments':payments, 'booking':booking}) }}
+		</div>
 		{{ form_end(form) }}
 	</div>
 </div>
+
+{{ include('payment/payment-javascript.html.twig', {'formId': form.vars.name, 'paymentTypeId': form.paymentType.vars.name}) }}

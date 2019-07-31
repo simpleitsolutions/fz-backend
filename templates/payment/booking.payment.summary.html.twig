@@ -22,63 +22,35 @@
 	{#TODO move this script to central location. Can we make it dynamic?? #}
 	<script>
 
+		{% for i in 1..booking.passengers|length %}
+			var $addPurchaseItemLink{{ i }} = $('<div class="btn-group pull-left"><div class="col-md-12 col-sm-12"><a href="#" class="add_purchase_item_link btn btn-default btn-md"><span class="glyphicon glyphicon-plus"></span></a></div></div>');
+			var $newPurchaseItemLink{{ i }} = $('<div></div>').append($addPurchaseItemLink{{ i }});
+		{% endfor %}
+
 		$(document).ready(function() {
-			$purchaseItemsHolder1 = $('div.purchaseItems1');
 
-			$purchaseItemsHolder1.append($newPurchaseItemLink1);
+			{% for i in 1..booking.passengers|length %}
 
-			$purchaseItemsHolder1.data('index', $purchaseItemsHolder1.children().length);
+			$purchaseItemsHolder{{ i }} = $('div.purchaseItems{{ i }}');
 
-			$addPurchaseItemLink1.on('click', function (e) {
-				// prevent the link from creating a "#" on the URL
+			$purchaseItemsHolder{{ i }}.append($newPurchaseItemLink{{ i }});
+
+			$purchaseItemsHolder{{ i }}.data('index', $purchaseItemsHolder{{ i }}.children().length);
+
+			$addPurchaseItemLink{{ i }}.on('click', function (e) {
 				e.preventDefault();
 
-				// add a new purchaseItem form (see next code block)
-				createPurchaseItemAddLink($purchaseItemsHolder1, $newPurchaseItemLink1);
+				createPurchaseItemAddLink($purchaseItemsHolder{{ i }}, $newPurchaseItemLink{{ i }});
 			});
 
-			// add a delete link to all of the existing tag form li elements
-			$purchaseItemsHolder1.find('div.purchaseItem').each(function () {
+			$purchaseItemsHolder{{ i }}.find('div.purchaseItem').each(function () {
 				createPurchaseItemDeleteLink($(this));
 			});
 
-			$purchaseItemsHolder2 = $('div.purchaseItems2');
+			{% endfor %}
 
-			$purchaseItemsHolder2.append($newPurchaseItemLink2);
 
-			$purchaseItemsHolder2.data('index', $purchaseItemsHolder2.children().length);
 
-			$addPurchaseItemLink2.on('click', function (e) {
-				// prevent the link from creating a "#" on the URL
-				e.preventDefault();
-
-				// add a new purchaseItem form (see next code block)
-				createPurchaseItemAddLink($purchaseItemsHolder2, $newPurchaseItemLink2);
-			});
-
-			// add a delete link to all of the existing tag form li elements
-			$purchaseItemsHolder2.find('div.purchaseItem').each(function () {
-				createPurchaseItemDeleteLink($(this));
-			});
-
-			$purchaseItemsHolder3 = $('div.purchaseItems3');
-
-			$purchaseItemsHolder3.append($newPurchaseItemLink3);
-
-			$purchaseItemsHolder3.data('index', $purchaseItemsHolder3.children().length);
-
-			$addPurchaseItemLink3.on('click', function (e) {
-				// prevent the link from creating a "#" on the URL
-				e.preventDefault();
-
-				// add a new purchaseItem form (see next code block)
-				createPurchaseItemAddLink($purchaseItemsHolder3, $newPurchaseItemLink3);
-			});
-
-			// add a delete link to all of the existing tag form li elements
-			$purchaseItemsHolder3.find('div.purchaseItem').each(function () {
-				createPurchaseItemDeleteLink($(this));
-			});
 		});
 
 </script>

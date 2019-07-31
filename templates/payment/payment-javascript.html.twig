@@ -1,0 +1,11 @@
+<script>
+    $(document).ready(function() {
+        {% for i in 0..form.paymentType.vars.choices|length %}
+        $("#payment-type-button-{{ i }}").click(function (e) {
+            $("input[name='{{ formId }}[{{ paymentTypeId }}]']:checked").parent().removeClass('checked');
+            $("input[name='{{ formId }}[{{ paymentTypeId }}]'][value='{{ i }}']").parent().addClass('checked');
+            $("input[name='{{ formId }}[{{ paymentTypeId }}]'][value='{{ i }}']").prop('checked', true);
+        })
+        {% endfor %}
+    });
+</script>

@@ -9,23 +9,23 @@
 					<div class="header nopadding col-md-12 col-sm-12 col-xs-12">
 						<div class="col-md-1 hidden-sm hidden-xs">ITEM</div>
 						<div class="text-left col-md-6 col-sm-6 col-xs-6">DESCRIPTION</div>
-						<div class="text-right visible-xs col-xs-2">ACTUAL</div>
-						<div class="hidden-xs text-right col-md-2 col-sm-2">ACTUAL PRICE</div>
+						<div class="text-right visible-xs visible-sm visible-md col-xs-2 col-sm-2 col-md-2">ACTUAL</div>
+						<div class="text-right hidden-xs hidden-sm hidden-md col-lg-2">ACTUAL PRICE</div>
 						<div class="text-right col-md-2 col-sm-3 col-xs-3">PRICE</div>
-						<div class="text-center col-md-1 col-sm-1 col-xs-1">&nbsp;</div>
+						<div class="text-right col-md-1 col-sm-1 col-xs-1">&nbsp;</div>
 					</div>
 
 				<div style="min-height:170px;" class=" purchaseItems" data-prototype="{% filter escape %}{% include 'payment/purchaseItem.new.html.twig' with {'form': form.purchaseItems.vars.prototype} %}{% endfilter %}">
 				{% for key,purchaseItem in form.purchaseItems %}
 					{% if loop.index > 1 %}   {# THINK ABOUT PUTTING A CONDITION-- IF PRODUCT IS A FLIGHT THEN DO NOT ALLOW THE DELETE ITEM BUTTON #}
-					<div class="row1 nopadding purchaseItem col-md-12">
+					<div class="row nopadding purchaseItem col-md-12">
 					{% else %}
-					<div class="row1 nopadding col-md-12">
+					<div class="row nopadding col-md-12">
 					{% endif %}
 						<div class="col-md-1 hidden-sm hidden-xs">#{{ loop.index }}</div>
-						<div class="text-left col-md-5 col-sm-6 col-xs-6">{{ form_row(purchaseItem.product, {'label':false, 'attr':{'onchange':'updatePurchase(this)'}}) }}</div>
-						<div id="product_price_{{ loop.index-1 }}" class="text-right col-md-3 col-sm-2 col-xs-2" style="margin:7px 0px;">{{ passenger.purchase.purchaseItems[key].product.price }}</div>
-						<div class="text-left col-md-2 col-sm-3 col-xs-3">{{ form_row(purchaseItem.amount, {'label':false, 'attr': {'class':'text-right calc-item form-control'}}) }}</div>
+						<div class="text-left col-md-6 col-sm-6 col-xs-6">{{ form_widget(purchaseItem.product, {'label':false, 'attr':{'onchange':'updatePurchase(this)'}}) }}</div>
+						<div id="product_price_{{ loop.index-1 }}" class="text-right col-md-2 col-sm-2 col-xs-2" style="margin:7px 0px;">{{ passenger.purchase.purchaseItems[key].product.price }}</div>
+						<div class="text-left col-md-2 col-sm-3 col-xs-3">{{ form_widget(purchaseItem.amount, {'label':false, 'attr': {'class':'text-right calc-item form-control'}}) }}</div>
 					</div>
 					{% endfor %}
 				</div>
@@ -41,14 +41,14 @@
 							{% set index = paymentType.vars.value %}{# get array index #}
 							{% set entity = form.paymentType.vars.choices[index].data %}{# get entity object #}
 							<div class="row col-xs-2 col-sm-1 col-md-1">
-								<div class=" col-xs-12 col-sm-12 col-md-12" style="min-height:54px;">
+								<div id="payment-type-button-{{ index }}" class=" col-xs-12 col-sm-12 col-md-12" style="">
 									{% if entity.iconPath %}
-										<img alt="{{ entity.name }}" title="{{ entity.name }}" src="{{ entity.iconPath }}" />
+										<img class="payment-type" alt="{{ entity.name }}" title="{{ entity.name }}" src="{{ entity.iconPath }}" />
 									{% else %}
 										<span style="min-height:54px;">{{ entity.name }}</span>
 									{% endif %}
+									<div class="col-sm-12 col-md-12">{{ form_widget(paymentType) }}</div>{# render checkbox #}
 								</div>
-								<div class="col-sm-12 col-md-12">{{ form_widget(paymentType) }}</div>{# render checkbox #}
 							</div>
 						{% endfor %}
 						{#{ form_widget(form.paymentType, {'attr' : {'class' : 'paymentType'}}) }#}
@@ -86,3 +86,5 @@
 		</div>
 		</div>
 	</div>
+
+	{{ include('payment/payment-javascript.html.twig', {'formId': form.vars.name, 'paymentTypeId': form.paymentType.vars.name}) }}

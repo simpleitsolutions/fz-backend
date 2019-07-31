@@ -1,4 +1,4 @@
 <div class="col-md-1 hidden-sm hidden-xs">&nbsp;</div>
-<div class="nopadding col-md-6 col-sm-6 col-xs-8">{{ form_row(form.product, {'label':false, 'attr':{'class':'form-control', 'onchange':'bookingPaymentSummaryUpdatePurchaseItem(this)'}}) }}</div>
-<div id="product_price___name__" class="hidden-xs text-right col-md-2 col-sm-2 col-xs-2" style="margin:7px 0px;">&nbsp;{#{ passenger.purchase.purchaseItems[loop.index-1].product.price }#}</div>
-<div class="nopadding text-left col-md-2 col-sm-3 col-xs-3">{{ form_row(form.amount, {'label':false, 'attr':{'class':'form-control calc-item text-right', 'onblur':'formatMoney(this)', 'onkeyup':'calculateSum(this)'}}) }}</div>
+<div class="col-md-6 col-sm-6 col-xs-6">{{ form_widget(form.product, {'label':false, 'attr':{ 'data-sonata-select2':'true', 'class':'form-control', 'onchange':'bookingPaymentSummaryUpdatePurchaseItem(this)'}}) }}</div>
+<div id="product_price___name__" class="text-right col-md-2 col-sm-2 col-xs-2" style="margin:7px 0px;">&nbsp;{#{ passenger.purchase.purchaseItems[loop.index-1].product.price }#}</div>
+<div class="text-left col-md-2 col-sm-3 col-xs-3">{{ form_widget(form.amount, {'label':false, 'attr':{'class':'form-control calc-item text-right', 'onblur':'formatMoney(this)', 'onkeyup':'calculateSum(this)'}}) }}</div>
