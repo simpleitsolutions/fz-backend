@@ -1,26 +1,34 @@
 
 <div class="nav-bar col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <ul class="pagination">
+    <ul class="pagination visible-xs">
+        <li class=""><a href="{{path('booking_custom_schedule', {'date':indexdate|date_modify('-1 days')|date("Y-m-d")} ) }}"><span class="fa fa-arrow-left"></span></a></li>
+        <li><a href="{{path('booking_custom_schedule', {'date':"now"|date("Y-m-d")} ) }}">Today</a></li>
+        <li class=""><a href="{{path('booking_custom_schedule', {'date':indexdate|date_modify('+1 days')|date("Y-m-d")} ) }}"><span class="fa fa-arrow-right"></span></a></li>
+    </ul>
+    <ul class="pagination hidden-sm hidden-xs">
         <li><a href="{{path('booking_custom_schedule', {'date':"now"|date("Y-m-d")} ) }}">Today</a></li>
     </ul>
-    <ul class="pagination hidden-xs hidden-sm">
-    {% for i in -1..3 %}
-      {% if i == 0 %}
-        <li class="disabled booking-schedule-current-date"><a href="#">{{indexdate|date("D d")}}</a></li>
-      {% else %}
-        <li><a href="{{path('booking_custom_schedule', {'date':indexdate|date_modify('+' ~ i ~ 'days')|date("Y-m-d")} ) }}">{{indexdate|date_modify('+' ~ i ~ 'days')|date("D d")}}</a></li>
-      {% endif %}
-    {% endfor %}
-    {% for i in 4..5 %}
-        <li><a href="{{ path('booking_custom_schedule', {'date':indexdate|date_modify('+' ~ i ~ 'days')|date("Y-m-d")} ) }}">{{indexdate|date_modify('+' ~ i ~ 'days')|date("D d")}}</a></li>
-    {% endfor %}
+    <ul class="pagination hidden-xs">
+        {% for i in -1..3 %}
+            {% if i == 0 %}
+                <li class="disabled booking-schedule-current-date"><a href="#">{{indexdate|date("D d")}}</a></li>
+            {% else %}
+                <li class=""><a href="{{path('booking_custom_schedule', {'date':indexdate|date_modify('+' ~ i ~ 'days')|date("Y-m-d")} ) }}">{{indexdate|date_modify('+' ~ i ~ 'days')|date("D d")}}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% for i in 4..5 %}
+            <li class=""><a href="{{ path('booking_custom_schedule', {'date':indexdate|date_modify('+' ~ i ~ 'days')|date("Y-m-d")} ) }}">{{indexdate|date_modify('+' ~ i ~ 'days')|date("D d")}}</a></li>
+        {% endfor %}
     </ul>
+
     <ul class="pagination hidden-xs hidden-sm">
         <li><a href="{{path('booking_custom_schedule', {'date':indexdate|date_modify('+1 weeks')|date("Y-m-d")} ) }}">Next Week</a></li>
     </ul>
+
     <ul class="pagination hidden-xs hidden-sm">
         <li><a href="{{path('booking_custom_schedule', {'date':indexdate|date_modify('+1 months')|date("Y-m-01")} ) }}">{{ indexdate|date_modify('+1 months')|date("F") }}</a></li>
     </ul>
+
 
     <ul class="pagination">
     {{ form_start(dateForm, {'action': path('booking_date_select'), 'attr': { 'id':'targetDateForm' }} ) }}
@@ -28,11 +36,14 @@
        <div class="booking-schedule-datepicker form-group">
             <div class="input-group date" id="datepicker">
                 <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
+                    <span class="fa fa-calendar"></span>
                 </span>
                 {{ form_widget(dateForm.targetDate, {'attr': {'class': 'form-control '}}) }}
             </div>
         </div>
     {{ form_end(dateForm) }}
     </ul>
+
+
+
 </div>
