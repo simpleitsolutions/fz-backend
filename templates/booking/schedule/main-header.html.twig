@@ -12,7 +12,7 @@
     	    </div>
     	    <div class="pull-right hidden-print hidden-xs">&nbsp;</div>
         	<div class="pull-right hidden-print">
-                <a href="{#{ path('booking_index') }#}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-list-alt"></span></a>
+                <a href="{#{ path('booking_index') }#}" class="btn btn-default btn-sm"><span class="fa fa-list-alt"></span></a>
             </div>
     	    <div class="pull-right hidden-print">&nbsp;</div>
     		{% if is_granted('ROLE_ADMIN') %}
@@ -27,7 +27,7 @@
 	    	{% endif %}
     	    <div class="pull-right hidden-print">&nbsp;</div>
     	    <div class="pull-right hidden-print">
-				<a href="{{ path('booking_custom_create', {'date':indexdate|date("Y-m-d")}) }}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></a>
+				<a href="{{ path('booking_custom_create', {'date':indexdate|date("Y-m-d")}) }}" class="btn btn-default btn-sm"><span class="fa fa-plus"></span></a>
     	    </div>
     	</h4>
     </div>
