@@ -16,6 +16,11 @@ use Symfony\Component\Form\FormEvents;
 
 class PassengerType extends AbstractType
 {
+    public function __construct(ProductRepository $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
 	public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name', TextType::class, array('label' => false, 'error_bubbling' => false) );
@@ -27,6 +32,16 @@ class PassengerType extends AbstractType
 //                    'empty_value' => 'Please Select',
                 'empty_data' => null,
                 'required' => false,
+                'preferred_choices' => $this->productRepository->getPreferredFlightProducts(),
+//                'group_by' => function($choice, $key, $value) {
+//                    if ($choice->getProductCategory() == "FLIGHT") {
+//                        return 'Flight';
+//                    } else if($choice->getProductCategory() == "TRANSPORT") {
+//                        return 'Transport';
+//                    } else {
+//                        return 'Other';
+//                    }
+//                },
                 'query_builder' => function (ProductRepository $er) {
                     return $er->createQueryBuilder('p')
                         ->join('p.productCategory', 'pc')
