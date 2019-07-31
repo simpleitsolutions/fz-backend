@@ -71,14 +71,14 @@
                 <thead>
                 <tr class="hidden-xs hidden-sm">
                     <th>Name</th>
-                    <th><span class="glyphicon glyphicon-user"></span></th>
+                    <th><span class="fa fa-user"></span></th>
                     <th>Flight</th>
                     <th>Arrival</th>
                     <th>Departure</th>
                 </tr>
                 <tr class="hidden-md hidden-lg">
                     <th style="width:50%">Name</th>
-                    <th style="width:10%"><span class="glyphicon glyphicon-user"></span></th>
+                    <th style="width:10%"><span class="fa fa-user"></span></th>
                     <th style="width:10%">Flight</th>
                     <th style="width:10%">Arriv.</th>
                     <th style="width:10%">Dep.</th>
@@ -95,7 +95,7 @@
                         <td>{{bookingrequest.departuredate is empty ? "" : bookingrequest.departuredate|date("d-m-Y")}}</td>
                         <td class="text-right">
                             <div class="pull-right hidden-print">
-                                <a href="{{ path('booking_request_custom_confirm', { 'id': bookingrequest.id }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-check"></span></a>
+                                <a href="{{ path('booking_request_custom_confirm', { 'id': bookingrequest.id }) }}" class="btn btn-default btn-xs"><span class="fa fa-check"></span></a>
                             </div>
                         </td>
                     </tr>
@@ -107,7 +107,7 @@
                         <td>{{bookingrequest.departuredate is empty ? "" : bookingrequest.departuredate|date("d M")}}</td>
                         <td class="text-right">
                             <div class="btn-group pull-right hidden-print">
-                                <a href="{{ path('booking_request_custom_confirm', { 'id': bookingrequest.id }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-check"></span></a>
+                                <a href="{{ path('booking_request_custom_confirm', { 'id': bookingrequest.id }) }}" class="btn btn-default btn-xs"><span class="fa fa-check"></span></a>
                             </div>
                         </td>
                     </tr>
@@ -127,10 +127,10 @@
                     </a>
 
                     <div class="pull-left hidden-print">
-                        <a href="{#{ path('waiting_list_new', {'date':indexdate|date("Y-m-d")})  }#}" class="btn btn-default btn-md visible-xs"><span class="glyphicon glyphicon-plus"></span></a>
+                        <a href="{#{ path('waiting_list_new', {'date':indexdate|date("Y-m-d")})  }#}" class="btn btn-default btn-md visible-xs"><span class="fa fa-plus"></span></a>
                     </div>
                     <div class="btn-group pull-left hidden-print">
-                        <a href="{#{ path('waiting_list_new', {'date':indexdate|date("Y-m-d")})  }#}" class="btn btn-default btn-sm hidden-xs"><span class="glyphicon glyphicon-plus"></span></a>
+                        <a href="{#{ path('waiting_list_new', {'date':indexdate|date("Y-m-d")})  }#}" class="btn btn-default btn-sm hidden-xs"><span class="fa fa-plus"></span></a>
                     </div>
                 </h4>
             </div>
@@ -141,7 +141,7 @@
                     <th>#</th>
                     <th>Name</th>
                     <th class="hidden-xs">Contact</th>
-                    <th><span class="glyphicon glyphicon-user"></span></th>
+                    <th><span class="fa fa-user"></span></th>
                     <th>Notes</th>
                     <th>&nbsp;</th>
                 </tr>
@@ -169,7 +169,7 @@
                         <td>
                             {% if(waitingListItem.deleted is null) %}
                                 <div class="btn-group pull-right hidden-print">
-                                    <a href="{#{ path('waiting_list_delete', {'id':waitingListItem.id}) }#}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-minus-sign"></span></a>
+                                    <a href="{#{ path('waiting_list_delete', {'id':waitingListItem.id}) }#}" class="btn btn-default btn-xs"><span class="fa fa-minus-sign"></span></a>
                                 </div>
                             {% else %}
                                 &nbsp;
