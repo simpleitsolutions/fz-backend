@@ -24,9 +24,9 @@ class ProductRepository extends ServiceEntityRepository
         $preferredFlights = $this
             ->createQueryBuilder('p')
             ->join('p.productCategory', 'pc')
-            ->where('pc.name = :category')
+            ->where('pc.name IN(:categories)')
             ->andWhere('p.preferred = :preferred')
-            ->setParameter('category', 'FLIGHT')
+            ->setParameter('categories', ['FLIGHT','MISC'])
             ->setParameter('preferred', true)
             ->orderBy('p.sortOrder', 'ASC')
             ->getQuery()
