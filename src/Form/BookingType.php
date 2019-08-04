@@ -54,6 +54,8 @@ class BookingType extends AbstractType
 		    'label' => 'Meeting Time',
             'widget' => 'choice',
             'attr' => ['class' => 'fixed-time'],
+            'placeholder' => ['hour' => 'hh', 'minute' => 'mm'],
+            'hours' => [0,7,8,9,10,11,12,13,14,15,16,17,18,19],
 //		    'translation_domain' => 'AazpBookingBundle',
 // 		    'required' => false,
 //            'attr' => ['class' => 'form-control', 'data-sonata-select2' => 'false'],
@@ -61,7 +63,7 @@ class BookingType extends AbstractType
 //		        'data-provide' => 'datepicker',
 //		        'data-format' => 'HH:mm',
 		    ));
-		
+
 		$builder->add('flight', EntityType::class, array('label' => 'Flight',
 		                                        'class' => Product::class,
                                                 'attr' => ['class' => 'form-control1'],
@@ -85,15 +87,16 @@ class BookingType extends AbstractType
 		    'required' => false,
 		    'choices' => $options['flightScheduleTimes'],
 		));
-		
+
 		$builder->add('passengers', CollectionType::class, array('entry_type' => PassengerType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => false));
+
 		$builder->add('contactinfo', TextareaType::class, array('label' => 'Contact', 'attr' => ['class' => 'form-control']));
 //        $builder->add('meetinglocation', ModelType::class, ['label' => 'Meeting Location', 'class' => MeetingLocation::class,]);
 
-		$builder->add('meetinglocation', EntityType::class, array('label' => 'Meeting Location',
+		$builder->add('meetingLocation', EntityType::class, array('label' => 'Meeting Location',
 		                                                 'class' => MeetingLocation::class,
 //		                                                 'property' => 'name',
-                                                         'attr' => ['class' => 'form-control', 'data-sonata-select2' => 'true'],
+                                                         'attr' => ['class' => 'form-control1'],
 		                                                 'placeholder' => 'Please Select',
 		                                                 'preferred_choices' => $options['preferredMeetingLocations'],
             											 'query_builder' => function(MeetingLocationRepository $er) {
@@ -109,7 +112,7 @@ class BookingType extends AbstractType
 		              return $er->createQueryBuilder('bo')
 		                        ->orderBy('bo.sortOrder', 'ASC');}
             ) );
-		
+
 		$builder->add('notes', TextareaType::class, array('label' => 'Comments', 'required' => false, 'attr' => ['class' => 'form-control']));
 
 		$builder->get('flightdate')->addModelTransformer(new DateTransformer());
@@ -119,7 +122,7 @@ class BookingType extends AbstractType
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Booking::class, 'cascade_validation' => true, 'validation_groups' => array('Booking', 'quick'),));
+            'data_class' => Booking::class, 'cascade_validation' => true,));
 	}
 
     public function configureOptions(OptionsResolver $resolver)

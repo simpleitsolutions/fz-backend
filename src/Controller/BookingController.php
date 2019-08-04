@@ -296,7 +296,7 @@ class BookingController extends AbstractController
 
         $form->remove('flightScheduleTime');
         $form->remove('passengers.flight');
-		$form->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-success']]);
+//		$form->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-success']]);
 		$form->add('saveAndExit', SubmitType::class, ['label' => 'Save', 'attr' => ['class' => 'btn btn-success']]);
 		$form->add('saveAndConfirm', SubmitType::class, ['label' => 'Save & Confirm', 'attr' => ['class' => 'btn btn-success']]);
  		$form->add('cancel', ButtonType::class, ['attr' => ['class' => 'btn btn-danger', 'formnovalidate' => true,]]);
@@ -344,7 +344,7 @@ class BookingController extends AbstractController
 			        ? $this->generateUrl('booking_custom_show', array('id'=> $booking->getId()))
 			        : $this->generateUrl('booking_custom_create');
 	        return $this->redirect($nextAction);
-	    }
+        }
 		return $this->render('booking/new.html.twig', array('form' => $form->createView()));
     }
 

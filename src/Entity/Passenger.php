@@ -28,7 +28,7 @@ class Passenger extends BaseEntity
 
 	/**
 	 * @ORM\Column(type="string", length=80)
-	 * @Assert\NotBlank(message="Passenger Name is required.", groups={"quick"})
+	 * @Assert\NotBlank(message="Passenger Name is required.")
 	 */
 	protected $name;
 	

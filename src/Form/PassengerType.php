@@ -53,8 +53,7 @@ class PassengerType extends AbstractType
             EntityType::class,
             array('label' => 'Pilot',
                 'class' => Pilot::class,
-//                                'property' => 'name',
-//                                'empty_value' => 'Please Select',
+                'placeholder' => 'Pilot Select',
                 'empty_data' => null,
                 'required' => false,
                 'query_builder' => function (PilotRepository $er) {

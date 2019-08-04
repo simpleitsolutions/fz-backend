@@ -19,58 +19,40 @@
             <div class="box-title">Booking</div>
         </div>
         <div class="box-body">
-            {{ form_start(form) }}
-            {#{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }#}
+            {#{ form_start(form) }#}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-3">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-4 col-md-12">
-                            {{ form_row(form.flightScheduleTime) }}
-                        </div>
-                        <div class="col-xs-6 col-sm-4 col-md-12">
-                            {{ form_label(form.flightdate, null, { 'label_attr': {'class': 'control-label'} }) }}{{ form_errors(form.flightdate) }}
+                        <div class="col-xs-12 col-sm-6 col-md-12">
+                            {{ form_label(form.flightdate) }}
                             <div class="form-group">
                                 <div class='input-group date' id='datepicker'>
-                                    <span class="input-group-addon">
-                                        <span class="fa fa-calendar"></span>
-                                    </span>
-                                    {#{ form_widget(form.flightdate) }#}
-                                    {{ form_widget(form.flightdate, {'attr': {'class': 'form-control'}}) }}
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                                    {{ form_widget(form.flightdate) }}
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-6 col-sm-4 col-md-12" >
-                            {{ form_label(form.meetingTime, null, { 'label_attr': {'class': 'control-label'} }) }}{{ form_errors(form.meetingTime) }}
-                           <div class="form-group">
-                                <div class='input-group date' id='timepicker1'>
-                                    <span class="input-group-addon">
-                                        <span class="fa fa-time"></span>
-                                    </span>
-                                    {{ form_widget(form.meetingTime) }}
-                                </div>
-                            </div>
+                        <div class="col-xs-12 col-md-12">
+                            {{ form_row(form.meetingLocation) }}
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-12" >
+                            {{ form_row(form.meetingTime) }}
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-12">
+                            {{ form_row(form.flightScheduleTime) }}
                         </div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-3">
                     <div class="row">
                         <div class="col-xs-12 col-md-12">
-                            {{ form_label(form.flight) }}
-                        </div>
-                        <div class="col-xs-12 col-md-12" style="margin-bottom:15px;">
-                            {{ form_widget(form.flight) }}
+                            {{ form_row(form.flight) }}
                         </div>
                         <div class="col-xs-12 col-md-12">
-                            {{ form_label(form.meetinglocation) }}
-                        </div>
-                        <div class="col-xs-12 col-md-12" style="margin-bottom:15px;">
-                            {{ form_widget(form.meetinglocation) }}
-                        </div>
-                        <div class="col-xs-12 col-md-12">
-                            {{ form_label(form.contactinfo) }}
-                        </div>
-                        <div class="col-xs-12 col-md-12" style="margin-bottom:15px;">
-                            {{ form_widget(form.contactinfo) }}
+                            {{ form_row(form.contactinfo, {'attr': { 'rows':'6' }}) }}
                         </div>
                     </div>
                 </div>

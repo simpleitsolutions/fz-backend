@@ -56,7 +56,7 @@ class Booking extends BaseEntity
 
     /**
      * @ORM\Column(type="string", length=300)
-     * @Assert\NotBlank(message="Contact Information is required.", groups={"quick"})
+     * @Assert\NotBlank(message="Contact Information is required.")
      */
     private $contactinfo;
 
@@ -67,12 +67,14 @@ class Booking extends BaseEntity
 
 	/**
      * @ORM\OneToMany(targetEntity="Passenger", mappedBy="booking", cascade={"all"})
+     * @Assert\Valid
      */
      private $passengers;
 
      /**
       * @ORM\Column(name="meeting_time", type="time", nullable=true)
-      * 	
+      * @Assert\DateTime
+      * @Assert\NotBlank(message="Meeting Time is required.")
       */
      private $meetingTime;
      
