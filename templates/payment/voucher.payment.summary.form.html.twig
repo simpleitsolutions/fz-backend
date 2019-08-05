@@ -5,7 +5,7 @@
 				<h5>{{voucher.name}}</h5>
 			</div>
 			<div class="box-body">
-				{{ form_start(form, {'attr': {'class':'payment form-inline'} }) }}
+				{{ form_start(form, {'attr': {'class':'payment form-inline', 'novalidate': 'novalidate'} }) }}
 					<div class="header nopadding col-md-12 col-sm-12 col-xs-12">
 						<div class="col-md-1 hidden-sm hidden-xs">ITEM</div>
 						<div class="text-left col-md-6 col-sm-6 col-xs-6">DESCRIPTION</div>
@@ -35,26 +35,11 @@
 					<div class="col-md-1">&nbsp;</div>
 				</div>
 
-				<div class="row purchase-payment-type-section">
-					<div class="col-xs-12 col-sm-12 col-md-12">
-						{% for paymentType in form.paymentType %}
-							{% set index = paymentType.vars.value %}{# get array index #}
-							{% set entity = form.paymentType.vars.choices[index].data %}{# get entity object #}
-							<div class="row col-xs-2 col-sm-1 col-md-1">
-								<div id="payment-type-button-{{ index }}" class=" col-xs-12 col-sm-12 col-md-12" style="">
-									{% if entity.iconPath %}
-										<img class="payment-type" alt="{{ entity.name }}" title="{{ entity.name }}" src="{{ entity.iconPath }}" />
-									{% else %}
-										<span style="min-height:54px;">{{ entity.name }}</span>
-									{% endif %}
-									<div class="col-sm-12 col-md-12">{{ form_widget(paymentType) }}</div>{# render checkbox #}
-								</div>
-							</div>
-						{% endfor %}
-						{#{ form_widget(form.paymentType, {'attr' : {'class' : 'paymentType'}}) }#}
-					</div>
+				<div class="purchase-payment-type-section">
+					{% include ('payment/payment-type-select.html.twig') %}
 				</div>
-				<div class="row1 box-body1 purchase-payment-section">
+
+				<div class="row box-body1 purchase-payment-section">
 					<div class="nopadding col-xs-12 col-md-12 col-sm-12">
 						<div class="text-center col-xs-7 col-sm-7 col-md-6">NOTES</div>
 						<div class="text-center col-xs-3 col-sm-3 col-md-3">LAST 4 DIGITS</div>
@@ -63,7 +48,7 @@
 						<div class="text-center visible-md visible-lg col-md-1" >&nbsp;</div>
 					</div>
 					<div class="nopadding col-xs-12 col-sm-12 col-md-12">
-						<div class="text-center col-xs-7 col-sm-7 col-md-6">{{ form_row(form.description, {'label':false, 'attr': {'class':'notes-field form-control full-width'}}) }}</div>
+						<div class="text-center col-xs-7 col-sm-7 col-md-6">{{ form_row(form.description, {'label':false, 'attr': {'class':'notes-field form-control'}}) }}</div>
 						<div class="text-center col-xs-3 col-sm-3 col-md-3">{{ form_row(form.sumupRef, {'label':false, 'attr': {'class':'text-right sumup-field form-control'}}) }}</div>
 						<div class="text-center col-xs-2 col-sm-2 col-md-2" >{{ form_row(form.paymentAmount, {'label':false, 'attr': {'class':'text-right payment-amount-field form-control'}}) }}</div>
 						<div class="text-center visible-md visible-lg col-md-1" >&nbsp;</div>
