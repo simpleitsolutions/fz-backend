@@ -32,6 +32,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Required;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Choice;
 
 
 /**
@@ -624,27 +628,56 @@ class BookingController extends AbstractController
         $paymentViewList = $paymentViewHelper->processBookingPayments($payments);
 
         $form = $this->createFormBuilder($booking)
-//            ->add('passengers', CollectionType::class, array('type' => new BPPassengerType(), 'allow_add' => false, 'allow_delete' => false, 'by_reference' => false))
-            ->add('passengers', CollectionType::class, array('entry_type' => BPPassengerType::class, 'allow_add' => false, 'allow_delete' => false, 'by_reference' => false))
-//            ->add('paymentType', EntityType::class, array('label' => 'Payment Type', 'class' => PaymentType::class,'property' => 'name', 'mapped' => false, 'expanded' => true))
-            ->add('paymentType', EntityType::class, array('label' => 'Payment Type', 'class' => PaymentType::class, 'choice_label' => 'name', 'mapped' => false, 'expanded' => true))
-//            ->add('paymentAmount', NumberType::class, array('precision' => 2, 'data' => $booking->calculateBalance(), 'mapped' => false))
-            ->add('paymentAmount', NumberType::class, array('scale' => 2, 'data' => $booking->calculateBalance(), 'mapped' => false))
-            ->add('sumupRef', TextType::class, array('mapped' => false, 'required' => false))
-            ->add('description', TextType::class, array('mapped' => false, 'required' => false))
-            ->add('pay', SubmitType::class, ['attr' => ['class' => 'btn btn-success']])
-//            ->add('cancel', SubmitType::class, array('attr' => array('class' => 'btn', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#modalWarning', 'data-modal-title' => 'Are you want to cancel this payment?' )))
-            ->add('cancel', ButtonType::class,
-                ['attr' => ['class' => 'btn',
-                    'formnovalidate' => true,
-                    'data-toggle' => 'modal',
-                    'data-target' => '#modalWarning',
-                    'data-href' => $this->generateUrl('booking_custom_show', array ('id'=> $passenger->getBooking()->getId())),
-                    'data-modal-title' => 'Are you want to cancel this payment?']])
+            ->add('passengers',
+                    CollectionType::class,
+                        array('entry_type' => BPPassengerType::class,
+                            'allow_add' => false,
+                            'allow_delete' => false,
+                            'by_reference' => false))
+
+            ->add('paymentType',
+                    EntityType::class,
+                        array('label' => 'Payment Type',
+                            'class' => PaymentType::class,
+                            'choice_label' => 'name',
+                            'mapped' => false,
+                            'expanded' => true,
+                            'constraints' => [
+                                new NotNull(['message'=>"A payment type is required."]),]))
+
+            ->add('paymentAmount',
+                    NumberType::class,
+                        array('scale' => 2,
+                            'data' => $booking->calculateBalance(),
+                            'mapped' => false,
+                            'constraints' => [
+                                new NotBlank()]))
+
+            ->add('sumupRef',
+                    TextType::class,
+                        array('mapped' => false,
+                            'required' => false))
+
+            ->add('description',
+                    TextType::class,
+                        array('mapped' => false,
+                            'required' => false))
+
+            ->add('pay',
+                    SubmitType::class,
+                        ['attr' => ['class' => 'btn btn-success']])
+
+            ->add('cancel',
+                    ButtonType::class,
+                       ['attr' => ['class' => 'btn',
+                        'formnovalidate' => true,
+                        'data-toggle' => 'modal',
+                        'data-target' => '#modalWarning',
+                        'data-href' => $this->generateUrl('booking_custom_show', array ('id'=> $passenger->getBooking()->getId())),
+                        'data-modal-title' => 'Are you want to cancel this payment?']])
             ->getForm();
 
         $form->handleRequest($request);
-
         if($request->isXmlHttpRequest() )
         {
             $paymentType = $form->get('paymentType')->getData();
@@ -722,8 +755,18 @@ class BookingController extends AbstractController
 
             $form = $this->createFormBuilder($booking)
                 ->add('passengers', CollectionType::class, array('entry_type' => BPPassengerType::class, 'allow_add' => false, 'allow_delete' => false, 'by_reference' => false))
-                ->add('paymentType', EntityType::class, array('label' => 'Payment Type', 'class' => PaymentType::class, 'choice_label' => 'name', 'mapped' => false, 'expanded' => true))
-                ->add('paymentAmount', NumberType::class, array('scale' => 2, 'data' => $booking->calculateBalance(), 'mapped' => false))
+                ->add('paymentType',
+                        EntityType::class,
+                            array('label' => 'Payment Type',
+                                'class' => PaymentType::class,
+                                'choice_label' => 'name',
+                                'mapped' => false,
+                                'expanded' => true,
+                                'error_bubbling' => true,
+                                'constraints' => [
+                                    new NotBlank()]))
+                ->add('paymentAmount', NumberType::class, array('scale' => 2, 'data' => $booking->calculateBalance(), 'mapped' => false, 'constraints' => [
+                    new NotBlank()]))
                 ->add('sumupRef', TextType::class, array('mapped' => false, 'required' => false))
                 ->add('description', TextType::class, array('mapped' => false, 'required' => false))
                 ->add('pay', SubmitType::class, ['attr' => ['class' => 'btn btn-success']])
@@ -876,6 +919,7 @@ class BookingController extends AbstractController
 
             return $this->redirect($this->generateUrl('booking_custom_show', array ('id'=> $booking->getId())));
         }
+
         return $this->render('payment/booking.payment.summary.html.twig', array(
             'paymentViewList' => $paymentViewList,
             'payments' => $payments,
