@@ -1,0 +1,11 @@
+<script>
+    $(document).ready(function() {
+        {% for i in 0..form.owner.vars.choices|length %}
+        $("#booking-owner-button-{{ i }}").click(function (e) {
+            $("input[name='{{ formId }}[{{ fieldId }}]']:checked").parent().removeClass('checked');
+            $("input[name='{{ formId }}[{{ fieldId }}]'][value='{{ i }}']").parent().addClass('checked');
+            $("input[name='{{ formId }}[{{ fieldId }}]'][value='{{ i }}']").prop('checked', true);
+        })
+        {% endfor %}
+    });
+</script>

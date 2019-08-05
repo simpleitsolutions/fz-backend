@@ -139,13 +139,16 @@ div[id^='booking-owner-button-'] ins {
     background-color: #ca7ca8;
 }
 
-
 @media screen and (max-width: 992px) {
     .fixed-time .select2-container {
         width: 48% !important;
     }
     .passengers .row {
-        margin-bottom: 5%;
+        margin-bottom: 0px;
+    }
+
+    .passenger {
+        padding-bottom: 20px;
     }
 
     .purchase-payment-type-section .payment-type {

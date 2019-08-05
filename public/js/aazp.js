@@ -63,8 +63,8 @@
 
 var $PassengerHolder;
 
-var $addPassengerLink = $('<div class="btn-group pull-left"><a href="#" class="add_contact_link btn btn-default btn-md"><span class="glyphicon glyphicon-plus"></span></a></div>');
-var $newPassengerLink = $('<div></div>').append($addPassengerLink);
+var $addPassengerLink = $('<div class="btn-group pull-left"><a href="#" class="add_contact_link btn btn-default btn-md"><span class="fa fa-plus"></span></a></div>');
+var $newPassengerLink = $('<div class="col-md-12 col-sm-12 col-xs-12"></div>').append($addPassengerLink);
 
 $(document).ready(function(){
 
@@ -250,7 +250,7 @@ $(document).ready(function(){
 // }
 
 function createPassengerDeleteLink($newPassengerHolder) {
-    var $newPassengerDeleteLink = $('<div class="btn-group col-md-1 col-xs-1"><a href="#" class="btn btn-default btn-md"><span class="glyphicon glyphicon-remove"></span></a></div>');
+    var $newPassengerDeleteLink = $('<div class="btn-group col-md-1 col-xs-1"><a href="#" class="btn btn-default btn-md"><span class="fa fa-remove"></span></a></div>');
     
     $newPassengerHolder.append($newPassengerDeleteLink);
 
@@ -281,7 +281,7 @@ function createPassengerAddLink($passengerHolder, $newPassengerAddLink) {
     // increase the index with one for the next item
     $passengerHolder.data('index', index+1);
 
-    var $newPassengerHolder = $('<div class="passenger row no-gutter col-md-12"></div>').append(newPassengerPrototype);
+    var $newPassengerHolder = $('<div class="passenger nopadding col-md-12 col-sm-12 col-xs-12"></div>').append(newPassengerPrototype);
     $newPassengerAddLink.before($newPassengerHolder);
     
     createPassengerDeleteLink($newPassengerHolder);

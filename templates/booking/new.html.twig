@@ -81,8 +81,8 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-12">
-                    {{ form_row(form.owner,{ 'attr': { 'class': 'owner' } }) }}
+                <div class="nopadding1 col-xs-12 col-sm-12 col-md-12">
+                    {% include ('booking/owner-select.html.twig') %}
                 </div>
                 <div class="col-xs-12 col-md-12">
                     {{ form_widget(form.saveAndExit) }}
@@ -96,5 +96,8 @@
         </div>
     </div>
     <!-- here -->
+
+
+    {{ include('booking/owner-javascript.html.twig', {'formId': form.vars.name, 'fieldId': form.owner.vars.name}) }}
 
     {% endblock sonata_admin_content %}
