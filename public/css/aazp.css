@@ -104,10 +104,24 @@ div[id^='payment-type-button-'] {
    border: 1px solid #D2DED6;
    border-radius: 3px;
    background-color: #f4f4f4;
-   min-height:100px;
+   min-height:125px;
+   margin: 10px 5px;
 }
 
 div[id^='payment-type-button-'] ins {
+    text-align: center;
+}
+
+
+div[id^='booking-owner-button-'] {
+    border: 1px solid #D2DED6;
+    border-radius: 3px;
+    background-color: #f4f4f4;
+    min-height:100px;
+    margin: 10px;
+}
+
+div[id^='booking-owner-button-'] ins {
     text-align: center;
 }
 
@@ -133,12 +147,31 @@ div[id^='payment-type-button-'] ins {
     .passengers .row {
         margin-bottom: 5%;
     }
+
+    .purchase-payment-type-section .payment-type {
+        width:35px;
+    }
+
+    div[id^='payment-type-button-'] {
+        min-height:106px;
+        margin: 10px 9px;
+    }
+
+    div[id^='payment-type-button-'] .form-group {
+        margin: 0px;
+    }
+
+    div[id^='payment-type-button-'] .form-group .radio {
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .col-xs-12 > .form-group {
+        width: 80%;
+    }
 }
 
 @media only screen and (min-width: 768px) {
-    .notes-field {
-        width: 450px;
-    }
     .sumup-field {
         width: 60px;
     }
