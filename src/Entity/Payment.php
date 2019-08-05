@@ -40,7 +40,7 @@ class Payment extends BaseEntity
 /**
      * @ORM\ManyToOne(targetEntity="PaymentType", inversedBy="payments")
      * @ORM\JoinColumn(name="payment_type_id", referencedColumnName="id")
-	 * @Assert\NotNull(message="No Payment Type selected.")
+     * @Assert\Valid
      */
 	protected $paymentType;
 
