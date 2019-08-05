@@ -34,7 +34,7 @@ class Voucher extends BaseEntity
     /**
      * @var integer
      *
-     * @ORM\Column(name="status", type="integer", nullable=false)
+     * @ORM\Column(name="status", type="integer")
      */
     private $status;
 
