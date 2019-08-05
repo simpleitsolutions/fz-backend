@@ -1,27 +1,19 @@
 {#TODO Page needs correct use of the bootstrap row col-x-x. col-x-x child of row #}
-	<div class="box-header">
-		PAYMENT SUMMARY - #{{booking.id}}
-	</div>
+<div class="box-header">
+	PAYMENT SUMMARY - #{{booking.id}}
+</div>
 
-    <div class="box-body">
-		<div class="col-md-12 nopadding">
+<div class="box-body">
+	<div class="col-md-12 nopadding">
 
-				{{ form_start(form, {'attr': {'class':'payment form-inline'} }) }}
-			{#<div class="row">#}
-				{#<div class="header nopadding col-md-12 col-sm-12 col-xs-12">#}
-					{#<div class="col-md-1 hidden-sm hidden-xs">ITEM</div>#}
-					{#<div class="text-left col-md-6 col-sm-6 col-xs-7">DESCRIPTION</div>#}
-					{#<div class="text-right visible-xs col-xs-2">ACTUAL</div>#}
-					{#<div class="hidden-xs text-right col-md-2 col-sm-2">ACTUAL PRICE</div>#}
-					{#<div class="text-center col-md-3 col-sm-3 col-xs-3">PRICE</div>#}
-				{#</div>#}
-			{#</div>		#}
+	{{ form_start(form, {'attr': {'class':'payment form-inline', 'novalidate': 'novalidate'} }) }}
+
     {% for passenger in booking.passengers %}
 	<div class="box box-default pdf-page-half">
-	    <div class="box-header hidden-print"><h5>{{passenger.name}}</h5></div>
+	    <div class="box-header hidden-print"><h5>{{passenger.name}} {{ passenger.pilot?'('~passenger.pilot.name~')' }}</h5></div>
     	<div class="box-body">
 			<div class="row">
-				<div class="header nopadding1 col-md-12 col-sm-12 col-xs-12">
+				<div class="header col-md-12 col-sm-12 col-xs-12">
 					<div class="col-md-1 hidden-sm hidden-xs">ITEM</div>
 					<div class="text-left col-md-6 col-sm-6 col-xs-6">DESCRIPTION</div>
 					<div class="text-right visible-xs visible-sm visible-md col-xs-2 col-sm-2 col-md-2">ACTUAL</div>
@@ -41,9 +33,9 @@
 				{% set purchaseItemIndex = loop.index0-1 %}
 
 				{% if loop.index0 > 0 %}
-				<div class="row nopadding purchaseItem col-md-12">
+				<div class="nopadding purchaseItem col-md-12 col-sm-12 col-xs-12">
 				{% else %}
-				<div class="row nopadding col-md-12">
+				<div class="nopadding col-md-12 col-sm-12 col-xs-12">
 				{% endif %}
 					<div class="text-center col-md-1 hidden-sm hidden-xs">#{{ itemNo }}</div>
 					<div class="text-left col-md-6 col-sm-6 col-xs-6">{{ form_widget(purchaseItem.product, {'label':false, 'attr':{'class': 'form-control', 'onchange':'bookingPaymentSummaryUpdatePurchaseItem(this)'}}) }}</div>
@@ -56,66 +48,49 @@
 			</div>
 		</div>
 	</div>
-	<div class="row col-md-12" style="margin:15px 0px;"><div class=" col-md-12"></div></div>
     {% endfor %}
 
-		<div class="row box-body purchase-balance-owing-section">
-			<div class="lined nopadding col-xs-12 col-sm-12 col-md-12">
-				<div class="field-label text-right col-xs-9 col-sm-9 col-md-10">AMOUNT OWING</div>
-				<div class="text-right col-sm-2 col-md-1" style="padding-right:27px;"><strong><span id="form_balanceAmount">{{ booking.calculateBalance|number_format(2) }}</span></strong></div>
-				<div class="col-md-1">&nbsp;</div>
-			</div>
+	<div class="row box-body purchase-balance-owing-section">
+		<div class="lined nopadding col-xs-12 col-sm-12 col-md-12">
+			<div class="field-label text-right col-xs-9 col-sm-9 col-md-10">AMOUNT OWING</div>
+			<div class="text-right col-sm-2 col-md-1" style="padding-right:27px;"><strong><span id="form_balanceAmount">{{ booking.calculateBalance|number_format(2) }}</span></strong></div>
+			<div class="col-md-1">&nbsp;</div>
 		</div>
-		<div class="row1 purchase-payment-type-section">
-			<div class="nopadding col-xs-12 col-sm-12 col-md-12">
-				{% for paymentType in form.paymentType %}
-			    {% set index = paymentType.vars.value %}{# get array index #}
-			    {% set entity = form.paymentType.vars.choices[index].data %}{# get entity object #}
-			        <div class="row col-xs-2 col-sm-2 col-md-1">
-			        <div id="payment-type-button-{{ index }}" class="col-xs-12 col-sm-12 col-md-12" style="" >
-			        	{% if entity.iconPath %}
-			        		<img class="payment-type" alt="{{ entity.name }}" title="{{ entity.name }}" src="{{ entity.iconPath }}" />
-			        	{% else %}
-			        	    <span style="min-height:54px;">{{ entity.name }}</span>
-			        	{% endif %}
-
-				        <div class="col-xs-12 col-sm-12 col-md-12">{{ form_widget(paymentType) }}</div>{# render checkbox #}
-					</div>
-			        </div>
-				{% endfor %}
-				{#{ form_widget(form.paymentType, {'attr' : {'class' : 'paymentType'}}) }#}
-			</div>
-		</div>
-		<div class="row box-body1 purchase-payment-section">
-			<div class="nopadding col-xs-12 col-sm-12 col-md-12">
-				<div class="nopadding col-xs-12 col-md-12 col-sm-12">
-					<div class="text-center col-xs-7 col-sm-7 col-md-6">NOTES</div>
-					<div class="text-center col-xs-3 col-sm-3 col-md-3">LAST 4 DIGITS</div>
-					<div class="text-center visible-xs visible-sm col-xs-2 col-sm-2">PAID</div>
-					<div class="text-center hidden-xs hidden-sm col-md-2">AMOUNT PAID</div>
-					<div class="text-center visible-md visible-lg col-md-1" >&nbsp;</div>
-				</div>
-				<div class="nopadding col-xs-12 col-sm-12 col-md-12">
-					<div class="text-center col-xs-7 col-sm-7 col-md-6">{{ form_row(form.description, {'label':false, 'attr': {'class':'form-control full-width notes-field'}}) }}</div>
-					<div class="text-center col-xs-3 col-sm-3 col-md-3">{{ form_row(form.sumupRef, {'label':false, 'attr': {'class':'form-control text-right sumup-field;'}}) }}</div>
-					<div class="text-center col-xs-2 col-sm-2 col-md-2" >{{ form_row(form.paymentAmount, {'label':false, 'attr': {'class':'form-control text-right payment-amount-field;'}}) }}</div>
-					<div class="text-center visible-md visible-lg col-md-1" >&nbsp;</div>
-				</div>
-			</div>
-		</div>
-		<div class="row buttons">
-			<div class="nopadding col-md-11">
-				<div class="text-right col-md-12">
-					{{form_widget(form.pay)}}
-					{{form_widget(form.cancel)}}
-				</div>
-			</div>
-		</div>
-		<div class="col-md-12">
-			{{ include('common/payment-summary.html.twig', {'payments':payments, 'booking':booking}) }}
-		</div>
-		{{ form_end(form) }}
 	</div>
+
+	<div class="purchase-payment-type-section">
+		{% include ('payment/payment-type-select.html.twig') %}
+	</div>
+
+	<div class="row purchase-payment-section">
+		<div class="nopadding col-xs-12 col-sm-12 col-md-12">
+			<div class="row nopadding">
+				<div class="text-center col-xs-7 col-sm-7 col-md-7">NOTES</div>
+				<div class="text-center col-xs-3 col-sm-3 col-md-2">LAST 4 DIGITS</div>
+				<div class="text-center visible-xs visible-sm col-xs-2 col-sm-2">PAID</div>
+				<div class="text-center hidden-xs hidden-sm col-md-2">AMOUNT PAID</div>
+				<div class="text-center visible-md visible-lg col-md-1" >&nbsp;</div>
+			</div>
+			<div class="row nopadding">
+				<div class="text-center col-xs-7 col-sm-7 col-md-7">{{ form_widget(form.description, {'label':false, 'attr': {'class':'notes-field'}}) }}</div>
+				<div class="text-center col-xs-3 col-sm-3 col-md-2">{{ form_widget(form.sumupRef, {'label':false, 'attr': {'class':'form-control1 text-right sumup-field;'}}) }}</div>
+				<div class="text-center col-xs-2 col-sm-2 col-md-2" >{{ form_widget(form.paymentAmount, {'label':false, 'attr': {'class':'form-control1 text-right payment-amount-field;'}}) }}</div>
+				<div class="text-center visible-md visible-lg col-md-1" >&nbsp;</div>
+			</div>
+		</div>
+	</div>
+	<div class="row buttons">
+		<div class="nopadding col-md-11">
+			<div class="text-right col-md-12">
+				{{form_row(form.pay)}}
+				{{form_row(form.cancel)}}
+			</div>
+		</div>
+	</div>
+	<div class="row nopadding">
+		{{ include('common/payment-summary.html.twig', {'payments':payments, 'booking':booking}) }}
+	</div>
+		{{ form_end(form) }}
 </div>
 
 {{ include('payment/payment-javascript.html.twig', {'formId': form.vars.name, 'paymentTypeId': form.paymentType.vars.name}) }}
