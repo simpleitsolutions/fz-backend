@@ -122,7 +122,8 @@ class BookingType extends AbstractType
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Booking::class, 'cascade_validation' => true,));
+            'data_class' => Booking::class,
+            'cascade_validation' => true,));
 	}
 
     public function configureOptions(OptionsResolver $resolver)
