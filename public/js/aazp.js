@@ -288,7 +288,7 @@ function createPassengerAddLink($passengerHolder, $newPassengerAddLink) {
 }
 
 function createPurchaseItemDeleteLink($newPurchaseItemsHolder) {
-    var $newPurchaseItemDeleteLink = $('<div class="btn-group col-md-1 col-xs-1"><a href="#" class="btn btn-default btn-md"><span class="glyphicon glyphicon-remove"></span></a></div>');
+    var $newPurchaseItemDeleteLink = $('<div class="btn-group col-md-1 col-xs-1"><a href="#" class="btn btn-default btn-md"><span class="fa fa-remove"></span></a></div>');
     
     $newPurchaseItemsHolder.append($newPurchaseItemDeleteLink);
 
@@ -320,7 +320,7 @@ function createPurchaseItemAddLink($purchaseItemsHolder, $newPurchaseItemAddLink
     // increase the index with one for the next item
     $purchaseItemsHolder.data('index', index+1);
 
-    var $newPurchaseItemsHolder = $('<div class="row nopadding purchaseItem col-md-12 col-sm-12"></div>').append(newPurchaseItemPrototype);
+    var $newPurchaseItemsHolder = $('<div class="nopadding purchaseItem col-md-12 col-sm-12 col-xs-12"></div>').append(newPurchaseItemPrototype);
     $newPurchaseItemAddLink.before($newPurchaseItemsHolder);
     
     createPurchaseItemDeleteLink($newPurchaseItemsHolder);
