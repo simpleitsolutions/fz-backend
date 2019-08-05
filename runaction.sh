@@ -160,13 +160,13 @@ elif [ "$1" == "cache-clear" ]; then
         php app/console cache:clear
 
 elif [ "$1" == "migrate" ]; then
-        php app/console doctrine:migrations:migrate
+        php bin/console doctrine:migrations:migrate
 
 elif [ "$1" == "migrate-diff" ]; then
-        php app/console doctrine:migrations:diff
+        php bin/console doctrine:migrations:diff
 
 elif [ "$1" == "migrate-status" ]; then
-        php app/console doctrine:migrations:status
+        php bin/console doctrine:migrations:status
 
 elif [ "$1" == "version-bump" ]; then
 		php bin/console app:version:bump -l

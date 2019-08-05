@@ -35,6 +35,8 @@ class AvailabilityAdmin extends AbstractAdmin
             {
                 $instance->setUnavailableFlightDate(DateTime::createFromFormat('Y-m-d', $targetDate));
             }
+
+            $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         }
 
         return $instance;
@@ -77,7 +79,7 @@ class AvailabilityAdmin extends AbstractAdmin
         //So try hidden fields with the actual value and place disabled fields for visual (form)
 
 
-        $formMapper->add('pilot', null, ['attr' => ['readonly' => true, 'data-sonata-select2'=>'false']]);
+//        $formMapper->add('pilot', null, ['attr' => ['class' => 'sonata-autocomplete-hidden', 'readonly' => true, 'data-sonata-select2'=>'false']]);
         $formMapper->add('flightScheduleTimes', null, [
             'expanded' => true,
             'class' => FlightScheduleTime::class,
