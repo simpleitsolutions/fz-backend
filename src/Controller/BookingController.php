@@ -19,6 +19,7 @@ use App\Form\PurchaseType;
 use App\Helper\BookingDailySchedule;
 use App\Helper\BookingPaymentHelper;
 use App\Helper\PaymentViewHelper;
+use App\Repository\PaymentTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 //use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
@@ -642,6 +643,9 @@ class BookingController extends AbstractController
                             'choice_label' => 'name',
                             'mapped' => false,
                             'expanded' => true,
+                            'query_builder' => function(PaymentTypeRepository $er) {
+                                return $er->createQueryBuilder('pt')
+                                    ->orderBy('pt.sortOrder', 'ASC');},
                             'constraints' => [
                                 new NotNull(['message'=>"A payment type is required."]),]))
 
@@ -763,6 +767,9 @@ class BookingController extends AbstractController
                                 'mapped' => false,
                                 'expanded' => true,
                                 'error_bubbling' => true,
+                                'query_builder' => function(PaymentTypeRepository $er) {
+                                    return $er->createQueryBuilder('pt')
+                                        ->orderBy('pt.sortOrder', 'ASC');},
                                 'constraints' => [
                                     new NotBlank()]))
                 ->add('paymentAmount', NumberType::class, array('scale' => 2, 'data' => $booking->calculateBalance(), 'mapped' => false, 'constraints' => [

@@ -68,6 +68,13 @@ class PaymentType extends BaseEntity
     private $sumUpPayment;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="sort_order", type="integer")
+     */
+    protected $sortOrder;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -232,6 +239,29 @@ class PaymentType extends BaseEntity
     public function isSumUpPayment()
     {
         return $this->sumUpPayment;
+    }
+
+    /**
+     * Set sortOrder
+     *
+     * @param integer $sortOrder
+     * @return PaymentType
+     */
+    public function setSortOrder($sortOrder)
+    {
+        $this->sortOrder = $sortOrder;
+
+        return $this;
+    }
+
+    /**
+     * Get sortOrder
+     *
+     * @return integer
+     */
+    public function getSortOrder()
+    {
+        return $this->sortOrder;
     }
 
     public function __toString()

@@ -48,6 +48,7 @@ class PaymentTypeAdmin extends AbstractAdmin
             ->add('iconPath')
             ->add('fee')
             ->add('sumUpPayment')
+            ->add('sortOrder')
             ->end()
         ;
     }
@@ -71,6 +72,7 @@ class PaymentTypeAdmin extends AbstractAdmin
             ->add('iconPath')
             ->add('fee')
             ->add('sumUpPayment')
+            ->add('sortOrder')
             ->add('_action', null, array(
                 'actions' => array(
                     'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
@@ -89,6 +91,7 @@ class PaymentTypeAdmin extends AbstractAdmin
             ->add('iconPath')
             ->add('fee')
             ->add('sumUpPayment')
+            ->add('sortOrder')
         ;
     }
 
