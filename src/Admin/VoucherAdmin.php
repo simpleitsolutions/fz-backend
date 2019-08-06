@@ -110,6 +110,7 @@ class VoucherAdmin extends AbstractAdmin
             ->add('withPhotos', null, ['label' => 'Photos'])
             ->add('language', null, ['template' => '/voucher/list/list__language.html.twig'])
             ->add('created', null, ['format' => 'd.m.Y H:i'])
+            ->add('notes')
             ->add('flightdate', null, ['label' => 'Flight Date', 'format' => 'd.m.Y H:i'])
             ->add('_action', null, array(
                 'actions' => array(
