@@ -4,7 +4,9 @@ namespace App\Admin;
 use App\Entity\Product;
 use App\Entity\Voucher;
 use App\Repository\ProductRepository;
+use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -47,7 +49,7 @@ class VoucherAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->with('Voucher', array('class' => 'col-md-4'));
+            ->with('Personal', ['class' => 'col-md-4']);
 //            ->add('id')
 
         $formMapper->getFormBuilder()->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
@@ -55,22 +57,35 @@ class VoucherAdmin extends AbstractAdmin
             $voucher = $event->getData();
             $form = $event->getForm();
             if($voucher && null != $voucher->getId()) {
-                $form->add('id', null, array('disabled'=> true)); //TODO: Need to have this loaded as the first field in the form. Currently it is the last.
+                $form->add('id', null, ['disabled'=> true]); //TODO: Need to have this loaded as the first field in the form. Currently it is the last.
             }
         });
 
         $formMapper->add('name')
-            ->add('flight', EntityType::class, ['label' => 'Flight',
-                                                            'class' => Product::class,
-                                                            'choice_label' => 'description',
-                                                            'placeholder' => 'Please Select',
-                                                            'query_builder' => function(ProductRepository $er) {
-                                                                    return $er->createQueryBuilder('p')->join('p.productCategory', 'pc')->where('pc.name = :category')->setParameter('category', 'FLIGHT')->orderBy('p.sortOrder', 'ASC');}
-                                                                    ])
-            ->add('withPhotos', ChoiceType::class, ['label' => 'Photos', 'choices' => array('NO'=>0, 'YES'=>1), 'multiple' => false, 'expanded' => true])
+            ->add('flight',
+                    EntityType::class,
+                        ['label' => 'Flight',
+                        'class' => Product::class,
+                        'choice_label' => 'description',
+                        'placeholder' => 'Please Select',
+//                        'preferred_choices' => $this->productRepository->getPreferredFlightProducts(),
+                        'query_builder' => function (ProductRepository $er) {
+                            return $er->createQueryBuilder('p')
+                                ->join('p.productCategory', 'pc')
+                                ->where('pc.name IN(:categories)')
+                                ->setParameter('categories', ['FLIGHT','VOUCHER'])
+                                ->orderBy('p.sortOrder', 'ASC');
+                        }]
+            )
             ->add('message', TextareaType::class, ['required' => false, 'attr' => ['rows' => '4']])
+        ->end()
+        ->with('Voucher', ['class' => 'col-md-4'])
+            ->add('withPhotos', ChoiceType::class, ['label' => 'Photos', 'choices' => ['NO'=>0, 'YES'=>1], 'multiple' => false, 'expanded' => true])
             ->add('language', ChoiceType::class, ['expanded' => true, 'choices' => ['English' => Voucher::ENGLISH, 'German' => Voucher::GERMAN]])
-            ->end()
+        ->end()
+        ->with('Office Use', ['class' => 'col-md-4'])
+            ->add('notes', TextareaType::class, ['required' => false, 'attr' => ['rows' => '6']])
+        ->end()
         ;
     }
 
@@ -134,8 +149,18 @@ class VoucherAdmin extends AbstractAdmin
             ->add('redeem', 'redeem/'.$this->getRouterIdParameter());
     }
 
+//    protected function configureTabMenu(ItemInterface $menu, $action, AdminInterface $childAdmin = null)
+//    {
+//        // ...other tab menu stuff
+//
+//        $menu->addChild('comments', array('attributes' => array('dropdown' => true)));
+//        $menu['comments']->addChild('list', ['uri' => $this->generateUrl('list'  )]);
+//    }
+
     public function toString($object)
     {
-        return $object->getName();
+        return $object instanceof Voucher
+            ? $object->getId() ? "Voucher No.".$object->getId()." ".$object->getName():"Voucher"
+            : 'Voucher';
     }
 }
