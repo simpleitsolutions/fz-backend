@@ -85,6 +85,8 @@ class ProductCategoryAdmin extends AbstractAdmin
 
     public function toString($object)
     {
-        return $object->getName();
+        return $object instanceof ProductCategory
+            ? $object->getName()
+            : 'Product Category';
     }
 }

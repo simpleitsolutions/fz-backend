@@ -85,6 +85,8 @@ class BookingRequestGroupConditionAdmin extends AbstractAdmin
 
     public function toString($object)
     {
-        return $object->getName();
+        return $object instanceof BookingRequestGroupCondition
+            ? "Booking Request Group Options ".$object->getName()
+            : 'Booking Request Group Options';
     }
 }

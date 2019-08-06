@@ -91,6 +91,8 @@ class PilotAdmin extends AbstractAdmin
 
     public function toString($object)
     {
-        return $object->getName();
+        return $object instanceof Pilot
+            ? $object->getName()
+            : 'Pilot';
     }
 }

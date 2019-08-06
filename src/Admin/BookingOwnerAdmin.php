@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 
+use App\Entity\BookingOwner;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -91,7 +92,8 @@ class BookingOwnerAdmin extends AbstractAdmin
 
     public function toString($object)
     {
-        return $object->getName();
+        return $object instanceof BookingOwner
+            ? "Booking Owner ".$object->getName()
+            : 'Booking Owner';
     }
-
 }

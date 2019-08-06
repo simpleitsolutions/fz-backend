@@ -4,6 +4,7 @@ namespace App\Admin;
 
 
 use App\Entity\MeetingLocation;
+use App\Entity\PaymentType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -106,7 +107,8 @@ class PaymentTypeAdmin extends AbstractAdmin
 
     public function toString($object)
     {
-        return $object->getName()."";
+        return $object instanceof PaymentType
+            ? $object->getName()
+            : 'Payment Type';
     }
-
 }

@@ -100,7 +100,8 @@ class MeetingLocationAdmin extends AbstractAdmin
 
     public function toString($object)
     {
-        return $object->getName();
+        return $object instanceof MeetingLocation
+            ? $object->getName()
+            : 'Meeting Location';
     }
-
 }

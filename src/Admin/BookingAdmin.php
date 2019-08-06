@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 
+use App\Entity\Booking;
 use App\Entity\BookingOwner;
 use App\Entity\BookingRequest;
 use App\Entity\FlightScheduleTime;
@@ -224,8 +225,15 @@ class BookingAdmin extends AbstractAdmin
 //    }
 
 
-    public function __toString()
+    public function toString($object)
     {
-        return "Booking";
+        return $object instanceof Booking
+            ? $object->getId()
+            : 'Booking';
     }
+
+//    public function __toString()
+//    {
+//        return "Booking";
+//    }
 }

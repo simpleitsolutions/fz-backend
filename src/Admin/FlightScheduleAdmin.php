@@ -93,6 +93,8 @@ class FlightScheduleAdmin extends AbstractAdmin
 
     public function toString($object)
     {
-        return "[".$object->getAffectiveStartDate()->format('d.m.Y')."-".$object->getAffectiveEndDate()->format('d.m.Y')."]";
+        return $object instanceof FlightSchedule
+            ? "Flight Schedule [".$object->getAffectiveStartDate()->format('d.m.Y')."-".$object->getAffectiveEndDate()->format('d.m.Y')."]"
+            : 'Flight Schedule';
     }
 }
