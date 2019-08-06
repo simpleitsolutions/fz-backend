@@ -11,6 +11,8 @@ sonata_admin:
     options:
         dropdown_number_groups_per_colums:  2
         lock_protection: true
+        html5_validate: false
+        pager_links:    5
     #        form_type: 'horizontal'
     dashboard:
         blocks:
