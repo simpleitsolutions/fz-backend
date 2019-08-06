@@ -103,12 +103,8 @@ class BookingRequestController extends AbstractController
             'preferredFlights' => $preferredFlights,
             'preferredMeetingLocations' => $preferredMeetingLocations)
         );
+        $form->remove('flightScheduleTime');
         $form->add('bookingRequestId',HiddenType::class, ['data' => $bookingRequest->getId(), 'mapped' => false]);
-
-        // $form->add('save', 'submit', array('label' => 'Confirm'));
-//        $form->add('saveAndExit', SubmitType::class, array('label' => 'Save', 'attr' => ['class' => 'form-control btn-success']));
-//        $form->add('saveAndConfirm', SubmitType::class, array('label' => 'Save & Confirm', 'attr' => ['class' => 'form-control btn-success']));
-//        $form->add('cancel', SubmitType::class, array('attr' => array('class' => 'form-control btn-danger', 'formnovalidate' => true, 'data-toggle' => 'modal', 'data-target' => '#cancelWarning', )));
         $form->add('saveAndExit', SubmitType::class, ['label' => 'Save', 'attr' => ['class' => 'btn btn-success']]);
         $form->add('saveAndConfirm', SubmitType::class, ['label' => 'Save & Confirm', 'attr' => ['class' => 'btn btn-success']]);
         $form->add('cancel', ButtonType::class, ['attr' => ['class' => 'btn btn-danger', 'formnovalidate' => true,]]);
