@@ -50,8 +50,15 @@ class Purchase extends BaseEntity
      **/
 	protected $passenger;
 
+    /**
+     * @Assert\NotNull()
+     */
 	protected $paymentAmount;
 
+    /**
+     * @Assert\Valid
+     * @Assert\NotNull()
+     */
 	protected $paymentType;
 
 

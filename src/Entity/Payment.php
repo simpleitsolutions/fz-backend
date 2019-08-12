@@ -27,6 +27,7 @@ class Payment extends BaseEntity
 	 * @var decimal
 	 *
 	 * @ORM\Column(name="amount", type="decimal", scale=2)
+     * @Assert\NotNull()
 	 */
 	protected $amount;
 	
@@ -34,13 +35,15 @@ class Payment extends BaseEntity
      * @var decimal
      *
      * @ORM\Column(name="sub_amount", type="decimal", scale=2, nullable=true)
+     *
      */
     protected $subAmount;
 
-/**
+    /**
      * @ORM\ManyToOne(targetEntity="PaymentType", inversedBy="payments")
      * @ORM\JoinColumn(name="payment_type_id", referencedColumnName="id")
      * @Assert\Valid
+     * @Assert\NotNull()
      */
 	protected $paymentType;
 

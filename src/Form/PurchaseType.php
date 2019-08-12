@@ -21,13 +21,14 @@ class PurchaseType extends AbstractType
     	$builder->add('purchaseItems', CollectionType::class, array('entry_type' => PurchaseItemType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => false));
         $builder->add('paymentType',
                         EntityType::class,
-                            array('label' => 'Payment Type',
+                            ['label' => 'Payment Type',
                                 'class' => PaymentType::class,
                                 'choice_label' => 'name',
                                 'query_builder' => function(PaymentTypeRepository $er) {
                                     return $er->createQueryBuilder('pt')
                                         ->orderBy('pt.sortOrder', 'ASC');},
-                                'expanded' => true));
+                                'expanded' => true
+                            ]);
         $builder->add('paymentAmount', NumberType::class, array('scale' => 2));
 		$builder->add('sumupRef', TextType::class, array('mapped' => false, 'required' => false));
 		$builder->add('description', TextType::class, array('mapped' => false, 'required' => false));

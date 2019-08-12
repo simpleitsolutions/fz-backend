@@ -19,7 +19,11 @@ h4 {
     width: 145px;
 }
 
- .form-inline .form-control {
+.form-inline .form-control {
+    width:100%;
+}
+
+.purchase-payment-section .form-group {
     width:100%;
 }
 
