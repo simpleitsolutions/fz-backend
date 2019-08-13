@@ -3,6 +3,13 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Valid;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BookingRepository")
@@ -42,21 +49,17 @@ class Booking extends BaseEntity
 
 	/**
 	 * @ORM\Column(type="datetime")
-	 * @Assert\DateTime(message="Flight Date is not a valid date.", groups={"quick"})
-	 * @Assert\NotBlank(message="Flight Date is required.", groups={"quick"})
-	 * 	 */
+     */
      private $flightdate;
 
     /**
      * @ORM\ManyToOne(targetEntity="Product")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
-     * @Assert\NotNull(message="No Flight selected.")
      **/
     private $flight;
 
     /**
      * @ORM\Column(type="string", length=300)
-     * @Assert\NotBlank(message="Contact Information is required.")
      */
     private $contactinfo;
 
@@ -67,21 +70,18 @@ class Booking extends BaseEntity
 
 	/**
      * @ORM\OneToMany(targetEntity="Passenger", mappedBy="booking", cascade={"all"})
-     * @Assert\Valid
      */
      private $passengers;
 
      /**
       * @ORM\Column(name="meeting_time", type="time", nullable=true)
       * @Assert\DateTime
-      * @Assert\NotBlank(message="Meeting Time is required.")
       */
      private $meetingTime;
      
      /**
      * @ORM\ManyToOne(targetEntity="MeetingLocation", inversedBy="bookings")
      * @ORM\JoinColumn(name="meetinglocation_id", referencedColumnName="id")
-	 * @Assert\NotNull(message="No Meeting Location selected.")
      */
      private $meetingLocation;
 
@@ -496,6 +496,67 @@ class Booking extends BaseEntity
         return $sumupPayments;
     }
 
+
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('flight',
+            new NotNull([
+                'message' => 'No Flight selected.'])
+        );
+        $metadata->addPropertyConstraint('flightdate',
+            new NotNull([
+                'message' => 'A Flight Date is required.',
+            ])
+        );
+        $metadata->addPropertyConstraint('flightdate',
+            new DateTime([
+                'message' => 'Flight Date is not a valid date.',
+            ])
+        );
+        $metadata->addPropertyConstraint('meetingLocation',
+            new NotNull([
+                'message' => 'No Meeting Location selected.',
+            ])
+        );
+
+        $metadata->addPropertyConstraint('meetingTime',
+            new NotNull([
+                'message' => 'No Meeting Time selected.',
+            ])
+        );
+        $metadata->addPropertyConstraint('contactinfo',
+            new NotNull([
+                'message' => 'Contact Information is required.',
+            ])
+        );
+        $metadata->addPropertyConstraint('contactinfo',
+            new Assert\Length(['max' => '300', 'maxMessage' => 'Max. {{ limit }} chars allowed.',
+                ])
+        );
+        $metadata->addPropertyConstraint('notes',
+            new Assert\Length(['max' => '1000', 'maxMessage' => 'Max. {{ limit }} chars allowed.',
+                ])
+        );
+        $metadata->addPropertyConstraint('owner',
+            new NotNull([
+                'message' => 'Booking Owner is required.',
+            ])
+        );
+
+//      CANNOT GET THE PAYLOAD SEVERITY TO WORK.
+//        $callback = function ($object, ExecutionContextInterface $context, $payload) {
+//            if(!is_null($object->flightScheduleTime)) {
+//                $context->buildViolation('Meeting Time outside Schedule Time')
+//                    ->atPath('meetingTime')
+//                    ->addViolation();
+//            }
+//        };
+//        $metadata->addConstraint(new Assert\Callback($callback), ['payload' => ['severity' => 'warning']]);
+
+        $metadata->addPropertyConstraint('passengers', new Valid());
+
+    }
 
     public function __toString()
     {
