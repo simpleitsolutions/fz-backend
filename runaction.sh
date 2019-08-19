@@ -15,6 +15,12 @@ SSH_IP_LIVE="simpleitsolutions.ch"
 SSH_PORT_LIVE="22"
 SSH_USER_LIVE="simpleit"
 
+TARGET_NAME_DEMO="METTELHORN"
+REMOTE_DIR_DEMO="/home/simpleit/ch.simpleitsolutions.bookings-demo/"
+SSH_IP_DEMO="simpleitsolutions.ch"
+SSH_PORT_DEMO="22"
+SSH_USER_DEMO="simpleit"
+
 
 DEFAULT_SYMFONY_APPLICATION=SITS
 DEFAULT_SYMFONY_BUNDLE=App
@@ -42,14 +48,23 @@ if [ "$1" == "deploy" ];then
 		SSH_PORT=${SSH_PORT_STAGE}
 	fi
 
-    	if [ "$2" == "live" ]; then
-        	target=Live
-        	TARGET_NAME=${TARGET_NAME_LIVE}
-        	REMOTE_DIR=${REMOTE_DIR_LIVE}
-        	SSH_USER=${SSH_USER_LIVE}
-        	SSH_IP=${SSH_IP_LIVE}
-        	SSH_PORT=${SSH_PORT_LIVE}
-    	fi
+    if [ "$2" == "live" ]; then
+        target=Live
+        TARGET_NAME=${TARGET_NAME_LIVE}
+        REMOTE_DIR=${REMOTE_DIR_LIVE}
+        SSH_USER=${SSH_USER_LIVE}
+        SSH_IP=${SSH_IP_LIVE}
+        SSH_PORT=${SSH_PORT_LIVE}
+    fi
+
+    if [ "$2" == "demo" ]; then
+        target=demo
+        TARGET_NAME=${TARGET_NAME_DEMO}
+        REMOTE_DIR=${REMOTE_DIR_DEMO}
+        SSH_USER=${SSH_USER_DEMO}
+        SSH_IP=${SSH_IP_DEMO}
+        SSH_PORT=${SSH_PORT_DEMO}
+    fi
 
     if [ "$3" == version-major ]; then
         php bin/console app:version:bump --major="+1" --minor="0" --patch="0" --prerelease="" --build="" 
@@ -78,20 +93,18 @@ if [ "$1" == "deploy" ];then
 	echo "  LOCAL_DIR:  ${YELLOW}${LOCAL_DIR}${RESET}"
 	echo "  REMOTE_DIR: ${YELLOW}${REMOTE_DIR}${RESET}"
 
-        echo "  ...Syncing to ${target}..."
+    echo "  ...Syncing to ${target}..."
 
-        echo "${RED}${BOLD}UPLOAD-SYNC ${RESET} -> ${target}/${TARGET_NAME} ! CONTINUE? (y/n)"
-        images=
-        media=
+    echo "${RED}${BOLD}UPLOAD-SYNC ${RESET} -> ${target}/${TARGET_NAME} ! CONTINUE? (y/n)"
+    images=
+    media=
 	response=
 	read response
 	if [ "$response" == "y" ]; then
-
         # -n Dry Run    -> set by adding a debug option
         # -v Verbose
         # -z Compress
         # -r Recursive
-
 
         if [ "$2" == "stage" ]; then
           rsync --exclude '.git' \
@@ -100,6 +113,15 @@ if [ "$1" == "deploy" ];then
               -avzh . ${SSH_USER}@${SSH_IP}:${REMOTE_DIR}
         fi
         if [ "$2" == "live" ]; then
+          rsync ${dryrun} -avzh \
+              --exclude '.git' \
+              --exclude=var \
+              --exclude=.env* \
+              --exclude=tests \
+              --exclude=.circleci \
+              . ${SSH_USER}@${SSH_IP}:${REMOTE_DIR}
+        fi
+        if [ "$2" == "demo" ]; then
           rsync ${dryrun} -avzh \
               --exclude '.git' \
               --exclude=var \
