@@ -13,7 +13,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
  *     SearchFilter::class,
  *     properties={
  *      "advertised": "exact",
-     *      "productCategory": "exact",
+ *      "productCategory": "exact",
  *     }
  * )
 @ApiResource(
