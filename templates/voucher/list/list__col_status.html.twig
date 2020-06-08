@@ -1,9 +1,18 @@
+{% set totalPrice = 0.0 %}
+{% if (object.withPhotos) %}
+        {%  set totalPrice = totalPrice + 40.0 %}
+{% endif %}
+{% if (object.flight) %}
+        {% set totalPrice = totalPrice + object.flight.price %}
+{% endif %}
 <td class="sonata-ba-list-field">
     {% if object.status == constant('\\App\\Entity\\Voucher::STATUS_NEW') %}
-            <span class="label label-danger">{{ constant('\\App\\Entity\\Voucher::STATUS_LABELS')[constant('\\App\\Entity\\Voucher::STATUS_NEW')] }}</span>
+        <span class="label label-danger">{{ constant('\\App\\Entity\\Voucher::STATUS_LABELS')[constant('\\App\\Entity\\Voucher::STATUS_NEW')] }}</span>
+        <span class="label label-danger">{{ totalPrice|number_format(2,'.',',') }}</span>
     {% elseif object.status == constant('\\App\\Entity\\Voucher::STATUS_PAYMENT_PART') %}
-            <span class="label label-warning">{{ constant('\\App\\Entity\\Voucher::STATUS_LABELS')[constant('\\App\\Entity\\Voucher::STATUS_PAYMENT_PART')] }}</span>
+        <span class="label label-warning">{{ constant('\\App\\Entity\\Voucher::STATUS_LABELS')[constant('\\App\\Entity\\Voucher::STATUS_PAYMENT_PART')] }}</span>
     {% elseif object.status == constant('\\App\\Entity\\Voucher::STATUS_PAYMENT_FULL') %}
-            <span class="label label-success">{{ constant('\\App\\Entity\\Voucher::STATUS_LABELS')[constant('\\App\\Entity\\Voucher::STATUS_PAYMENT_FULL')] }}</span>
+        <span class="label label-success">{{ constant('\\App\\Entity\\Voucher::STATUS_LABELS')[constant('\\App\\Entity\\Voucher::STATUS_PAYMENT_FULL')] }}</span>
+        <span class="label label-success">{{ object.purchase?(object.purchase.calculatePurchaseTotal == 0)?'FREEBIE':'VALUE: '~object.purchase.calculatePurchaseTotal|number_format(2,'.',',') }}</span>
     {% endif %}
 </td>

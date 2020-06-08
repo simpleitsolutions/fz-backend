@@ -97,6 +97,7 @@ class VoucherAdmin extends AbstractAdmin
             ->add('name')
             ->add('flight')
             ->add('language')
+            ->add('purchase')
         ;
     }
 
@@ -112,6 +113,7 @@ class VoucherAdmin extends AbstractAdmin
             ->add('created', null, ['format' => 'd.m.Y H:i'])
             ->add('notes')
             ->add('flightdate', null, ['label' => 'Flight Date', 'format' => 'd.m.Y H:i'])
+            ->add('purchase')
             ->add('_action', null, array(
                 'actions' => array(
                     'show' => ['template' => '/voucher/list/list__action_show.html.twig'],
