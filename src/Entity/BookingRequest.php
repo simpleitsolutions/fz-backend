@@ -142,7 +142,7 @@ class BookingRequest extends BaseEntityLegacy
         return $this->arrivalDate;
     }
 
-    public function setArrivalDate(?\DateTimeInterface $arrivalDate): self
+    public function setArrivalDate(?\DateTimeInterface $arrivalDate = null): self
     {
         $this->arrivalDate = $arrivalDate;
 
@@ -154,7 +154,7 @@ class BookingRequest extends BaseEntityLegacy
         return $this->departureDate;
     }
 
-    public function setDepartureDate(?\DateTimeInterface $departureDate): self
+    public function setDepartureDate(?\DateTimeInterface $departureDate = null): self
     {
         $this->departureDate = $departureDate;
 
