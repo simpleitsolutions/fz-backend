@@ -15,17 +15,22 @@
 		  	<img alt="Fly Zermatt Paragliding" src="{{ app.request.scheme ~ '://' ~ app.request.host}}{{app.request.port == 80?'': ':'~app.request.port}}/img/fly-zermatt-come-fly-with-us-logo.jpg">
 		</div>
 
-<p>Thank you for your interest in coming to fly with us in Zermatt!</p>
 
-<p>Please note that at the moment you do NOT have a fixed booking. Follow the below steps to make a fixed booking...</p>
-<h3><i>How to finalize your Booking</i></h3>
+	<p>Thank you for your interest in coming to fly with us in Zermatt! We are now processing your booking information.</p>
 
-	<ol>
-	<li>Contact us 3 - 4 days prior to your requested paragliding date to let us know if you still want to fly. We will check weather and conditions and then finalize your flight details
-    Tel: +41 79 643 6808 :: <a href="mailto:info@flyzermatt.com">info@flyzermatt.com</a></li>
+	<p><strong>Important!</strong> THIS BOOKING IS NOT YET CONFIRMED!</p>
 
-    <li>Come to our office (minimum) 1 day before your flight to make full payment. If you can’t come to our office before your flight (for example you are arriving the morning of your flight) please let us know so we can make other arrangements.</li>
-    </ol>
+	<p>Once we have checked your information, we will send you an email with payment details and any additional information regarding passenger restrictions, flight conditions or required changes.</p>
+
+	<p>Your booking will then be confirmed once payment has been received.</p>
+
+	<p>
+		Please note: <strong>“Our cancellation policy”</strong><br/>
+		Up until 48 hours prior to your booking, 100% refund.<br/>
+		Less than 48 hours to your booking, No refund.<br/>
+		Please see our <a href="https://www.flyzermatt.com" target="_blank"> terms & conditions</a> for more information.
+	</p>
+
 
 <p>To find our shop in Zermatt, please see the video below.</p>
 
@@ -48,9 +53,9 @@ The FlyZermatt Team</i></p>
 {{ bookingRequest.noPassengers }}</p>
 
 <p><b>Dates ::</b><br/>
-Arrive: {{ bookingRequest.arrivalDate|date("d.m.Y") }}<br/>
+Arrive: {{ bookingRequest.arrivalDate is not null?bookingRequest.arrivalDate|date("d.m.Y"):'NOT GIVEN' }}<br/>
 <span style="color:#8B0000;"><b>Flight: {{ bookingRequest.flightDate|date("d.m.Y") }}</b></span><br/>
-Leave: {{ bookingRequest.departureDate|date("d.m.Y") }}<br/></p>
+Leave: {{ bookingRequest.departureDate is not null?bookingRequest.departureDate|date("d.m.Y"):'NOT GIVEN' }}<br/></p>
 
 <p><b>Group Requirements ::</b><br/>
 	{% for groupCondition in bookingRequest.groupconditions %}
@@ -79,5 +84,4 @@ Mobile: +41 79 643 6808<br/></p>
 <p style="text-align:center;">FLYZermatt on Vimeo.com<br/>
 <a href="https://vimeo.com/flyzermatt" target="_blank">https://vimeo.com/flyzermatt</a></p>
 
----------------------------------------------------------------------------------------
 </div>

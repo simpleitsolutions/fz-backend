@@ -33,9 +33,9 @@
 {{ bookingRequest.noPassengers }}</p>
 
 <p><b>Dates ::</b><br/>
-Arrive: {{ bookingRequest.arrivalDate|date("d.m.Y") }}<br/>
+Arrive: {{ bookingRequest.arrivalDate is not null?bookingRequest.arrivalDate|date("d.m.Y"):'NOT GIVEN' }}<br/>
 <span style="color:#8B0000;"><b>Flight: {{ bookingRequest.flightDate|date("d.m.Y") }}</b></span><br/>
-Leave: {{ bookingRequest.departureDate|date("d.m.Y") }}<br/></p>
+Leave: {{ bookingRequest.departureDate is not null?bookingRequest.departureDate|date("d.m.Y"):'NOT GIVEN' }}<br/></p>
 
 <p><b>Group Requirements ::</b><br/>
 	{% for groupCondition in bookingRequest.groupconditions %}
