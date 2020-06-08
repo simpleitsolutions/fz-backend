@@ -150,6 +150,13 @@ $(document).ready(function(){
     }).on("change", function (e) {
         $('#targetDateForm').submit();
     });
+    $('#datepicker-enddate').datepicker({
+        format: 'dd-mm-yyyy',
+        autoclose: true,
+        // todayBtn: true,
+    }).on("change", function (e) {
+        $('#targetDateForm').submit();
+    });
     $('#datepicker-sm').datepicker({
         format: 'dd-mm-yyyy',
         autoclose: true,

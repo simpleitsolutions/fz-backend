@@ -11,22 +11,33 @@ use Doctrine\ORM\EntityRepository;
  */
 class BookingRepository extends EntityRepository
 {
-	public function getBookingsForDate(\DateTime $today)
-	{
-	    $enddate = clone $today;
-	    $enddate->modify('+ 1 days');
+    public function getBookingsForDate(\DateTime $today)
+    {
+        $enddate = clone $today;
+        $enddate->modify('+ 1 days');
 
-	    return $this->createQueryBuilder('b')
-    	    ->where('b.flightdate >= :startdate')
-    	    ->andwhere('b.flightdate < :enddate')
-    	    ->setParameter('startdate', $today->format('Y-m-d'))
-    	    ->setParameter('enddate', $enddate->format('Y-m-d') )
-    	    ->orderBy('b.meetingTime', 'ASC')
-    	    ->getQuery()
-    	    ->execute();
-	}
+        return $this->createQueryBuilder('b')
+            ->where('b.flightdate >= :startdate')
+            ->andwhere('b.flightdate < :enddate')
+            ->setParameter('startdate', $today->format('Y-m-d'))
+            ->setParameter('enddate', $enddate->format('Y-m-d') )
+            ->orderBy('b.meetingTime', 'ASC')
+            ->getQuery()
+            ->execute();
+    }
 
-	public function getBookingsForTheLastDays(\DateTime $givenDate, $noOfDays)
+    public function getBookingsForDateRange(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('b')
+            ->where( 'b.flightdate between :startdate and :enddate')
+            ->setParameter('startdate', $startDate->format('Y-m-d'))
+            ->setParameter('enddate', $endDate->format('Y-m-d') )
+            ->orderBy('b.meetingTime', 'ASC')
+            ->getQuery()
+            ->execute();
+    }
+
+    public function getBookingsForTheLastDays(\DateTime $givenDate, $noOfDays)
 	{
 	    $givenDate->modify('- '.$noOfDays.' days');
 	    return $this->createQueryBuilder('b')
