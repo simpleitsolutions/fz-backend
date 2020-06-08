@@ -31,7 +31,7 @@ class ProductAdmin extends AbstractAdmin
         '_page' => 1,
 
         // reverse order (default = 'ASC')
-        '_sort_order' => 'DESC',
+        '_sort_order' => 'ASC',
 
         // name of the ordered field (default = the model's id field, if any)
 //        '_sort_by' => 'advertised'

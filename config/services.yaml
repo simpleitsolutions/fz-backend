@@ -59,7 +59,7 @@ services:
             - App\Entity\Voucher
             - App\Controller\VoucherCRUDController
         tags:
-            - { name: sonata.admin, manager_type: orm, group: Admin, label: Vouchers, pager_type: 'simple' }
+            - { name: sonata.admin, manager_type: orm, group: Admin, label: Vouchers }
         public: true
 
     admin.passenger:
@@ -120,6 +120,16 @@ services:
             -
         tags:
             - { name: sonata.admin, manager_type: orm, group: Admin,  label: Purchases, pager_type: 'simple'  }
+        public: true
+
+    admin.purchaseitem:
+        class: App\Admin\PurchaseItemAdmin
+        arguments:
+            -
+            - App\Entity\PurchaseItem
+            -
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Admin,  label: PurchaseItems, pager_type: 'simple'  }
         public: true
 
     admin.payment:

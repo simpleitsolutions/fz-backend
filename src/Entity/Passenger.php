@@ -282,8 +282,7 @@ class Passenger extends BaseEntity
 	{
 		if($this->purchase != null)
 		{
-			// return $this->purchase->getPayments();
-			return $this->purchase();
+			 return $this->purchase->getPayments();
 		}
 	}
 

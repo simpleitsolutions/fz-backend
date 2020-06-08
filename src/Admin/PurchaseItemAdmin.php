@@ -3,17 +3,18 @@
 namespace App\Admin;
 
 
+use App\Entity\PurchaseItem;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class PurchaseAdmin extends AbstractAdmin
+class PurchaseItemAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'purchase';
+    protected $baseRoutePattern = 'purchaseitem';
 
-    protected $baseRouteName = 'purchase';
+    protected $baseRouteName = 'purchaseitem';
 
     protected $searchResultActions = ['show'];
 
@@ -39,13 +40,8 @@ class PurchaseAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->with('Purchase', array('class' => 'col-md-6'))
-//            ->add('id')
-            ->add('purchaseItems')
-            ->add('payments')
-            ->add('passenger')
-            ->add('voucher')
-            ->end()
+//            ->add('description')
+//            ->add('amount')
         ;
     }
 
@@ -53,39 +49,40 @@ class PurchaseAdmin extends AbstractAdmin
     {
         $datagridMapper
 //            ->add('purchaseItems')
-            ->add('passenger')
+            ->add('product')
         ;
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id')
-            ->add('purchaseItems')
-            ->add('payments')
-            ->add('passenger')
-            ->add('voucher')
-            ->add('_action', null, array(
-                'actions' => array(
-                    'edit' => ['template' => '/sonataadmin/CRUD/list__action_edit.html.twig'],
-                    'delete' => ['template' => '/sonataadmin/CRUD/list__action_delete.html.twig'],
+            ->add('id')
+            ->add('product')
+            ->add('description')
+            ->add('amount')
+            ->add('_action',
+                    null,
+                    [
+                        'actions' => []
+                    ]
                 )
-            ))
         ;
     }
 
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('purchaseItems')
-            ->add('payments')
-            ->add('passenger')
-            ->add('voucher')
+            ->add('id')
+            ->add('product')
+            ->add('description')
+            ->add('amount')
         ;
     }
 
     public function toString($object)
     {
-        return $object->getId();
+        return $object instanceof PurchaseItem
+            ? $object->getId().""
+            : 'Purchase Item';
     }
 }
