@@ -55,8 +55,6 @@ class OnlineBookingController extends AbstractController
      *     }
      *   )
      */
-
-
     public function init()
     {
 //        {
@@ -70,6 +68,31 @@ class OnlineBookingController extends AbstractController
             'book-days-from-today' => '2',
             'book-future-months'  => '12',
             'video-cost' => '40',
+        ]);
+    }
+
+    /**
+     * @Route(
+     *     name="flightOptions",
+     *     path="/api/flightoptions/{flightDate}",
+     *     methods={"GET"},
+     *     defaults={
+     *       "_controller"="\App\Controller\OnlineBookingController::flightOptions",
+     *       "_api_item_operation_name"="flightoptions"
+     *     }
+     *   )
+     */
+    public function flightOptions(\DateTime $flightDate)
+    {
+//        {
+//        "classic": "Classic High",
+//        "scenic": "Scenic",
+//        "elite": "Elite (Classic)"
+//        }
+        return $this->json([
+            'classic' => 'Classic High',
+            'scenic' => 'Scenic',
+            'elite' => 'Elite (Classic)',
         ]);
     }
 }
